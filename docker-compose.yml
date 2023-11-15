@@ -1,0 +1,156 @@
+version: '3.4'
+
+services:
+  api-gateway:
+    container_name: superbad-store.api-gateway
+    image: superbad-store.api-gateway
+    ports:
+      - "3000:80"
+    build:
+      context: .
+      dockerfile: APIGateway/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - Routes__0__DownstreamHostAndPorts__0__Host=superbad-store.identity.api
+      - Routes__0__DownstreamHostAndPorts__0__Port=80
+      - SwaggerEndPoints__0__Config__0__Url=http://superbad-store.identity.api/swagger/v1/swagger.json
+      - Routes__1__DownstreamHostAndPorts__0__Host=superbad-store.products.api
+      - Routes__1__DownstreamHostAndPorts__0__Port=80
+      - SwaggerEndPoints__1__Config__0__Url=http://superbad-store.products.api/swagger/v1/swagger.json
+      - Routes__2__DownstreamHostAndPorts__0__Host=superbad-store.sales.api
+      - Routes__2__DownstreamHostAndPorts__0__Port=80
+      - SwaggerEndPoints__2__Config__0__Url=http://superbad-store.sales.api/swagger/v1/swagger.json
+    depends_on:
+      - identity-service
+      - product-service
+      - sale-service
+    links:
+      - identity-service
+      - product-service
+      - sale-service
+  identity-service:
+    container_name: superbad-store.identity.api
+    image: superbad-store.identity
+    ports:
+      - "5003:80"
+      - "50051:50051"
+    build:
+      context: .
+      dockerfile: Services/Identity/Presentation/IdentityManagement.Presentation.API/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__Postgres=Host=superbad-store.db; Port=5432; Database=Identity; Username=postgres; Password=password
+      - ConnectionStrings__Redis=superbad-store.redis
+      - Kestrel__Endpoints__Http__Url=http://+:80
+      - Kestrel__Endpoints__gRPC__Url=http://+:50051
+      - Serilog__SeqServerUrl=http://superbad-store.seq:5341
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      seq:
+        condition: service_started
+    links:
+      - db
+  product-service:
+    container_name: superbad-store.products.api
+    image: superbad-store.products
+    ports:
+      - "5001:80"
+    build:
+      context: .
+      dockerfile: Services/Products/Presentation/ProductManagement.Presentation.API/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__Postgres=Host=superbad-store.db; Port=5432; Database=Products; Username=postgres; Password=password
+      - ConnectionStrings__RabbitMQ=superbad-store.rabbitmq
+      - ConnectionStrings__Redis=superbad-store.redis
+      - GrpcUrls__Identity=http://superbad-store.identity.api:50051
+      - Serilog__SeqServerUrl=http://superbad-store.seq.:5341
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      seq:
+        condition: service_started
+      sale-service:
+        condition: service_started
+    links:
+      - db
+      - rabbitmq
+  sale-service:
+    container_name: superbad-store.sales.api
+    image: superbad-store.sales
+    ports:
+      - "5002:80"
+    build:
+      context: .
+      dockerfile: Services/Sales/Presentation/SaleManagement.Presentation.API/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__Postgres=Host=superbad-store.db; Port=5432; Database=Sales; Username=postgres; Password=password
+      - ConnectionStrings__RabbitMQ=superbad-store.rabbitmq
+      - ConnectionStrings__Redis=superbad-store.redis
+      - GrpcUrls__Identity=http://superbad-store.identity.api:50051
+      - Serilog__SeqServerUrl=http://superbad-store.seq.:5341
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      seq:
+        condition: service_started
+    links:
+      - db
+      - rabbitmq
+  db:
+    container_name: superbad-store.db
+    image: postgres:latest
+    environment:
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5432:5432"
+    volumes:
+      - data:/var/opt/postgresql
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 0s
+      retries: 5
+  redis:
+    container_name: superbad-store.redis
+    image: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: [ "CMD", "redis-cli","ping" ]
+      interval: 10s
+      timeout: 0s
+      retries: 5
+  rabbitmq:
+    container_name: superbad-store.rabbitmq
+    image: rabbitmq:3.12-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 0s
+      retries: 5
+  seq:
+    container_name: superbad-store.seq
+    image: datalust/seq:latest
+    ports:
+      - "8080:80"
+      - "5341:5341"
+    environment:
+      - ACCEPT_EULA=Y
+volumes:
+  data:
