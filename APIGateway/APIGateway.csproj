@@ -21,4 +21,9 @@
         </Content>
     </ItemGroup>
 
+
+    <ItemGroup>
+        <ProjectReference Include="..\BuildingBlocks\Presentation\BuildingBlock.Presentation.API\BuildingBlock.Presentation.API.csproj"/>
+    </ItemGroup>
+
 </Project>

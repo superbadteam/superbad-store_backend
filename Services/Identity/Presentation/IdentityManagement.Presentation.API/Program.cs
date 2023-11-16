@@ -25,7 +25,7 @@ builder.Services.AddGrpc();
 
 var app = builder.Build();
 
-await app.UseDefaultMiddlewares(app.Environment);
+await app.UseDefaultMiddlewares(app.Environment, builder.Configuration);
 
 app.MapControllers();
 
