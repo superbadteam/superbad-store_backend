@@ -24,6 +24,7 @@ public static class DefaultExtensions
             });
 
         services
+            .AddApplicationCors(configuration)
             .AddHttpContextAccessor()
             .AddCurrentUser()
             .AddDatabase<TDbContext>(configuration)
