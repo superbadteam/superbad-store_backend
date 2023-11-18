@@ -25,7 +25,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("refresh-token")]
-    public async Task<ActionResult<LoginResponseDto>> GenerateRefreshTokenAsync(GenerateRefreshTokenRequestDto dto)
+    public async Task<ActionResult<TokenResponseDto>> GenerateRefreshTokenAsync(GenerateRefreshTokenRequestDto dto)
     {
         var response = await _mediator.Send(new GenerateRefreshTokenCommand(dto));
 

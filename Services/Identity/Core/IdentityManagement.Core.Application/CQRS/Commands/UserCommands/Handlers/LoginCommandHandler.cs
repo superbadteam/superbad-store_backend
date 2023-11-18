@@ -44,8 +44,12 @@ public class LoginCommandHandler : ICommandHandler<LoginCommand, LoginResponseDt
 
         return new LoginResponseDto
         {
-            AccessToken = accessToken,
-            RefreshToken = refreshToken
+            Token = new TokenResponseDto
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken
+            },
+            EmailConfirmed = user.EmailConfirmed
         };
     }
 }

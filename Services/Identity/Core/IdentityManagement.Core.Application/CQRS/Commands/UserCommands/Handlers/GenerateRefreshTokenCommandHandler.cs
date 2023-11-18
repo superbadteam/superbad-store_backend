@@ -8,7 +8,7 @@ using IdentityManagement.Core.Domain.UserAggregate.Repositories;
 
 namespace IdentityManagement.Core.Application.CQRS.Commands.UserCommands.Handlers;
 
-public class GenerateRefreshTokenCommandHandler : ICommandHandler<GenerateRefreshTokenCommand, LoginResponseDto>
+public class GenerateRefreshTokenCommandHandler : ICommandHandler<GenerateRefreshTokenCommand, TokenResponseDto>
 {
     private readonly IAuthService _authService;
     private readonly ITokenService _tokenService;
@@ -26,7 +26,7 @@ public class GenerateRefreshTokenCommandHandler : ICommandHandler<GenerateRefres
         _userOperationRepository = userOperationRepository;
     }
 
-    public async Task<LoginResponseDto> Handle(GenerateRefreshTokenCommand request, CancellationToken cancellationToken)
+    public async Task<TokenResponseDto> Handle(GenerateRefreshTokenCommand request, CancellationToken cancellationToken)
     {
         var user = await _tokenService.VerifyRefreshTokenAsync(request.Dto.RefreshToken);
 
@@ -42,7 +42,7 @@ public class GenerateRefreshTokenCommandHandler : ICommandHandler<GenerateRefres
 
         await _unitOfWork.SaveChangesAsync();
 
-        return new LoginResponseDto
+        return new TokenResponseDto
         {
             AccessToken = accessToken,
             RefreshToken = refreshToken
