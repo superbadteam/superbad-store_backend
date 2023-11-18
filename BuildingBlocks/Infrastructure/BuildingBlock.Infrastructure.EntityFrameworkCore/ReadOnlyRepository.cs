@@ -1,4 +1,6 @@
 using System.Linq.Dynamic.Core;
+using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using BuildingBlock.Core.Domain;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Specifications.Abstractions;
@@ -11,11 +13,13 @@ public class ReadOnlyRepository<TDbContext, TEntity> : IReadOnlyRepository<TEnti
     where TEntity : class, IEntity
 {
     private readonly TDbContext _dbContext;
+    private readonly IMapper _mapper;
     private DbSet<TEntity>? _dbSet;
 
-    public ReadOnlyRepository(TDbContext dbContext)
+    public ReadOnlyRepository(TDbContext dbContext, IMapper mapper)
     {
         _dbContext = dbContext;
+        _mapper = mapper;
     }
 
     protected DbSet<TEntity> DbSet => _dbSet ??= _dbContext.Set<TEntity>();
@@ -43,15 +47,6 @@ public class ReadOnlyRepository<TDbContext, TEntity> : IReadOnlyRepository<TEnti
         return query.ToListAsync();
     }
 
-    public Task<bool> CheckIfExistAsync(ISpecification<TEntity>? specification = null)
-    {
-        var query = DbSet.AsNoTracking();
-
-        query = Filter(query, specification);
-
-        return query.AnyAsync();
-    }
-
     public async Task<(List<TEntity>, int)> GetFilterAndPagingAsync(
         ISpecification<TEntity>? specification,
         string sort,
@@ -71,6 +66,59 @@ public class ReadOnlyRepository<TDbContext, TEntity> : IReadOnlyRepository<TEnti
         query = query.Skip(pageSize * (pageIndex - 1)).Take(pageSize);
 
         return (await query.ToListAsync(), totalCount);
+    }
+
+    public Task<bool> CheckIfExistAsync(ISpecification<TEntity>? specification = null)
+    {
+        var query = DbSet.AsNoTracking();
+
+        query = Filter(query, specification);
+
+        return query.AnyAsync();
+    }
+
+    public async Task<(List<TDto>, int)> GetFilterAndPagingAsync<TDto>(
+        ISpecification<TEntity>? specification,
+        string sort,
+        int pageIndex,
+        int pageSize, string? includeTables = null)
+    {
+        var query = DbSet.AsNoTracking();
+
+        query = Filter(query, specification);
+
+        var totalCount = await query.CountAsync();
+
+        query = Include(query, includeTables);
+
+        query = Sort(query, sort);
+
+        query = query.Skip(pageSize * (pageIndex - 1)).Take(pageSize);
+
+        return (await query.ProjectTo<TDto>(_mapper.ConfigurationProvider).ToListAsync(), totalCount);
+    }
+
+    public Task<TDto?> GetAnyAsync<TDto>(ISpecification<TEntity>? specification = null, string? includeTables = null)
+    {
+        var query = DbSet.AsNoTracking();
+
+        query = Filter(query, specification);
+
+        query = Include(query, includeTables);
+
+        return query.ProjectTo<TDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
+    }
+
+    public Task<List<TDto>> GetAllAsync<TDto>(ISpecification<TEntity>? specification = null,
+        string? includeTables = null)
+    {
+        var query = DbSet.AsNoTracking();
+
+        query = Filter(query, specification);
+
+        query = Include(query, includeTables);
+
+        return query.ProjectTo<TDto>(_mapper.ConfigurationProvider).ToListAsync();
     }
 
     private static IQueryable<TEntity> Filter(IQueryable<TEntity> query, ISpecification<TEntity>? specification)

@@ -22,7 +22,7 @@ public class CachedRoleReadOnlyRepository : IRoleReadOnlyRepository
             async () => await _roleReadOnlyRepository.GetNameByUserIdAsync(userId), TimeSpan.FromMinutes(30));
     }
 
-    public Task<IEnumerable<Role>> GetByUserIdAsync(Guid userId)
+    public Task<List<Role>> GetByUserIdAsync(Guid userId)
     {
         return _roleReadOnlyRepository.GetByUserIdAsync(userId);
     }

@@ -1,6 +1,5 @@
 using BuildingBlock.Core.Domain.Shared.Constants;
 using BuildingBlock.Core.Domain.Shared.Services;
-using IdentityManagement.Core.Domain.PermissionAggregate.Entities;
 using IdentityManagement.Core.Domain.PermissionAggregate.Repositories;
 
 namespace IdentityManagement.Infrastructure.EntityFrameworkCore.CachedRepositories.CachedPermissionRepositories;
@@ -22,10 +21,5 @@ public class CachedPermissionReadOnlyRepository : IPermissionReadOnlyRepository
         return await _cacheService.GetOrSetRecordAsync(CacheKeyRegistry.GetPermissionsByRoleNameKey(roleName),
             async () => await _permissionReadOnlyRepository.GetNamesByRoleNameAsync(roleName),
             TimeSpan.FromMinutes(30));
-    }
-
-    public Task<IEnumerable<Permission>> GetAllByRoleNameAsync(string roleName)
-    {
-        return _permissionReadOnlyRepository.GetAllByRoleNameAsync(roleName);
     }
 }

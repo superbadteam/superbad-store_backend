@@ -36,10 +36,10 @@ public class
 
         var specification = productKeywordPartialMatchSpecification.And(productTypeSpecification);
 
-        var (products, totalCount) = await _repository.GetFilterAndPagingAsync(specification,
+        var (products, totalCount) = await _repository.GetFilterAndPagingAsync<ProductSummaryDto>(specification,
             query.Dto.Sort, query.Dto.PageIndex, query.Dto.PageSize);
 
-        return new FilterAndPagingResultDto<ProductSummaryDto>(_mapper.Map<List<ProductSummaryDto>>(products),
-            query.Dto.PageIndex, query.Dto.PageSize, totalCount);
+        return new FilterAndPagingResultDto<ProductSummaryDto>(products, query.Dto.PageIndex, query.Dto.PageSize,
+            totalCount);
     }
 }
