@@ -70,7 +70,8 @@ namespace ProductManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("\"DeletedAt\" IS NULL");
 
                     b.ToTable("Products");
                 });
