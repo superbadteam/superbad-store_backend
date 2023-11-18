@@ -18,5 +18,7 @@ public class RoleMapper : Profile
 
         CreateMap<ApplicationUserRole, UserRole>();
         CreateMap<UserRole, ApplicationUserRole>();
+
+        CreateMap<ApplicationRole, RoleNameDto>();
     }
 }

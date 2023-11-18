@@ -1,4 +1,3 @@
-using AutoMapper;
 using BuildingBlock.Core.Application.CQRS;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
@@ -12,22 +11,20 @@ namespace ProductManagement.Core.Application.CQRS.Queries.ProductQueries.Handler
 
 public class GetProductQueryHandler : IQueryHandler<GetProductQuery, ProductDetailDto>
 {
-    private readonly IMapper _mapper;
     private readonly IReadOnlyRepository<Product> _repository;
 
-    public GetProductQueryHandler(IReadOnlyRepository<Product> repository, IMapper mapper)
+    public GetProductQueryHandler(IReadOnlyRepository<Product> repository)
     {
         _repository = repository;
-        _mapper = mapper;
     }
 
     public async Task<ProductDetailDto> Handle(GetProductQuery query, CancellationToken cancellationToken)
     {
         var productIdSpecification = new EntityIdSpecification<Product>(query.ProductId);
-
-        var product = Optional<Product>.Of(await _repository.GetAnyAsync(productIdSpecification))
+        var product = Optional<ProductDetailDto>
+            .Of(await _repository.GetAnyAsync<ProductDetailDto>(productIdSpecification))
             .ThrowIfNotExist(new ProductNotFoundException(query.ProductId)).Get();
 
-        return _mapper.Map<ProductDetailDto>(product);
+        return product;
     }
 }

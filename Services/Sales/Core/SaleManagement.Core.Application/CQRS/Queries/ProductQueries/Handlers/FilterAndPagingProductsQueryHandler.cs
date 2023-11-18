@@ -1,4 +1,3 @@
-using AutoMapper;
 using BuildingBlock.Core.Application.CQRS;
 using BuildingBlock.Core.Application.DTOs;
 using BuildingBlock.Core.Domain.Repositories;
@@ -13,16 +12,11 @@ public class
     FilterAndPagingProductsQueryHandler : IQueryHandler<FilterAndPagingProductsQuery,
         FilterAndPagingResultDto<ProductSummaryDto>>
 {
-    private readonly IMapper _mapper;
     private readonly IReadOnlyRepository<Product> _repository;
 
-    public FilterAndPagingProductsQueryHandler(
-        IReadOnlyRepository<Product> repository,
-        IMapper mapper
-    )
+    public FilterAndPagingProductsQueryHandler(IReadOnlyRepository<Product> repository)
     {
         _repository = repository;
-        _mapper = mapper;
     }
 
     public async Task<FilterAndPagingResultDto<ProductSummaryDto>> Handle(FilterAndPagingProductsQuery query,
@@ -39,10 +33,10 @@ public class
 
         var specification = productKeywordPartialMatchSpecification.And(productTypeSpecification);
 
-        var (products, totalCount) = await _repository.GetFilterAndPagingAsync(specification,
+        var (products, totalCount) = await _repository.GetFilterAndPagingAsync<ProductSummaryDto>(specification,
             query.Dto.Sort, query.Dto.PageIndex, query.Dto.PageSize);
 
-        return new FilterAndPagingResultDto<ProductSummaryDto>(_mapper.Map<List<ProductSummaryDto>>(products),
-            query.Dto.PageIndex, query.Dto.PageSize, totalCount);
+        return new FilterAndPagingResultDto<ProductSummaryDto>(products, query.Dto.PageIndex, query.Dto.PageSize,
+            totalCount);
     }
 }
