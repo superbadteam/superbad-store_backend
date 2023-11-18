@@ -8,7 +8,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 {
     public void Configure(EntityTypeBuilder<Product> builder)
     {
-        builder.HasIndex(a => a.Code).IsUnique();
+        builder.HasIndex(a => a.Code).IsUnique().HasFilter("\"DeletedAt\" IS NULL");
         builder.Property(p => p.Code)
             .IsRequired()
             .HasMaxLength(256)
