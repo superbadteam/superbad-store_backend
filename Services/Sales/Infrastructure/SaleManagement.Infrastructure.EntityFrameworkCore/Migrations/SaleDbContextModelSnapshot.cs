@@ -73,7 +73,7 @@ namespace SaleManagement.Infrastructure.EntityFrameworkCore.Migrations
                         .IsUnique()
                         .HasFilter("\"DeletedAt\" IS NULL");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 #pragma warning restore 612, 618
         }

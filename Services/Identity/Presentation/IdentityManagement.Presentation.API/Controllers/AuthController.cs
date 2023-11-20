@@ -24,6 +24,14 @@ public class AuthController : ControllerBase
         return Ok(response);
     }
 
+    [HttpPost("register")]
+    public async Task<ActionResult<UserDto>> RegisterAsync(CreateUserDto dto)
+    {
+        var user = await _mediator.Send(new CreateUserCommand(dto));
+
+        return Ok(user);
+    }
+
     [HttpPost("refresh-token")]
     public async Task<ActionResult<TokenResponseDto>> GenerateRefreshTokenAsync(GenerateRefreshTokenRequestDto dto)
     {

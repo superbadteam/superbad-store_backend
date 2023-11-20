@@ -21,11 +21,12 @@ public class UserDomainService : IUserDomainService
         user.RefreshTokens.Add(new RefreshToken(refreshToken));
     }
 
-    public async Task<User> CreateAsync(string email, string password, string confirmPassword)
+    public async Task<User> CreateAsync(string email, string name, string phoneNumber, string password,
+        string confirmPassword)
     {
-        await CheckValidOnCreate(email, password, confirmPassword);
+        await CheckValidOnCreate(email, phoneNumber, password, confirmPassword);
 
-        var user = new User(email);
+        var user = new User(email, name, phoneNumber);
 
         return user;
     }
@@ -38,17 +39,30 @@ public class UserDomainService : IUserDomainService
         return await _userReadOnlyRepository.GetPasswordResetToken(user);
     }
 
-    private async Task CheckValidOnCreate(string email, string password, string confirmPassword)
+    private async Task CheckValidOnCreate(string email, string phoneNumber, string password, string confirmPassword)
+    {
+        ThrowIfPasswordIsNotMatch(password, confirmPassword);
+
+        await ThrowIfPhoneNumberIsExistAsync(phoneNumber);
+
+        await ThrowIfEmailIsExistAsync(email);
+    }
+
+    private async Task ThrowIfPhoneNumberIsExistAsync(string phoneNumber)
+    {
+        Optional<bool>.Of(await _userReadOnlyRepository.CheckIfPhoneNumberIsExistAsync(phoneNumber))
+            .ThrowIfExist(new UserConflictException("phone number", phoneNumber));
+    }
+
+    private async Task ThrowIfEmailIsExistAsync(string email)
+    {
+        Optional<bool>.Of(await _userReadOnlyRepository.CheckIfEmailIsExistAsync(email))
+            .ThrowIfExist(new UserConflictException("email", email));
+    }
+
+    private static void ThrowIfPasswordIsNotMatch(string password, string confirmPassword)
     {
         Optional<string>.Of(password).ThrowIfNotEqual(confirmPassword,
             new ValidationException("Password and confirm password don't match"));
-
-        await CheckIfEmailIsExisted(email);
-    }
-
-    private async Task CheckIfEmailIsExisted(string email)
-    {
-        Optional<bool>.Of(await _userReadOnlyRepository.CheckIfEmailExistAsync(email))
-            .ThrowIfExist(new UserConflictException(email));
     }
 }

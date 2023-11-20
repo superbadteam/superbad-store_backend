@@ -5,7 +5,7 @@ namespace IdentityManagement.Core.Domain.UserAggregate.Exceptions;
 
 public class UserConflictException : EntityConflictException
 {
-    public UserConflictException(string email) : base(nameof(Permissions.User), "email", email)
+    public UserConflictException(string column, string value) : base(nameof(Permissions.User), column, value)
     {
     }
 }

@@ -11,7 +11,9 @@ public interface IUserReadOnlyRepository
     Task<(IEnumerable<User> users, int totalCount)> FilterAndPagingUsers(string keyword, string sort, int pageIndex,
         int pageSize);
 
-    Task<bool> CheckIfEmailExistAsync(string email);
+    Task<bool> CheckIfEmailIsExistAsync(string email);
+
+    Task<bool> CheckIfPhoneNumberIsExistAsync(string phoneNumber);
 
     Task<bool> CheckPasswordAsync(User user, string password);
 
