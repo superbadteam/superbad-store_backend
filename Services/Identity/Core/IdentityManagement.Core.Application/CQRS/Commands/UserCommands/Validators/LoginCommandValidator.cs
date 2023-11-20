@@ -8,13 +8,9 @@ public class LoginCommandValidator : AbstractValidator<LoginCommand>
     public LoginCommandValidator()
     {
         RuleFor(user => user.Dto.Email)
-            .NotEmpty()
-            .When(user => string.IsNullOrWhiteSpace(user.Dto.Email))
-            ;
+            .NotEmpty();
 
         RuleFor(user => user.Dto.Password)
-            .NotEmpty()
-            .When(user => string.IsNullOrWhiteSpace(user.Dto.Password))
-            ;
+            .NotEmpty();
     }
 }

@@ -5,9 +5,11 @@ namespace IdentityManagement.Core.Domain.UserAggregate.Entities;
 
 public class User : AggregateRoot
 {
-    public User(string email)
+    public User(string email, string name, string phoneNumber)
     {
         Email = email;
+        Name = name;
+        PhoneNumber = phoneNumber;
     }
 
     public User()
@@ -31,6 +33,10 @@ public class User : AggregateRoot
     public bool LockoutEnabled { get; set; } = true;
 
     public int AccessFailedCount { get; set; }
+
+    public string Name { get; set; } = null!;
+
+    public string PhoneNumber { get; set; } = null!;
 
     public ICollection<RefreshToken> RefreshTokens { get; set; } = null!;
 

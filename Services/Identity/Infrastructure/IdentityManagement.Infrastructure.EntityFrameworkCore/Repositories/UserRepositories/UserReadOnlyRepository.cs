@@ -55,11 +55,18 @@ public class UserReadOnlyRepository : IUserReadOnlyRepository
         return (user, totalCount);
     }
 
-    public Task<bool> CheckIfEmailExistAsync(string email)
+    public Task<bool> CheckIfEmailIsExistAsync(string email)
     {
         var userEmailExactMatchSpecification = new UserEmailExactMatchSpecification(email);
 
         return _userReadOnlyRepository.CheckIfExistAsync(userEmailExactMatchSpecification);
+    }
+
+    public Task<bool> CheckIfPhoneNumberIsExistAsync(string phoneNumber)
+    {
+        var userPhoneNumberExactMatchSpecification = new UserPhoneNumberSpecification(phoneNumber);
+
+        return _userReadOnlyRepository.CheckIfExistAsync(userPhoneNumberExactMatchSpecification);
     }
 
     public Task<bool> CheckPasswordAsync(User user, string password)
