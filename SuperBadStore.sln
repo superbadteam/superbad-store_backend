@@ -9,21 +9,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlock.Core.Domain",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{E6F7A20E-6AB5-46FA-BA37-2E63D93B4661}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Products", "Products", "{109832E2-2984-4C49-B0C1-7309B3DB4DAB}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{109832E2-2984-4C49-B0C1-7309B3DB4DAB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{48551DB2-DA5D-481F-B6C7-3C4373BAB214}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Presentation.API", "Services\Products\Presentation\ProductManagement.Presentation.API\ProductManagement.Presentation.API.csproj", "{E8E61E18-3913-4E0D-9A5F-7E337E1FAE4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.Presentation.API", "Services\Inventory\Presentation\InventoryManagement.Presentation.API\InventoryManagement.Presentation.API.csproj", "{E8E61E18-3913-4E0D-9A5F-7E337E1FAE4A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{DD4554BB-C854-441F-9BAC-7A27C07F6E97}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Core.Application", "Services\Products\Core\ProductManagement.Core.Application\ProductManagement.Core.Application.csproj", "{5BA8D984-AD04-4B9F-8A6C-61D61DBCAD48}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.Core.Application", "Services\Inventory\Core\InventoryManagement.Core.Application\InventoryManagement.Core.Application.csproj", "{5BA8D984-AD04-4B9F-8A6C-61D61DBCAD48}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Core.Domain", "Services\Products\Core\ProductManagement.Core.Domain\ProductManagement.Core.Domain.csproj", "{51EC404C-8F3A-4EAB-93E7-26D8105EA3D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.Core.Domain", "Services\Inventory\Core\InventoryManagement.Core.Domain\InventoryManagement.Core.Domain.csproj", "{51EC404C-8F3A-4EAB-93E7-26D8105EA3D3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{13ACEA21-B126-41E9-B35E-AAB147F2FE4F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProductManagement.Infrastructure.EntityFrameworkCore", "Services\Products\Infrastructure\ProductManagement.Infrastructure.EntityFrameworkCore\ProductManagement.Infrastructure.EntityFrameworkCore.csproj", "{6ABD3C77-321A-4CFD-8B57-A58A52AB7698}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InventoryManagement.Infrastructure.EntityFrameworkCore", "Services\Inventory\Infrastructure\InventoryManagement.Infrastructure.EntityFrameworkCore\InventoryManagement.Infrastructure.EntityFrameworkCore.csproj", "{6ABD3C77-321A-4CFD-8B57-A58A52AB7698}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlock.Infrastructure.EntityFrameworkCore", "BuildingBlocks\Infrastructure\BuildingBlock.Infrastructure.EntityFrameworkCore\BuildingBlock.Infrastructure.EntityFrameworkCore.csproj", "{A395856B-8B26-40F9-8CC8-34D8DC92B60B}"
 EndProject
