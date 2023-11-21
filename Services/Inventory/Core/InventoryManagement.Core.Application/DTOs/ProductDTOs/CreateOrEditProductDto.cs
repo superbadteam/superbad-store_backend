@@ -12,5 +12,7 @@ public class CreateOrEditProductDto
 
     public IEnumerable<CreateProductTypeDto> Types { get; set; } = null!;
 
+    public IEnumerable<CreateProductImageDto> Images { get; set; } = null!;
+
     public ProductCondition Condition { get; set; }
 }

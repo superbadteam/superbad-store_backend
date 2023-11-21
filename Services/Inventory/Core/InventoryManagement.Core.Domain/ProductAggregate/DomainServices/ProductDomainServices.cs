@@ -7,7 +7,8 @@ using InventoryManagement.Core.Domain.CategoryAggregate.Exceptions;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities.Enums;
 using InventoryManagement.Core.Domain.ProductAggregate.Exceptions;
-using InventoryManagement.Core.Domain.ProductAggregate.Specifications;
+using InventoryManagement.Core.Domain.UserAggregate.Entities;
+using InventoryManagement.Core.Domain.UserAggregate.Exceptions;
 
 namespace InventoryManagement.Core.Domain.ProductAggregate.DomainServices;
 
@@ -16,18 +17,21 @@ public class ProductDomainService : IProductDomainService
     private readonly IReadOnlyRepository<Category> _categoryReadOnlyRepository;
     private readonly ICurrentUser _currentUser;
     private readonly IReadOnlyRepository<Product> _productReadOnlyRepository;
+    private readonly IReadOnlyRepository<User> _userReadOnlyRepository;
 
     public ProductDomainService(IReadOnlyRepository<Product> productReadOnlyRepository,
-        IReadOnlyRepository<Category> categoryReadOnlyRepository, ICurrentUser currentUser)
+        IReadOnlyRepository<Category> categoryReadOnlyRepository, ICurrentUser currentUser,
+        IReadOnlyRepository<User> userReadOnlyRepository)
     {
         _productReadOnlyRepository = productReadOnlyRepository;
         _categoryReadOnlyRepository = categoryReadOnlyRepository;
         _currentUser = currentUser;
+        _userReadOnlyRepository = userReadOnlyRepository;
     }
 
     public async Task<Product> CreateAsync(string name, string description, Guid categoryId, ProductCondition condition)
     {
-        await CheckValidOnCreateAsync(categoryId);
+        await CheckValidOnCreateAsync(categoryId, _currentUser.Id);
 
         return new Product(name, description, categoryId, condition, _currentUser.Id);
     }
@@ -68,57 +72,43 @@ public class ProductDomainService : IProductDomainService
         return product.AddTypes(name, quantity, price);
     }
 
-    public void CreateProductImage(ProductType productType, string url)
+    public void CreateProductImage(Product product, string url)
     {
-        productType.AddImage(url);
+        product.AddImage(url);
     }
-
 
     private Task<Product> CheckValidOnDeleteAsync(Guid id)
     {
         return GetOrThrowAsync(id);
     }
 
-    private async Task CheckValidOnCreateAsync(Guid categoryId)
+    private async Task CheckValidOnCreateAsync(Guid categoryId, Guid userId)
     {
-        await ThrowIfCategoryIsExistAsync(categoryId);
+        await ThrowIfUserIsNotExistAsync(userId);
+        await ThrowIfCategoryIsNotExistAsync(categoryId);
     }
 
-    private async Task ThrowIfCategoryIsExistAsync(Guid categoryId)
+    private async Task ThrowIfUserIsNotExistAsync(Guid userId)
     {
-        var categorySpecification = new EntityIdSpecification<Category>(categoryId);
+        Optional<bool>
+            .Of(await _userReadOnlyRepository.CheckIfExistAsync(new EntityIdSpecification<User>(userId)))
+            .ThrowIfNotExist(new UserNotFoundException(userId));
+    }
 
-        Optional<bool>.Of(await _categoryReadOnlyRepository.CheckIfExistAsync(categorySpecification))
+    private async Task ThrowIfCategoryIsNotExistAsync(Guid categoryId)
+    {
+        Optional<bool>
+            .Of(await _categoryReadOnlyRepository.CheckIfExistAsync(new EntityIdSpecification<Category>(categoryId)))
             .ThrowIfNotExist(new CategoryNotFoundException(categoryId));
-    }
-
-    private async Task ThrowIfExistAsync(string code)
-    {
-        var productCodeSpecification = new ProductCodeExactMatchSpecification(code);
-
-        Optional<bool>.Of(await _productReadOnlyRepository.CheckIfExistAsync(productCodeSpecification))
-            .ThrowIfExist(new ProductConflictExceptionException(nameof(code), code));
     }
 
     private async Task<Product> CheckValidOnEditAsync(Guid id, string code)
     {
         var product = await GetOrThrowAsync(id);
 
-        await ThrowIfExistAsync(id, code);
+        // await ThrowIfExistAsync(id, code);
 
         return product;
-    }
-
-    private async Task ThrowIfExistAsync(Guid id, string code)
-    {
-        var productCodeSpecification = new ProductCodeExactMatchSpecification(code);
-
-        var productIdNotEqualSpecification = new EntityIdNotEqualSpecification<Product>(id);
-
-        var specification = productCodeSpecification.And(productIdNotEqualSpecification);
-
-        Optional<bool>.Of(await _productReadOnlyRepository.CheckIfExistAsync(specification))
-            .ThrowIfExist(new ProductConflictExceptionException(nameof(code), code));
     }
 
     private async Task<Product> GetOrThrowAsync(Guid id)

@@ -12,8 +12,8 @@ public class ProductImageConfiguration : IEntityTypeConfiguration<ProductImage>
             .IsRequired();
 
         builder
-            .HasOne(productImage => productImage.ProductType)
+            .HasOne(productImage => productImage.Product)
             .WithMany(product => product.Images)
-            .HasForeignKey(productImage => productImage.ProductTypeId);
+            .HasForeignKey(productImage => productImage.ProductId);
     }
 }

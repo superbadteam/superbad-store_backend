@@ -15,6 +15,7 @@ public class Product : AggregateRoot
         MinPrice = 0;
         MaxPrice = 0;
         Types = new List<ProductType>();
+        Images = new List<ProductImage>();
     }
 
     public Product(string name, string description, Guid categoryId, ProductCondition condition, Guid userId) : this()
@@ -47,10 +48,12 @@ public class Product : AggregateRoot
     public int TotalReviews { get; set; }
 
     public ProductCondition Condition { get; set; }
-    
+
     public double MinPrice { get; set; }
-    
+
     public double MaxPrice { get; set; }
+
+    public List<ProductImage> Images { get; set; }
 
     public ProductType AddTypes(string name, int quantity, double price)
     {
@@ -65,5 +68,12 @@ public class Product : AggregateRoot
     {
         MinPrice = minPrice;
         MaxPrice = maxPrice;
+    }
+
+    public void AddImage(string url)
+    {
+        var image = new ProductImage(url);
+
+        Images.Add(image);
     }
 }
