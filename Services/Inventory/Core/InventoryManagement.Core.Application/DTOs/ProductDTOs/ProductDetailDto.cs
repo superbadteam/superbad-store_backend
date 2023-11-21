@@ -14,9 +14,13 @@ public class ProductDetailDto
 
     public Guid CategoryId { get; set; }
 
-    public double Price { get; set; }
+    public int Sold { get; set; }
 
-    public int Quantity { get; set; }
+    public double Rating { get; set; }
+
+    public int TotalReviews { get; set; }
 
     public ProductCondition Condition { get; set; }
+
+    public IEnumerable<ProductTypeDto> Types { get; set; } = null!;
 }
