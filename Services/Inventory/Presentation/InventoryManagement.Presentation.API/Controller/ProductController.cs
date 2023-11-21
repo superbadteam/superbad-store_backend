@@ -21,7 +21,6 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = Permissions.Product.View)]
     public async Task<ActionResult<FilterAndPagingResultDto<ProductSummaryDto>>> GetAllAsync(
         [FromQuery] FilterAndPagingProductsDto dto)
     {

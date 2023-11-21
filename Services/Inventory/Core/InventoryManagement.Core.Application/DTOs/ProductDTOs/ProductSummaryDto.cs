@@ -6,5 +6,13 @@ public class ProductSummaryDto
 
     public string Name { get; set; } = null!;
 
-    public double Price { get; set; }
+    public double MinPrice { get; set; }
+
+    public double MaxPrice { get; set; }
+
+    public int Sold { get; set; }
+
+    public double Rating { get; set; }
+
+    public string ImageUrl { get; set; } = null!;
 }

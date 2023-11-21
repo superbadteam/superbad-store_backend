@@ -3,5 +3,8 @@ namespace InventoryManagement.Core.Application.DTOs.ProductDTOs.Enums;
 public enum ProductSortProperty
 {
     CreatedAt,
-    Price
+    Price,
+    TotalReviews,
+    Rating,
+    Sold
 }
