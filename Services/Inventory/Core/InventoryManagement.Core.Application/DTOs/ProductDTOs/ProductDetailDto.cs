@@ -21,6 +21,10 @@ public class ProductDetailDto
     public int TotalReviews { get; set; }
 
     public ProductCondition Condition { get; set; }
+    
+    public double MinPrice { get; set; }
+    
+    public double MaxPrice { get; set; }
 
     public IEnumerable<ProductTypeDto> Types { get; set; } = null!;
 }

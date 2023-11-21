@@ -33,15 +33,23 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,
         var product = await _productService.CreateAsync(request.Dto.Name, request.Dto.Description,
             request.Dto.CategoryId, request.Dto.Condition);
 
+        var minPrice = double.MaxValue;
+        var maxPrice = double.MinValue;
 
         foreach (var productTypeDto in request.Dto.Types)
         {
             var productType = _productService.CreateProductType(product, productTypeDto.Name, productTypeDto.Quantity,
                 productTypeDto.Price);
 
+            if (productType.Price < minPrice) minPrice = productType.Price;
+            
+            if (productType.Price > maxPrice) maxPrice = productType.Price;
+            
             foreach (var productImageDto in productTypeDto.Images)
                 _productService.CreateProductImage(productType, productImageDto.Url);
         }
+
+        product.SetPriceRange(minPrice, maxPrice);
 
         await _operationRepository.AddAsync(product);
 

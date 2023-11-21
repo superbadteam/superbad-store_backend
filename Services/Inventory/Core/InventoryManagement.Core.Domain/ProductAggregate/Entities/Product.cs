@@ -12,6 +12,8 @@ public class Product : AggregateRoot
         Sold = 0;
         Rating = 0;
         TotalReviews = 0;
+        MinPrice = 0;
+        MaxPrice = 0;
         Types = new List<ProductType>();
     }
 
@@ -45,6 +47,10 @@ public class Product : AggregateRoot
     public int TotalReviews { get; set; }
 
     public ProductCondition Condition { get; set; }
+    
+    public double MinPrice { get; set; }
+    
+    public double MaxPrice { get; set; }
 
     public ProductType AddTypes(string name, int quantity, double price)
     {
@@ -53,5 +59,11 @@ public class Product : AggregateRoot
         Types.Add(type);
 
         return type;
+    }
+
+    public void SetPriceRange(double minPrice, double maxPrice)
+    {
+        MinPrice = minPrice;
+        MaxPrice = maxPrice;
     }
 }
