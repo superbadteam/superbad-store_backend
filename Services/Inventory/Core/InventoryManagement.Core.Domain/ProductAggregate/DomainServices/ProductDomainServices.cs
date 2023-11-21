@@ -1,6 +1,9 @@
+using BuildingBlock.Core.Application;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using BuildingBlock.Core.Domain.Specifications.Implementations;
+using InventoryManagement.Core.Domain.CategoryAggregate.Entities;
+using InventoryManagement.Core.Domain.CategoryAggregate.Exceptions;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities.Enums;
 using InventoryManagement.Core.Domain.ProductAggregate.Exceptions;
@@ -10,20 +13,23 @@ namespace InventoryManagement.Core.Domain.ProductAggregate.DomainServices;
 
 public class ProductDomainService : IProductDomainService
 {
-    private readonly IReadOnlyRepository<Product> _readOnlyRepository;
+    private readonly IReadOnlyRepository<Category> _categoryReadOnlyRepository;
+    private readonly ICurrentUser _currentUser;
+    private readonly IReadOnlyRepository<Product> _productReadOnlyRepository;
 
-    public ProductDomainService(IReadOnlyRepository<Product> readOnlyRepository)
+    public ProductDomainService(IReadOnlyRepository<Product> productReadOnlyRepository,
+        IReadOnlyRepository<Category> categoryReadOnlyRepository, ICurrentUser currentUser)
     {
-        _readOnlyRepository = readOnlyRepository;
+        _productReadOnlyRepository = productReadOnlyRepository;
+        _categoryReadOnlyRepository = categoryReadOnlyRepository;
+        _currentUser = currentUser;
     }
 
-    public async Task<Product> CreateAsync(string name, string description, Guid categoryId, double price, int quantity,
-        ProductCondition condition)
+    public async Task<Product> CreateAsync(string name, string description, Guid categoryId, ProductCondition condition)
     {
-        // await CheckValidOnCreateAsync(code);
+        await CheckValidOnCreateAsync(categoryId);
 
-        // return new Product(code, name, price, isAvailable, type);
-        throw new NotImplementedException();
+        return new Product(name, description, categoryId, condition, _currentUser.Id);
     }
 
     public async Task<Product> EditAsync(Guid id, string code, string name, double price, bool isAvailable,
@@ -57,21 +63,40 @@ public class ProductDomainService : IProductDomainService
         return products;
     }
 
+    public ProductType CreateProductType(Product product, string name, int quantity, double price)
+    {
+        return product.AddTypes(name, quantity, price);
+    }
+
+    public void CreateProductImage(ProductType productType, string url)
+    {
+        productType.AddImage(url);
+    }
+
+
     private Task<Product> CheckValidOnDeleteAsync(Guid id)
     {
         return GetOrThrowAsync(id);
     }
 
-    private async Task CheckValidOnCreateAsync(string code)
+    private async Task CheckValidOnCreateAsync(Guid categoryId)
     {
-        await ThrowIfExistAsync(code);
+        await ThrowIfCategoryIsExistAsync(categoryId);
+    }
+
+    private async Task ThrowIfCategoryIsExistAsync(Guid categoryId)
+    {
+        var categorySpecification = new EntityIdSpecification<Category>(categoryId);
+
+        Optional<bool>.Of(await _categoryReadOnlyRepository.CheckIfExistAsync(categorySpecification))
+            .ThrowIfNotExist(new CategoryNotFoundException(categoryId));
     }
 
     private async Task ThrowIfExistAsync(string code)
     {
         var productCodeSpecification = new ProductCodeExactMatchSpecification(code);
 
-        Optional<bool>.Of(await _readOnlyRepository.CheckIfExistAsync(productCodeSpecification))
+        Optional<bool>.Of(await _productReadOnlyRepository.CheckIfExistAsync(productCodeSpecification))
             .ThrowIfExist(new ProductConflictExceptionException(nameof(code), code));
     }
 
@@ -92,7 +117,7 @@ public class ProductDomainService : IProductDomainService
 
         var specification = productCodeSpecification.And(productIdNotEqualSpecification);
 
-        Optional<bool>.Of(await _readOnlyRepository.CheckIfExistAsync(specification))
+        Optional<bool>.Of(await _productReadOnlyRepository.CheckIfExistAsync(specification))
             .ThrowIfExist(new ProductConflictExceptionException(nameof(code), code));
     }
 
@@ -100,7 +125,7 @@ public class ProductDomainService : IProductDomainService
     {
         var productIdSpecification = new EntityIdSpecification<Product>(id);
 
-        return Optional<Product>.Of(await _readOnlyRepository.GetAnyAsync(productIdSpecification))
+        return Optional<Product>.Of(await _productReadOnlyRepository.GetAnyAsync(productIdSpecification))
             .ThrowIfNotExist(new ProductNotFoundException(id)).Get();
     }
 }

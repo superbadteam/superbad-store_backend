@@ -4,6 +4,18 @@ namespace InventoryManagement.Core.Domain.ProductAggregate.Entities;
 
 public class ProductType : Entity
 {
+    public ProductType()
+    {
+        Images = new List<ProductImage>();
+    }
+
+    public ProductType(string name, int quantity, double price) : this()
+    {
+        Name = name;
+        Quantity = quantity;
+        Price = price;
+    }
+
     public Guid ProductId { get; set; }
 
     public Product Product { get; set; } = null!;
@@ -14,5 +26,12 @@ public class ProductType : Entity
 
     public double Price { get; set; }
 
-    public string ImageUrl { get; set; } = null!;
+    public List<ProductImage> Images { get; set; }
+
+    public void AddImage(string url)
+    {
+        var image = new ProductImage(url);
+
+        Images.Add(image);
+    }
 }

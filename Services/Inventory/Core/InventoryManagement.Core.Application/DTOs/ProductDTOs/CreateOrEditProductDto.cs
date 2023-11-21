@@ -10,9 +10,7 @@ public class CreateOrEditProductDto
 
     public Guid CategoryId { get; set; }
 
-    public int Quantity { get; set; }
-
-    public double Price { get; set; }
+    public IEnumerable<CreateProductTypeDto> Types { get; set; } = null!;
 
     public ProductCondition Condition { get; set; }
 }

@@ -31,14 +31,21 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,
     public async Task<ProductDetailDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
         var product = await _productService.CreateAsync(request.Dto.Name, request.Dto.Description,
-            request.Dto.CategoryId, request.Dto.Price, request.Dto.Quantity, request.Dto.Condition);
+            request.Dto.CategoryId, request.Dto.Condition);
+
+
+        foreach (var productTypeDto in request.Dto.Types)
+        {
+            var productType = _productService.CreateProductType(product, productTypeDto.Name, productTypeDto.Quantity,
+                productTypeDto.Price);
+
+            foreach (var productImageDto in productTypeDto.Images)
+                _productService.CreateProductImage(productType, productImageDto.Url);
+        }
 
         await _operationRepository.AddAsync(product);
 
         await _unitOfWork.SaveChangesAsync();
-
-        // _eventBus.Publish(new ProductCreatedIntegrationEvent(product.Id, product.Code, product.Name,
-        //     product.Price, product.IsAvailable, product.Type, product.CreatedAt, product.CreatedBy));
 
         return _mapper.Map<ProductDetailDto>(product);
     }

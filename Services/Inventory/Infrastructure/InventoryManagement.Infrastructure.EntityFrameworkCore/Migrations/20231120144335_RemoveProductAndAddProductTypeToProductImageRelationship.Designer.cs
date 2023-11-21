@@ -3,6 +3,7 @@ using System;
 using InventoryManagement.Infrastructure.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InventoryManagement.Infrastructure.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(InventoryDbContext))]
-    partial class InventoryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231120144335_RemoveProductAndAddProductTypeToProductImageRelationship")]
+    partial class RemoveProductAndAddProductTypeToProductImageRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,7 +56,7 @@ namespace InventoryManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("InventoryManagement.Core.Domain.ProductAggregate.Entities.Product", b =>
@@ -114,7 +117,7 @@ namespace InventoryManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("InventoryManagement.Core.Domain.ProductAggregate.Entities.ProductImage", b =>
@@ -153,7 +156,7 @@ namespace InventoryManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasIndex("ProductTypeId");
 
-                    b.ToTable("ProductImages", (string)null);
+                    b.ToTable("ProductImages");
                 });
 
             modelBuilder.Entity("InventoryManagement.Core.Domain.ProductAggregate.Entities.ProductType", b =>
@@ -199,7 +202,7 @@ namespace InventoryManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductTypes", (string)null);
+                    b.ToTable("ProductTypes");
                 });
 
             modelBuilder.Entity("InventoryManagement.Core.Domain.UserAggregate.Entities.User", b =>
@@ -243,7 +246,7 @@ namespace InventoryManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("InventoryManagement.Core.Domain.ProductAggregate.Entities.Product", b =>

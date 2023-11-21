@@ -18,9 +18,6 @@ public class ProductTypeConfiguration : IEntityTypeConfiguration<ProductType>
         builder.Property(productType => productType.Price)
             .IsRequired();
 
-        builder.Property(productType => productType.ImageUrl)
-            .IsRequired();
-
         builder
             .HasOne(productImage => productImage.Product)
             .WithMany(product => product.Types)
