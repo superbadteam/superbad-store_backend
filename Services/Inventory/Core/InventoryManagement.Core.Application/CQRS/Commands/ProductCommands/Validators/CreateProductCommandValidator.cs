@@ -15,5 +15,8 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 
         RuleForEach(command => command.Dto.Types)
             .SetValidator(new CreateProductTypeDtoValidator());
+
+        RuleForEach(command => command.Dto.Images)
+            .SetValidator(new CreateProductImageDtoValidator());
     }
 }

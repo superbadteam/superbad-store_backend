@@ -42,12 +42,12 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,
                 productTypeDto.Price);
 
             if (productType.Price < minPrice) minPrice = productType.Price;
-            
+
             if (productType.Price > maxPrice) maxPrice = productType.Price;
-            
-            foreach (var productImageDto in productTypeDto.Images)
-                _productService.CreateProductImage(productType, productImageDto.Url);
         }
+
+        foreach (var productImageDto in request.Dto.Images)
+            _productService.CreateProductImage(product, productImageDto.Url);
 
         product.SetPriceRange(minPrice, maxPrice);
 

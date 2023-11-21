@@ -15,7 +15,7 @@ public class ProductImage : Entity
 
     public string Url { get; set; } = null!;
 
-    public Guid ProductTypeId { get; set; }
+    public Guid ProductId { get; set; }
 
-    public ProductType ProductType { get; set; } = null!;
+    public Product Product { get; set; } = null!;
 }

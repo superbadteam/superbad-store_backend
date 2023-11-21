@@ -8,5 +8,5 @@ public class CreateProductTypeDto
 
     public double Price { get; set; }
 
-    public IEnumerable<CreateProductImageDto> Images { get; set; } = null!;
+    public string? ImageUrl { get; set; }
 }

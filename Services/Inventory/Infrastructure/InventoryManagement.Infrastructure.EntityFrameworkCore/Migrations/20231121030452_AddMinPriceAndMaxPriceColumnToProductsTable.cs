@@ -14,15 +14,13 @@ namespace InventoryManagement.Infrastructure.EntityFrameworkCore.Migrations
                 name: "MaxPrice",
                 table: "Products",
                 type: "double precision",
-                nullable: false,
-                defaultValue: 0.0);
+                nullable: false);
 
             migrationBuilder.AddColumn<double>(
                 name: "MinPrice",
                 table: "Products",
                 type: "double precision",
-                nullable: false,
-                defaultValue: 0.0);
+                nullable: false);
         }
 
         /// <inheritdoc />

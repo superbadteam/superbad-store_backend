@@ -6,7 +6,6 @@ public class ProductType : Entity
 {
     public ProductType()
     {
-        Images = new List<ProductImage>();
     }
 
     public ProductType(string name, int quantity, double price) : this()
@@ -26,12 +25,5 @@ public class ProductType : Entity
 
     public double Price { get; set; }
 
-    public List<ProductImage> Images { get; set; }
-
-    public void AddImage(string url)
-    {
-        var image = new ProductImage(url);
-
-        Images.Add(image);
-    }
+    public string? ImageUrl { get; set; }
 }

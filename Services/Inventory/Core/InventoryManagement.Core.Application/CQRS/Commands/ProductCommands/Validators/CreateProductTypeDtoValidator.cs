@@ -15,8 +15,5 @@ public class CreateProductTypeDtoValidator : AbstractValidator<CreateProductType
 
         RuleFor(dto => dto.Price)
             .CheckPriceValidation();
-
-        RuleForEach(dto => dto.Images)
-            .SetValidator(new CreateProductImageDtoValidator());
     }
 }
