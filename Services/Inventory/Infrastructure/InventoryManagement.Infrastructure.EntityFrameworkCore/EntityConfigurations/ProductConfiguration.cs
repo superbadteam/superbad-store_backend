@@ -35,7 +35,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
 
         builder.Property(product => product.MinPrice)
             .IsRequired();
-        
+
         builder.Property(product => product.MaxPrice)
             .IsRequired();
 

@@ -1,6 +1,7 @@
 using BuildingBlock.Core.Application.CQRS;
 using BuildingBlock.Core.Application.DTOs;
 using BuildingBlock.Core.Domain.Repositories;
+using BuildingBlock.Core.Domain.Specifications.Abstractions;
 using InventoryManagement.Core.Application.CQRS.Queries.ProductQueries.Requests;
 using InventoryManagement.Core.Application.DTOs.ProductDTOs;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
@@ -22,15 +23,29 @@ public class
     public async Task<FilterAndPagingResultDto<ProductSummaryDto>> Handle(FilterAndPagingProductsQuery query,
         CancellationToken cancellationToken)
     {
-        var productCodePartialMatchSpecification = new ProductCodePartialMatchSpecification(query.Dto.Keyword);
-
         var productNamePartialMatchSpecification = new ProductNamePartialMatchSpecification(query.Dto.Keyword);
 
-        var productKeywordPartialMatchSpecification =
-            productNamePartialMatchSpecification.Or(productCodePartialMatchSpecification);
+        var productConditionSpecification = new ProductConditionSpecification(query.Dto.Condition);
+
+        Specification<Product>? productCategorySpecifications = null;
+
+        foreach (var categoryId in query.Dto.CategoryIds)
+        {
+            var categorySpecification = new ProductCategoryIdSpecification(categoryId);
+            productCategorySpecifications = productCategorySpecifications == null
+                ? categorySpecification
+                : productCategorySpecifications.Or(categorySpecification);
+        }
+
+        var specification = productNamePartialMatchSpecification.And(productConditionSpecification);
+
+        specification = productCategorySpecifications == null
+            ? specification
+            : specification.And(productCategorySpecifications);
+
 
         var (products, totalCount) = await _repository.GetFilterAndPagingAsync<ProductSummaryDto>(
-            productKeywordPartialMatchSpecification, query.Dto.Sort, query.Dto.PageIndex, query.Dto.PageSize);
+            specification, query.Dto.Sort, query.Dto.PageIndex, query.Dto.PageSize);
 
         return new FilterAndPagingResultDto<ProductSummaryDto>(products, query.Dto.PageIndex, query.Dto.PageSize,
             totalCount);
