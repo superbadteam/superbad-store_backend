@@ -27,8 +27,8 @@ public class GrpcPermissionAuthorizationHandler : AuthorizationHandler<Permissio
 
         if (userId != null)
         {
-            if (!await IsUserEmailConfirmedAsync(userId))
-                throw new UnauthorizedException("User email is not confirmed.");
+            // if (!await IsUserEmailConfirmedAsync(userId))
+            //     throw new UnauthorizedException("User email is not confirmed.");
 
             var permissions = await GetPermissionsAsync(userId);
 
