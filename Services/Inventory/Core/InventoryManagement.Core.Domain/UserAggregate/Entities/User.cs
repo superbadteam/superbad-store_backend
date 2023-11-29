@@ -9,7 +9,7 @@ public class User : AggregateRoot
 
     public double AverageRating { get; set; }
 
-    public string ImageUrl { get; set; } = null!;
+    public string? AvatarUrl { get; set; }
 
     public int ProductSold { get; set; }
 
