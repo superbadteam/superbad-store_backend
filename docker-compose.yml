@@ -3,7 +3,7 @@ version: '3.4'
 services:
   api-gateway:
     container_name: superbad-store.api-gateway
-    image: superbad-store.api-gateway
+    image: phuc1403/superbad-store.api-gateway:dev
     ports:
       - "3000:80"
     build:
@@ -30,7 +30,7 @@ services:
       - sale-service
   identity-service:
     container_name: superbad-store.identity.api
-    image: superbad-store.identity
+    image: phuc1403/superbad-store.identity:dev
     ports:
       - "5003:80"
       - "50051:50051"
@@ -55,7 +55,7 @@ services:
       - db
   inventory-service:
     container_name: superbad-store.inventory.api
-    image: superbad-store.inventory
+    image: phuc1403/superbad-store.inventory:dev
     ports:
       - "5001:80"
     build:
@@ -84,7 +84,7 @@ services:
       - rabbitmq
   sale-service:
     container_name: superbad-store.sales.api
-    image: superbad-store.sales
+    image: phuc1403/superbad-store.sales:dev
     ports:
       - "5002:80"
     build:
