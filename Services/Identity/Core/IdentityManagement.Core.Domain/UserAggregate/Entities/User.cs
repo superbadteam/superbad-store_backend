@@ -5,11 +5,10 @@ namespace IdentityManagement.Core.Domain.UserAggregate.Entities;
 
 public class User : AggregateRoot
 {
-    public User(string email, string name, string phoneNumber)
+    public User(string email, string name)
     {
         Email = email;
         Name = name;
-        PhoneNumber = phoneNumber;
     }
 
     public User()
@@ -36,7 +35,7 @@ public class User : AggregateRoot
 
     public string Name { get; set; } = null!;
 
-    public string PhoneNumber { get; set; } = null!;
+    public string? PhoneNumber { get; set; }
 
     public string? AvatarUrl { get; set; }
 

@@ -36,13 +36,13 @@ public class UserSeeder : IDataSeeder
         var admin = await _userReadOnlyRepository.GetByEmailAsync("admin@123");
 
         if (admin == null)
-            await _userOperationRepository.CreateAsync(new User("admin@123", "Admin", "0123456789"), "Admin@123");
+            await _userOperationRepository.CreateAsync(new User("admin@123", "Admin"), "Admin@123");
 
         var user = await _userReadOnlyRepository.GetByEmailAsync("user@123");
 
         if (user == null)
         {
-            user = new User("user@123", "User", "0234567891");
+            user = new User("user@123", "User");
 
             await _userOperationRepository.CreateAsync(user, "User@123");
 

@@ -3,9 +3,9 @@ using IdentityManagement.Core.Application.CQRS.Commands.UserCommands.Requests;
 
 namespace IdentityManagement.Core.Application.CQRS.Commands.UserCommands.Validators;
 
-public class CreateUserCommandValidator : AbstractValidator<CreateUserCommand>
+public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
 {
-    public CreateUserCommandValidator()
+    public RegisterCommandValidator()
     {
         RuleFor(command => command.Dto.Email)
             .CheckEmailValidation();

@@ -30,7 +30,6 @@ public class UserConfiguration : IEntityTypeConfiguration<ApplicationUser>
             .HasMaxLength(320)
             .IsRequired();
         builder.Property(user => user.PhoneNumber)
-            .HasMaxLength(20)
-            .IsRequired();
+            .HasMaxLength(20);
     }
 }

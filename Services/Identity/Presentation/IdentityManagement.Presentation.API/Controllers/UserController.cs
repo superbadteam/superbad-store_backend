@@ -22,7 +22,7 @@ public class UserController : ControllerBase
 
     [HttpGet]
     [Authorize(Policy = Permissions.User.ViewAll)]
-    public async Task<ActionResult<FilterAndPagingResultDto<UserDto>>> GetFilteredAndPagedUsersAsync(
+    public async Task<ActionResult<FilterAndPagingResultDto<UserDetailDto>>> GetFilteredAndPagedUsersAsync(
         [FromQuery] FilterAndPagingUsersDto dto)
     {
         var users = await _mediator.Send(new FilterAndPagingUsersQuery(dto));
@@ -32,7 +32,7 @@ public class UserController : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = Permissions.User.Create)]
-    public async Task<ActionResult<UserDto>> CreateUserAsync(CreateUserDto dto)
+    public async Task<ActionResult<UserDetailDto>> CreateUserAsync(CreateUserDto dto)
     {
         var user = await _mediator.Send(new CreateUserCommand(dto));
 
@@ -41,7 +41,7 @@ public class UserController : ControllerBase
 
     [HttpGet("{id:guid}")]
     [Authorize(Policy = Permissions.User.ViewAll)]
-    public async Task<ActionResult<UserDto>> GetUserByIdAsync(Guid id)
+    public async Task<ActionResult<UserDetailDto>> GetUserByIdAsync(Guid id)
     {
         var user = await _mediator.Send(new GetUserByIdQuery(id));
 
@@ -50,7 +50,7 @@ public class UserController : ControllerBase
 
     [HttpGet("me")]
     [Authorize(Policy = Permissions.User.ViewPersonal)]
-    public async Task<ActionResult<UserDto>> GetCurrentUserAsync()
+    public async Task<ActionResult<UserSummaryDto>> GetCurrentUserAsync()
     {
         var user = await _mediator.Send(new GetCurrentUserQuery());
 

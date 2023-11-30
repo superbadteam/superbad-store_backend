@@ -25,9 +25,9 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("register")]
-    public async Task<ActionResult<UserDto>> RegisterAsync(CreateUserDto dto)
+    public async Task<ActionResult<UserSummaryDto>> RegisterAsync(CreateUserDto dto)
     {
-        var user = await _mediator.Send(new CreateUserCommand(dto));
+        var user = await _mediator.Send(new RegisterCommand(dto));
 
         return Ok(user);
     }

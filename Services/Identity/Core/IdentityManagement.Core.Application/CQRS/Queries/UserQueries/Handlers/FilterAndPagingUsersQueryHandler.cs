@@ -8,7 +8,7 @@ using IdentityManagement.Core.Domain.UserAggregate.Repositories;
 namespace IdentityManagement.Core.Application.CQRS.Queries.UserQueries.Handlers;
 
 public class
-    FilterAndPagingUsersQueryHandler : IQueryHandler<FilterAndPagingUsersQuery, FilterAndPagingResultDto<UserDto>>
+    FilterAndPagingUsersQueryHandler : IQueryHandler<FilterAndPagingUsersQuery, FilterAndPagingResultDto<UserDetailDto>>
 {
     private readonly IMapper _mapper;
     private readonly IUserReadOnlyRepository _userReadOnlyRepository;
@@ -20,7 +20,7 @@ public class
         _userReadOnlyRepository = userReadOnlyRepository;
     }
 
-    public async Task<FilterAndPagingResultDto<UserDto>> Handle(FilterAndPagingUsersQuery request,
+    public async Task<FilterAndPagingResultDto<UserDetailDto>> Handle(FilterAndPagingUsersQuery request,
         CancellationToken cancellationToken)
     {
         var (users, totalCount) =
@@ -28,7 +28,7 @@ public class
                 request.Dto.PageIndex,
                 request.Dto.PageSize);
 
-        return new FilterAndPagingResultDto<UserDto>(_mapper.Map<IEnumerable<UserDto>>(users),
+        return new FilterAndPagingResultDto<UserDetailDto>(_mapper.Map<IEnumerable<UserDetailDto>>(users),
             request.Dto.PageIndex, request.Dto.PageSize, totalCount);
     }
 }
