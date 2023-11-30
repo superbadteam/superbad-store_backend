@@ -13,6 +13,10 @@ public class UserDto
     public bool EmailConfirmed { get; set; }
 
     public bool PhoneNumberConfirmed { get; set; }
+        
+    public string? AvatarUrl { get; set; }
+    
+    public string? CoverUrl { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
