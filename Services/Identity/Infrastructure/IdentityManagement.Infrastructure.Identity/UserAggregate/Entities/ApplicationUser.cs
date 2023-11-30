@@ -10,6 +10,10 @@ public sealed class ApplicationUser : IdentityUser<Guid>, IAggregateRoot
 
     public ICollection<ApplicationUserRole> UserRoles { get; set; } = null!;
 
+    public string? AvatarUrl { get; set; }
+
+    public string? CoverUrl { get; set; }
+
     public string Name { get; set; } = null!;
 
     public DateTime CreatedAt { get; set; }
