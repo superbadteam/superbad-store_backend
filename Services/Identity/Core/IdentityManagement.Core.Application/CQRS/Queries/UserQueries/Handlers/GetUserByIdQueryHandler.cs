@@ -9,7 +9,7 @@ using IdentityManagement.Core.Domain.UserAggregate.Repositories;
 
 namespace IdentityManagement.Core.Application.CQRS.Queries.UserQueries.Handlers;
 
-public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, UserDto>
+public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, UserDetailDto>
 {
     private readonly IMapper _mapper;
     private readonly IUserReadOnlyRepository _userReadOnlyRepository;
@@ -20,11 +20,11 @@ public class GetUserByIdQueryHandler : IQueryHandler<GetUserByIdQuery, UserDto>
         _userReadOnlyRepository = userReadOnlyRepository;
     }
 
-    public async Task<UserDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
+    public async Task<UserDetailDto> Handle(GetUserByIdQuery request, CancellationToken cancellationToken)
     {
         var user = Optional<User>.Of(await _userReadOnlyRepository.GetByIdAsync(request.UserId))
             .ThrowIfNotExist(new UserNotFoundException(request.UserId)).Get();
 
-        return _mapper.Map<UserDto>(user);
+        return _mapper.Map<UserDetailDto>(user);
     }
 }

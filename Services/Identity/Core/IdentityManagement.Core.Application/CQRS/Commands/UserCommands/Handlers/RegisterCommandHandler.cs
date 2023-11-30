@@ -15,7 +15,7 @@ using IdentityManagement.Core.Domain.UserAggregate.Repositories;
 
 namespace IdentityManagement.Core.Application.CQRS.Commands.UserCommands.Handlers;
 
-public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserDetailDto>
+public class RegisterCommandHandler : ICommandHandler<RegisterCommand, UserSummaryDto>
 {
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
@@ -27,23 +27,23 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserD
     private readonly IUserOperationRepository _userOperationRepository;
     private readonly IUserReadOnlyRepository _userReadOnlyRepository;
 
-    public CreateUserCommandHandler(IUserDomainService userDomainService, IMapper mapper, IUnitOfWork unitOfWork,
-        IUserOperationRepository userOperationRepository, IRoleDomainService roleDomainService,
+    public RegisterCommandHandler(IEventBus eventBus, IMapper mapper, IRoleDomainService roleDomainService,
         IRoleOperationRepository roleOperationRepository, IRoleReadOnlyRepository roleReadOnlyRepository,
-        IEventBus eventBus, IUserReadOnlyRepository userReadOnlyRepository)
+        IUnitOfWork unitOfWork, IUserDomainService userDomainService, IUserOperationRepository userOperationRepository,
+        IUserReadOnlyRepository userReadOnlyRepository)
     {
-        _userDomainService = userDomainService;
+        _eventBus = eventBus;
         _mapper = mapper;
-        _unitOfWork = unitOfWork;
-        _userOperationRepository = userOperationRepository;
         _roleDomainService = roleDomainService;
         _roleOperationRepository = roleOperationRepository;
         _roleReadOnlyRepository = roleReadOnlyRepository;
-        _eventBus = eventBus;
+        _unitOfWork = unitOfWork;
+        _userDomainService = userDomainService;
+        _userOperationRepository = userOperationRepository;
         _userReadOnlyRepository = userReadOnlyRepository;
     }
 
-    public async Task<UserDetailDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
+    public async Task<UserSummaryDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         var user = await _userDomainService.CreateAsync(request.Dto.Email, request.Dto.Name, request.Dto.Password,
             request.Dto.ConfirmPassword);
@@ -64,10 +64,6 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserD
         _eventBus.Publish(new UserCreatedIntegrationEvent(user.Id, user.Name, userCreationDto!.CreatedAt,
             userCreationDto.CreatedBy));
 
-        var userDetailDto = _mapper.Map<UserDetailDto>(user);
-
-        _mapper.Map(userCreationDto, userDetailDto);
-
-        return userDetailDto;
+        return _mapper.Map<UserSummaryDto>(user);
     }
 }
