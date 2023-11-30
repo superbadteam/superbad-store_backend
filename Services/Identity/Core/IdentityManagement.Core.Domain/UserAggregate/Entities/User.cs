@@ -38,10 +38,6 @@ public class User : AggregateRoot
 
     public string PhoneNumber { get; set; } = null!;
 
-    public string? AvatarUrl { get; set; }
-
-    public string? CoverUrl { get; set; }
-
     public ICollection<RefreshToken> RefreshTokens { get; set; } = null!;
 
     public ICollection<UserRole> UserRoles { get; set; } = null!;
