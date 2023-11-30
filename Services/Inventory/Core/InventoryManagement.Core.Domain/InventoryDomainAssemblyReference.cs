@@ -2,6 +2,6 @@ using BuildingBlock.Core.Domain;
 
 namespace InventoryManagement.Core.Domain;
 
-public class ProductDomainAssemblyReference : DomainAssemblyReference
+public class InventoryDomainAssemblyReference : DomainAssemblyReference
 {
 }

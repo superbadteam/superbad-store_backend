@@ -1,5 +1,8 @@
 using BuildingBlock.Core.Application;
+using BuildingBlock.Core.Application.EventBus.Abstractions;
 using BuildingBlock.Core.Domain.Shared.Services;
+using IdentityManagement.Core.Application.DTOs.UserDTOs;
+using IdentityManagement.Core.Application.IntegrationEvents.UserEvents.Events;
 using IdentityManagement.Core.Domain.UserAggregate.Entities;
 using IdentityManagement.Core.Domain.UserAggregate.Repositories;
 using Microsoft.Extensions.Logging;
@@ -8,18 +11,20 @@ namespace IdentityManagement.Core.Application.Seeder;
 
 public class UserSeeder : IDataSeeder
 {
+    private readonly IEventBus _eventBus;
     private readonly ILogger<UserSeeder> _logger;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserOperationRepository _userOperationRepository;
     private readonly IUserReadOnlyRepository _userReadOnlyRepository;
 
     public UserSeeder(IUserReadOnlyRepository userReadOnlyRepository, IUserOperationRepository userOperationRepository,
-        ILogger<UserSeeder> logger, IUnitOfWork unitOfWork)
+        ILogger<UserSeeder> logger, IUnitOfWork unitOfWork, IEventBus eventBus)
     {
         _userReadOnlyRepository = userReadOnlyRepository;
         _userOperationRepository = userOperationRepository;
         _logger = logger;
         _unitOfWork = unitOfWork;
+        _eventBus = eventBus;
     }
 
     public int ExecutionOrder => 1;
@@ -36,9 +41,22 @@ public class UserSeeder : IDataSeeder
         var user = await _userReadOnlyRepository.GetByEmailAsync("user@123");
 
         if (user == null)
-            await _userOperationRepository.CreateAsync(new User("user@123", "User", "0234567891"), "User@123");
+        {
+            user = new User("user@123", "User", "0234567891");
 
-        await _unitOfWork.SaveChangesAsync();
+            await _userOperationRepository.CreateAsync(user, "User@123");
+
+            await _unitOfWork.SaveChangesAsync();
+
+            var userCreationDto = await _userReadOnlyRepository.GetByEmailAsync<UserCreationDto>("user@123");
+
+            _eventBus.Publish(new UserCreatedIntegrationEvent(user.Id, user.Name, userCreationDto!.CreatedAt,
+                userCreationDto.CreatedBy));
+        }
+        else
+        {
+            await _unitOfWork.SaveChangesAsync();
+        }
 
         _logger.LogInformation("Seed users successfully");
     }

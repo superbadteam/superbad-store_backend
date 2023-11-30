@@ -41,6 +41,7 @@ services:
       - ASPNETCORE_URLS=http://+:80
       - ConnectionStrings__Postgres=Host=superbad-store.db; Port=5432; Database=Identity; Username=postgres; Password=password
       - ConnectionStrings__Redis=superbad-store.redis
+      - ConnectionStrings__RabbitMQ=superbad-store.rabbitmq
       - Kestrel__Endpoints__Http__Url=http://+:80
       - Kestrel__Endpoints__gRPC__Url=http://+:50051
       - Serilog__SeqServerUrl=http://superbad-store.seq:5341
@@ -50,6 +51,8 @@ services:
       redis:
         condition: service_healthy
       seq:
+        condition: service_started
+      inventory-service:
         condition: service_started
     links:
       - db

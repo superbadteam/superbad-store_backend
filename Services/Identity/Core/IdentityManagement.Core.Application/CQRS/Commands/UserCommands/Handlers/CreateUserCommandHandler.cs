@@ -1,9 +1,11 @@
 using AutoMapper;
 using BuildingBlock.Core.Application.CQRS;
+using BuildingBlock.Core.Application.EventBus.Abstractions;
 using BuildingBlock.Core.Domain.Shared.Services;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using IdentityManagement.Core.Application.CQRS.Commands.UserCommands.Requests;
 using IdentityManagement.Core.Application.DTOs.UserDTOs;
+using IdentityManagement.Core.Application.IntegrationEvents.UserEvents.Events;
 using IdentityManagement.Core.Domain.RoleAggregate.DomainServices.Abstractions;
 using IdentityManagement.Core.Domain.RoleAggregate.Entities;
 using IdentityManagement.Core.Domain.RoleAggregate.Exceptions;
@@ -15,6 +17,7 @@ namespace IdentityManagement.Core.Application.CQRS.Commands.UserCommands.Handler
 
 public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserDto>
 {
+    private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private readonly IRoleDomainService _roleDomainService;
     private readonly IRoleOperationRepository _roleOperationRepository;
@@ -22,10 +25,12 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserD
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserDomainService _userDomainService;
     private readonly IUserOperationRepository _userOperationRepository;
+    private readonly IUserReadOnlyRepository _userReadOnlyRepository;
 
     public CreateUserCommandHandler(IUserDomainService userDomainService, IMapper mapper, IUnitOfWork unitOfWork,
         IUserOperationRepository userOperationRepository, IRoleDomainService roleDomainService,
-        IRoleOperationRepository roleOperationRepository, IRoleReadOnlyRepository roleReadOnlyRepository)
+        IRoleOperationRepository roleOperationRepository, IRoleReadOnlyRepository roleReadOnlyRepository,
+        IEventBus eventBus, IUserReadOnlyRepository userReadOnlyRepository)
     {
         _userDomainService = userDomainService;
         _mapper = mapper;
@@ -34,6 +39,8 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserD
         _roleDomainService = roleDomainService;
         _roleOperationRepository = roleOperationRepository;
         _roleReadOnlyRepository = roleReadOnlyRepository;
+        _eventBus = eventBus;
+        _userReadOnlyRepository = userReadOnlyRepository;
     }
 
     public async Task<UserDto> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -51,6 +58,11 @@ public class CreateUserCommandHandler : ICommandHandler<CreateUserCommand, UserD
         await _roleOperationRepository.UpdateAsync(role);
 
         await _unitOfWork.SaveChangesAsync();
+
+        var userCreationDto = await _userReadOnlyRepository.GetByIdAsync<UserCreationDto>(user.Id);
+
+        _eventBus.Publish(new UserCreatedIntegrationEvent(user.Id, user.Name, userCreationDto!.CreatedAt,
+            userCreationDto.CreatedBy));
 
         return _mapper.Map<UserDto>(user);
     }

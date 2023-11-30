@@ -32,6 +32,15 @@ public class UserReadOnlyRepository : IUserReadOnlyRepository
         return _mapper.Map<User?>(applicationUser);
     }
 
+    public async Task<TDto?> GetByIdAsync<TDto>(Guid id, string? includeTables = null)
+    {
+        var userIdSpecification = new UserIdSpecification(id);
+
+        var applicationUser = await _userReadOnlyRepository.GetAnyAsync(userIdSpecification, includeTables);
+
+        return _mapper.Map<TDto?>(applicationUser);
+    }
+
     public async Task<User?> GetByEmailAsync(string email, string? includeTables = null)
     {
         var userEmailExactMatchSpecification = new UserEmailExactMatchSpecification(email);
@@ -40,6 +49,13 @@ public class UserReadOnlyRepository : IUserReadOnlyRepository
             await _userReadOnlyRepository.GetAnyAsync(userEmailExactMatchSpecification, includeTables);
 
         return _mapper.Map<User?>(applicationUser);
+    }
+
+    public Task<TDto?> GetByEmailAsync<TDto>(string email, string? includeTables = null)
+    {
+        var userEmailExactMatchSpecification = new UserEmailExactMatchSpecification(email);
+
+        return _userReadOnlyRepository.GetAnyAsync<TDto>(userEmailExactMatchSpecification, includeTables);
     }
 
     public async Task<(IEnumerable<User> users, int totalCount)> FilterAndPagingUsers(string keyword, string sort,
