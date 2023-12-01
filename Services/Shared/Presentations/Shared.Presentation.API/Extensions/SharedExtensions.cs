@@ -18,6 +18,10 @@ public static class SharedExtensions
             {
                 options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
+        
+        services
+            .AddGrpcAuthentication(configuration)
+            .AddGrpcAuthorization();
 
         services
             .RegisterServices<SharedApplicationAssemblyReference>();
