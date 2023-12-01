@@ -8,7 +8,7 @@ using Shared.Core.Application.DTOs;
 namespace Shared.Presentation.API.Controllers;
 
 [ApiController]
-[Route("api")]
+[Route("api/uploads")]
 public class UploadController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -18,7 +18,7 @@ public class UploadController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpPost]
+    [HttpPost("images")]
     [DisableRequestSizeLimit]
     [Authorize(Policy = Permissions.File.Upload)]
     public async Task<ActionResult<UploadImagesResponseDto>> CreateAsync(IEnumerable<IFormFile> images)
