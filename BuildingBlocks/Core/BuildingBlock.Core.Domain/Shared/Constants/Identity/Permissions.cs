@@ -20,7 +20,11 @@ public static class Permissions
         new Claim(Role.View, "Can view roles"),
         new Claim(Role.Edit, "Can edit roles"),
         new Claim(Role.Delete, "Can delete roles"),
-        new Claim(Role.Create, "Can create roles")
+        new Claim(Role.Create, "Can create roles"),
+        
+        // FILE
+        new Claim(File.Upload, "Can upload files")
+        
     );
 
     public static readonly List<Claim> UserPermissions = new()
@@ -32,7 +36,10 @@ public static class Permissions
         new Claim(Product.View, "Can view products"),
         new Claim(Product.Edit, "Can edit products"),
         new Claim(Product.Delete, "Can delete products"),
-        new Claim(Product.Create, "Can create products")
+        new Claim(Product.Create, "Can create products"),
+        
+        // FILE
+        new Claim(File.Upload, "Can upload files")
     };
 
     public static class Product
@@ -62,5 +69,11 @@ public static class Permissions
         public const string Create = Default + ".Create";
         public const string Edit = Default + ".Edit";
         public const string Delete = Default + ".Delete";
+    }
+
+    public static class File
+    {
+        private const string Default = Prefix + ".File";
+        public const string Upload = Default + ".Upload";
     }
 }

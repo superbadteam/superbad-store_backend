@@ -20,6 +20,9 @@ services:
       - Routes__2__DownstreamHostAndPorts__0__Host=superbad-store.sales.api
       - Routes__2__DownstreamHostAndPorts__0__Port=80
       - SwaggerEndPoints__2__Config__0__Url=http://superbad-store.sales.api/swagger/v1/swagger.json
+      - Routes__3__DownstreamHostAndPorts__0__Host=superbad-store.shared.api
+      - Routes__3__DownstreamHostAndPorts__0__Port=80
+      - SwaggerEndPoints__3__Config__0__Url=http://superbad-store.shared.api/swagger/v1/swagger.json
     depends_on:
       - identity-service
       - inventory-service
@@ -112,6 +115,25 @@ services:
     links:
       - db
       - rabbitmq
+  shared-service:
+    container_name: superbad-store.shared.api
+    image: phuc1403/superbad-store.shared:dev
+    ports:
+      - "5004:80"
+    build:
+      context: .
+      dockerfile: Services/Shared/Presentations/Shared.Presentation.API/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__Redis=superbad-store.redis
+      - GrpcUrls__Identity=http://superbad-store.identity.api:50051
+      - Serilog__SeqServerUrl=http://superbad-store.seq.:5341
+      - CloudStorage__ConnectionString=cloudinary://584162449796495:CVUD4g-jjIQ5LtOID2sfCSPhHFE@dgtaa84en
+    depends_on:
+      redis:
+        condition: service_healthy
+      seq:
+        condition: service_started
   db:
     container_name: superbad-store.db
     image: postgres:latest
