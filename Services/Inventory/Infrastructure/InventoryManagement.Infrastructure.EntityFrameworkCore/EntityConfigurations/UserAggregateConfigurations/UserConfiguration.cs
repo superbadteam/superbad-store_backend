@@ -2,7 +2,7 @@ using InventoryManagement.Core.Domain.UserAggregate.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace InventoryManagement.Infrastructure.EntityFrameworkCore.EntityConfigurations;
+namespace InventoryManagement.Infrastructure.EntityFrameworkCore.EntityConfigurations.UserAggregateConfigurations;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {
