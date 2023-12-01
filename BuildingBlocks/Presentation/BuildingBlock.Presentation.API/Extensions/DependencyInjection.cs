@@ -22,7 +22,7 @@ public static partial class DependencyInjection
         foreach (var classType in classesToRegister)
         {
             var interfaceType = classType.GetInterfaces()
-                .FirstOrDefault(type => type.Name == $"I{classType.Name}");
+                .FirstOrDefault(type => Service().IsMatch(type.Name));
 
             if (interfaceType != null) services.AddScoped(interfaceType, classType);
         }
