@@ -7,5 +7,6 @@ public class Category : AggregateRoot
 {
     public string Name { get; set; } = null!;
 
+    public Guid? ParentId { get; set; }
     public ICollection<Product> Products { get; set; } = null!;
 }
