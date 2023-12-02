@@ -5,7 +5,7 @@ using BuildingBlock.Core.Domain.Shared.Services;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
 using Microsoft.Extensions.Logging;
 
-namespace InventoryManagement.Core.Application;
+namespace InventoryManagement.Core.Application.Seeders;
 
 public class ProductSeeder
 {

@@ -2,7 +2,7 @@ using AutoMapper;
 using InventoryManagement.Core.Application.DTOs.ProductDTOs;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
 
-namespace InventoryManagement.Infrastructure.EntityFrameworkCore;
+namespace InventoryManagement.Infrastructure.EntityFrameworkCore.Mappers;
 
 public class ProductMapper : Profile
 {

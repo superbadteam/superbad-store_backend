@@ -48,7 +48,7 @@ public class CategorySeeder : IDataSeeder
 
         await _unitOfWork.SaveChangesAsync();
 
-        var subCategories = new List<Category>();
+        // var subCategories = new List<Category>();
 
         foreach (var mainCategory in mainCategories)
         {
@@ -57,10 +57,11 @@ public class CategorySeeder : IDataSeeder
             if (!categories.TryGetValue(name, out var subCategoryNames)) continue;
 
             foreach (var subCategoryName in subCategoryNames)
-                subCategories.Add(await _categoryDomainService.CreateAsync(subCategoryName, mainCategory.Id));
-        }
+                mainCategory.SubCategories.Add(
+                    await _categoryDomainService.CreateAsync(subCategoryName, mainCategory.Id));
 
-        await _categoryOperationRepository.AddRangeAsync(subCategories);
+            _categoryOperationRepository.Update(mainCategory);
+        }
 
         await _unitOfWork.SaveChangesAsync();
 
