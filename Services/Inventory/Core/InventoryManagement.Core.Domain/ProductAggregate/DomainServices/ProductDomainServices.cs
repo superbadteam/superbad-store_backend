@@ -1,4 +1,5 @@
 using BuildingBlock.Core.Application;
+using BuildingBlock.Core.Domain.Exceptions;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using BuildingBlock.Core.Domain.Specifications.Implementations;
@@ -85,7 +86,16 @@ public class ProductDomainService : IProductDomainService
     private async Task CheckValidOnCreateAsync(Guid categoryId, Guid userId)
     {
         await ThrowIfUserIsNotExistAsync(userId);
-        await ThrowIfCategoryIsNotExistAsync(categoryId);
+        await CheckCategoryValidation(categoryId);
+    }
+
+    private async Task CheckCategoryValidation(Guid categoryId)
+    {
+        var category = Optional<Category>
+            .Of(await _categoryReadOnlyRepository.GetAnyAsync(new EntityIdSpecification<Category>(categoryId)))
+            .ThrowIfNotExist(new CategoryNotFoundException(categoryId)).Get();
+
+        if (category.ParentId == null) throw new ValidationException("Cannot choose a parent category");
     }
 
     private async Task ThrowIfUserIsNotExistAsync(Guid userId)
@@ -93,13 +103,6 @@ public class ProductDomainService : IProductDomainService
         Optional<bool>
             .Of(await _userReadOnlyRepository.CheckIfExistAsync(new EntityIdSpecification<User>(userId)))
             .ThrowIfNotExist(new UserNotFoundException(userId));
-    }
-
-    private async Task ThrowIfCategoryIsNotExistAsync(Guid categoryId)
-    {
-        Optional<bool>
-            .Of(await _categoryReadOnlyRepository.CheckIfExistAsync(new EntityIdSpecification<Category>(categoryId)))
-            .ThrowIfNotExist(new CategoryNotFoundException(categoryId));
     }
 
     private async Task<Product> CheckValidOnEditAsync(Guid id, string code)
