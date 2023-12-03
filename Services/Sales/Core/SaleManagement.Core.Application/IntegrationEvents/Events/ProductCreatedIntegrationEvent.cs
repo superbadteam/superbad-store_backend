@@ -1,5 +1,5 @@
 using BuildingBlock.Core.Application.IntegrationEvents.Events;
-using SaleManagement.Core.Domain.ProductAggregate.Entities.Enums;
+using SaleManagement.Core.Domain.ProductAggregate.Entities;
 
 namespace SaleManagement.Core.Application.IntegrationEvents.Events;
 

@@ -1,6 +1,6 @@
 using BuildingBlock.Core.Application.DTOs;
 using SaleManagement.Core.Application.DTOs.ProductDTOs.Enums;
-using SaleManagement.Core.Domain.ProductAggregate.Entities.Enums;
+using SaleManagement.Core.Domain.ProductAggregate.Entities;
 
 namespace SaleManagement.Core.Application.DTOs.ProductDTOs;
 

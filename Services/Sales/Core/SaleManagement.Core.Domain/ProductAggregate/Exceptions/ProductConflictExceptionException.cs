@@ -8,8 +8,4 @@ public class ProductConflictExceptionException : EntityConflictException
     public ProductConflictExceptionException(string column, string value) : base(nameof(Product), column, value)
     {
     }
-
-    public ProductConflictExceptionException(Guid id) : base(id)
-    {
-    }
 }
