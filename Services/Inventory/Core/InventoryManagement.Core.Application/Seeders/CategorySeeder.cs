@@ -1,7 +1,7 @@
 using BuildingBlock.Core.Application;
 using BuildingBlock.Core.Domain.Repositories;
+using BuildingBlock.Core.Domain.Shared.Constants;
 using BuildingBlock.Core.Domain.Shared.Services;
-using InventoryManagement.Core.Domain.CategoryAggregate.Constants;
 using InventoryManagement.Core.Domain.CategoryAggregate.DomainServices;
 using InventoryManagement.Core.Domain.CategoryAggregate.Entities;
 using Microsoft.Extensions.Logging;
@@ -40,7 +40,7 @@ public class CategorySeeder : IDataSeeder
 
         _logger.LogInformation("Start seeding category data");
 
-        var categories = CategoryData.GetCategories();
+        var categories = Categories.GetCategories();
 
         var mainCategories = categories.Select(category => _categoryDomainService.Create(category.Key)).ToList();
 

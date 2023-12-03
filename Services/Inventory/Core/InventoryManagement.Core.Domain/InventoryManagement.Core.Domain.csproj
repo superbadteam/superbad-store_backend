@@ -10,4 +10,8 @@
         <ProjectReference Include="..\..\..\..\BuildingBlocks\Core\BuildingBlock.Core.Application\BuildingBlock.Core.Application.csproj"/>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\Core\BuildingBlock.Core.Domain\BuildingBlock.Core.Domain.csproj"/>
     </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="CategoryAggregate\Constants\"/>
+    </ItemGroup>
 </Project>

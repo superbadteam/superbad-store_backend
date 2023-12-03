@@ -5,21 +5,19 @@ using SaleManagement.Core.Domain.ProductAggregate.Entities.Enums;
 
 namespace SaleManagement.Core.Domain.ProductAggregate.Specifications;
 
-public class ProductTypeSpecification : Specification<Product>
+public class ProductConditionSpecification : Specification<Product>
 {
-    private readonly ProductCondition? _type;
+    private readonly ProductCondition? _productCondition;
 
-    public ProductTypeSpecification(ProductCondition? type)
+    public ProductConditionSpecification(ProductCondition? productCondition)
     {
-        _type = type;
+        _productCondition = productCondition;
     }
 
     public override Expression<Func<Product, bool>> ToExpression()
     {
-        // if (_type == null) return product => true;
-        //
-        // return product => product.Type == _type;
+        if (_productCondition == null) return product => true;
 
-        throw new NotImplementedException();
+        return product => product.Condition == _productCondition;
     }
 }

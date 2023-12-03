@@ -1,7 +1,8 @@
 namespace SaleManagement.Core.Domain.ProductAggregate.Entities.Enums;
 
-public enum ProductType
+public enum ProductCondition
 {
-    Service,
-    Physical
+    New,
+    LikeNew,
+    Used
 }

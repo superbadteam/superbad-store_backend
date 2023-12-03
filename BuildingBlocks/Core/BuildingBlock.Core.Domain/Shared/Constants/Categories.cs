@@ -1,6 +1,6 @@
-namespace InventoryManagement.Core.Domain.CategoryAggregate.Constants;
+namespace BuildingBlock.Core.Domain.Shared.Constants;
 
-public static class CategoryData
+public static class Categories
 {
     public static Dictionary<string, IEnumerable<string>> GetCategories()
     {

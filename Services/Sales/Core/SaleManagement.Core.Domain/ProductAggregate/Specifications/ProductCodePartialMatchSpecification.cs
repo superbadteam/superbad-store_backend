@@ -15,8 +15,9 @@ public class ProductCodePartialMatchSpecification : Specification<Product>
 
     public override Expression<Func<Product, bool>> ToExpression()
     {
-        if (string.IsNullOrWhiteSpace(_code)) return product => true;
-
-        return product => product.Code.ToUpper().Contains(_code.ToUpper());
+        // if (string.IsNullOrWhiteSpace(_code)) return product => true;
+        //
+        // return product => product.Code.ToUpper().Contains(_code.ToUpper());
+        throw new NotImplementedException();
     }
 }
