@@ -1,7 +1,7 @@
 using System.Collections.Immutable;
 using System.Security.Claims;
 
-namespace BuildingBlock.Core.Domain.Shared.Constants.Identity;
+namespace BuildingBlock.Core.Domain.Shared.Constants;
 
 public static class Permissions
 {

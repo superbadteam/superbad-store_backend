@@ -5,7 +5,7 @@ using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Services;
 using InventoryManagement.Core.Application.CQRS.Commands.ProductCommands.Requests;
 using InventoryManagement.Core.Application.DTOs.ProductDTOs;
-using InventoryManagement.Core.Domain.ProductAggregate.DomainServices;
+using InventoryManagement.Core.Domain.ProductAggregate.DomainServices.Abstractions;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
 
 namespace InventoryManagement.Core.Application.CQRS.Commands.ProductCommands.Handlers;

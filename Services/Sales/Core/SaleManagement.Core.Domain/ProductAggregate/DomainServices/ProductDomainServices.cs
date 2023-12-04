@@ -1,4 +1,3 @@
-using BuildingBlock.Core.Application;
 using BuildingBlock.Core.Domain.Exceptions;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
@@ -16,25 +15,23 @@ namespace SaleManagement.Core.Domain.ProductAggregate.DomainServices;
 public class ProductDomainService : IProductDomainService
 {
     private readonly IReadOnlyRepository<Category> _categoryReadOnlyRepository;
-    private readonly ICurrentUser _currentUser;
     private readonly IReadOnlyRepository<Product> _productReadOnlyRepository;
     private readonly IReadOnlyRepository<User> _userReadOnlyRepository;
 
     public ProductDomainService(IReadOnlyRepository<Product> productReadOnlyRepository,
-        IReadOnlyRepository<Category> categoryReadOnlyRepository, ICurrentUser currentUser,
-        IReadOnlyRepository<User> userReadOnlyRepository)
+        IReadOnlyRepository<Category> categoryReadOnlyRepository, IReadOnlyRepository<User> userReadOnlyRepository)
     {
         _productReadOnlyRepository = productReadOnlyRepository;
         _categoryReadOnlyRepository = categoryReadOnlyRepository;
-        _currentUser = currentUser;
         _userReadOnlyRepository = userReadOnlyRepository;
     }
 
-    public async Task<Product> CreateAsync(string name, string description, Guid categoryId, ProductCondition condition)
+    public async Task<Product> CreateAsync(Guid productId, Guid userId, string name, string description,
+        Guid categoryId, ProductCondition condition, DateTime createdAt, string createdBy)
     {
-        await CheckValidOnCreateAsync(categoryId, _currentUser.Id);
+        await CheckValidOnCreateAsync(productId, categoryId, userId);
 
-        return new Product(name, description, categoryId, condition, _currentUser.Id);
+        return new Product(productId, userId, name, description, categoryId, condition, createdAt, createdBy);
     }
 
     public async Task<Product> EditAsync(Guid id, string code, string name, double price, bool isAvailable,
@@ -68,14 +65,15 @@ public class ProductDomainService : IProductDomainService
         return products;
     }
 
-    public ProductType CreateProductType(Product product, string name, int quantity, double price)
+    public ProductType CreateProductType(Product product, Guid id, string name, int quantity, double price,
+        string? imageUrl, DateTime createdAt, string createdBy)
     {
-        return product.AddTypes(name, quantity, price);
+        return product.AddTypes(id, name, quantity, price, imageUrl, createdAt, createdBy);
     }
 
-    public void CreateProductImage(Product product, string url)
+    public void CreateProductImage(Product product, Guid id, string url, DateTime createdAt, string createdBy)
     {
-        product.AddImage(url);
+        product.AddImage(id, url, createdAt, createdBy);
     }
 
     private Task<Product> CheckValidOnDeleteAsync(Guid id)
@@ -83,10 +81,18 @@ public class ProductDomainService : IProductDomainService
         return GetOrThrowAsync(id);
     }
 
-    private async Task CheckValidOnCreateAsync(Guid categoryId, Guid userId)
+    private async Task CheckValidOnCreateAsync(Guid productId, Guid categoryId, Guid userId)
     {
+        await ThrowIfProductIsExist(productId);
         await ThrowIfUserIsNotExistAsync(userId);
         await CheckCategoryValidation(categoryId);
+    }
+
+    private async Task ThrowIfProductIsExist(Guid productId)
+    {
+        Optional<bool>
+            .Of(await _productReadOnlyRepository.CheckIfExistAsync(new EntityIdSpecification<Product>(productId)))
+            .ThrowIfExist(new ProductConflictException(productId));
     }
 
     private async Task CheckCategoryValidation(Guid categoryId)

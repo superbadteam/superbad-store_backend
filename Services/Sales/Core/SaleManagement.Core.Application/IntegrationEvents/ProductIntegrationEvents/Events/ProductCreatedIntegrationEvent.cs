@@ -1,7 +1,7 @@
 using BuildingBlock.Core.Application.IntegrationEvents.Events;
-using InventoryManagement.Core.Domain.ProductAggregate.Entities.Enums;
+using SaleManagement.Core.Domain.ProductAggregate.Entities.Enums;
 
-namespace InventoryManagement.Core.Application.IntegrationEvents.Events;
+namespace SaleManagement.Core.Application.IntegrationEvents.ProductIntegrationEvents.Events;
 
 public record ProductCreatedIntegrationEvent(ProductCreatedPayload Product) : IntegrationEvent;
 
@@ -50,8 +50,6 @@ public class ProductImagePayload
     public Guid Id { get; set; }
 
     public string Url { get; set; } = null!;
-
-    public Guid ProductId { get; set; }
 
     public DateTime CreatedAt { get; set; }
 

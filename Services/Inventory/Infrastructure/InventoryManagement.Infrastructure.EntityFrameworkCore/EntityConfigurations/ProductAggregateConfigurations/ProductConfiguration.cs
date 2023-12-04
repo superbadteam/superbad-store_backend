@@ -27,22 +27,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(product => product.Condition)
             .IsRequired();
 
-        builder.Property(product => product.Rating)
-            .IsRequired();
-
-        builder.Property(product => product.TotalReviews)
-            .IsRequired();
-
-        builder.Property(product => product.MinPrice)
-            .IsRequired();
-
-        builder.Property(product => product.MaxPrice)
-            .IsRequired();
-
-        builder.HasOne(product => product.User)
-            .WithMany(user => user.Products)
-            .HasForeignKey(product => product.UserId);
-
         builder.HasOne(product => product.Category)
             .WithMany(category => category.Products)
             .HasForeignKey(product => product.CategoryId);

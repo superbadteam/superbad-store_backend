@@ -4,7 +4,5 @@ namespace SaleManagement.Core.Domain.CategoryAggregate.DomainServices;
 
 public interface ICategoryDomainService
 {
-    Category Create(string name);
-
-    Task<Category> CreateAsync(string name, Guid parentId);
+    Task<Category> CreateAsync(Guid id, string name, Guid? parentId, DateTime createdAt, string createdBy);
 }

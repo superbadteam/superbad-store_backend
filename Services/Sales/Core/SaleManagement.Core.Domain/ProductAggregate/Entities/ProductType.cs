@@ -2,17 +2,22 @@ using BuildingBlock.Core.Domain;
 
 namespace SaleManagement.Core.Domain.ProductAggregate.Entities;
 
-public class ProductType : Entity
+public sealed class ProductType : Entity
 {
     public ProductType()
     {
     }
 
-    public ProductType(string name, int quantity, double price) : this()
+    public ProductType(Guid id, string name, int quantity, double price, string? imageUrl, DateTime createdAt,
+        string createdBy) : this()
     {
+        Id = id;
         Name = name;
         Quantity = quantity;
         Price = price;
+        CreatedBy = createdBy;
+        CreatedAt = createdAt;
+        ImageUrl = imageUrl;
     }
 
     public Guid ProductId { get; set; }

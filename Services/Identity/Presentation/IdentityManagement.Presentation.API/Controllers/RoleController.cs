@@ -1,4 +1,4 @@
-using BuildingBlock.Core.Domain.Shared.Constants.Identity;
+using BuildingBlock.Core.Domain.Shared.Constants;
 using IdentityManagement.Core.Application.CQRS.Commands.RoleCommands.Requests;
 using IdentityManagement.Core.Application.DTOs.RoleDTOs;
 using MediatR;

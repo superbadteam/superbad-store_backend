@@ -1,5 +1,5 @@
 using BuildingBlock.Core.Application.DTOs;
-using BuildingBlock.Core.Domain.Shared.Constants.Identity;
+using BuildingBlock.Core.Domain.Shared.Constants;
 using IdentityManagement.Core.Application.CQRS.Commands.UserCommands.Requests;
 using IdentityManagement.Core.Application.CQRS.Queries.UserQueries.Requests;
 using IdentityManagement.Core.Application.DTOs.UserDTOs;

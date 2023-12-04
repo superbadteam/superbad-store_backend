@@ -1,7 +1,7 @@
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities.Enums;
 
-namespace InventoryManagement.Core.Domain.ProductAggregate.DomainServices;
+namespace InventoryManagement.Core.Domain.ProductAggregate.DomainServices.Abstractions;
 
 public interface IProductDomainService
 {
@@ -12,7 +12,7 @@ public interface IProductDomainService
 
     Task<IEnumerable<Product>> DeleteManyAsync(IEnumerable<Guid> ids);
 
-    ProductType CreateProductType(Product product, string name, int quantity, double price);
+    ProductType CreateProductType(Product product, string name, int quantity, double price, string? imageUrl);
 
     void CreateProductImage(Product product, string url);
 }

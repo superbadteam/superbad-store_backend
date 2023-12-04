@@ -3,7 +3,7 @@ using SaleManagement.Core.Domain.ProductAggregate.Entities;
 
 namespace SaleManagement.Core.Domain.CategoryAggregate.Entities;
 
-public class Category : AggregateRoot
+public sealed class Category : AggregateRoot
 {
     public Category()
     {
@@ -11,14 +11,13 @@ public class Category : AggregateRoot
         SubCategories = new List<Category>();
     }
 
-    public Category(string name) : this()
+    public Category(Guid id, string name, Guid? parentId, DateTime createdAt, string createdBy) : this()
     {
+        Id = id;
         Name = name;
-    }
-
-    public Category(string name, Guid parentId) : this(name)
-    {
         ParentId = parentId;
+        CreatedAt = createdAt;
+        CreatedBy = createdBy;
     }
 
     public string Name { get; set; } = null!;

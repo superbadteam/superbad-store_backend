@@ -3,8 +3,7 @@ using BuildingBlock.Core.Application.EventBus.Abstractions;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Services;
 using InventoryManagement.Core.Application.CQRS.Commands.ProductCommands.Requests;
-using InventoryManagement.Core.Application.IntegrationEvents.Events;
-using InventoryManagement.Core.Domain.ProductAggregate.DomainServices;
+using InventoryManagement.Core.Domain.ProductAggregate.DomainServices.Abstractions;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
 
 namespace InventoryManagement.Core.Application.CQRS.Commands.ProductCommands.Handlers;
@@ -27,13 +26,14 @@ public class DeleteManyProductsCommandHandler : ICommandHandler<DeleteManyProduc
 
     public async Task Handle(DeleteManyProductsCommand request, CancellationToken cancellationToken)
     {
-        var products = (await _productDomainService.DeleteManyAsync(request.Dto.Ids)).ToList();
-
-        _operationRepository.DeleteRange(products);
-
-        await _unitOfWork.SaveChangesAsync();
-
-        foreach (var product in products)
-            _eventBus.Publish(new ProductDeletedIntegrationEvent(product.Id, product.DeletedAt, product.DeletedBy));
+        // var products = (await _productDomainService.DeleteManyAsync(request.Dto.Ids)).ToList();
+        //
+        // _operationRepository.DeleteRange(products);
+        //
+        // await _unitOfWork.SaveChangesAsync();
+        //
+        // foreach (var product in products)
+        //     _eventBus.Publish(new ProductDeletedIntegrationEvent(product.Id, product.DeletedAt, product.DeletedBy));
+        throw new NotImplementedException();
     }
 }

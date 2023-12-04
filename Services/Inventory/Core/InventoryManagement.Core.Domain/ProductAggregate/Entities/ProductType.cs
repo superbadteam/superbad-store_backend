@@ -8,11 +8,12 @@ public class ProductType : Entity
     {
     }
 
-    public ProductType(string name, int quantity, double price) : this()
+    public ProductType(string name, int quantity, double price, string? imageUrl) : this()
     {
         Name = name;
         Quantity = quantity;
         Price = price;
+        ImageUrl = imageUrl;
     }
 
     public Guid ProductId { get; set; }

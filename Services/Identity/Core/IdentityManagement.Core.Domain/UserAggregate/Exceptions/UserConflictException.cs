@@ -1,5 +1,5 @@
 using BuildingBlock.Core.Domain.Exceptions;
-using BuildingBlock.Core.Domain.Shared.Constants.Identity;
+using BuildingBlock.Core.Domain.Shared.Constants;
 
 namespace IdentityManagement.Core.Domain.UserAggregate.Exceptions;
 

@@ -5,7 +5,7 @@ using SaleManagement.Core.Domain.UserAggregate.Entities;
 
 namespace SaleManagement.Core.Domain.ProductAggregate.Entities;
 
-public class Product : AggregateRoot
+public sealed class Product : AggregateRoot
 {
     public Product()
     {
@@ -18,13 +18,17 @@ public class Product : AggregateRoot
         Images = new List<ProductImage>();
     }
 
-    public Product(string name, string description, Guid categoryId, ProductCondition condition, Guid userId) : this()
+    public Product(Guid id, Guid userId, string name, string description,
+        Guid categoryId, ProductCondition condition, DateTime createdAt, string createdBy) : this()
     {
+        Id = id;
         Name = name;
         Description = description;
         CategoryId = categoryId;
         Condition = condition;
         UserId = userId;
+        CreatedAt = createdAt;
+        CreatedBy = createdBy;
     }
 
     public Guid UserId { get; set; }
@@ -55,9 +59,10 @@ public class Product : AggregateRoot
 
     public List<ProductImage> Images { get; set; }
 
-    public ProductType AddTypes(string name, int quantity, double price)
+    public ProductType AddTypes(Guid id, string name, int quantity, double price, string? imageUrl, DateTime createdAt,
+        string createdBy)
     {
-        var type = new ProductType(name, quantity, price);
+        var type = new ProductType(id, name, quantity, price, imageUrl, createdAt, createdBy);
 
         Types.Add(type);
 
@@ -70,9 +75,9 @@ public class Product : AggregateRoot
         MaxPrice = maxPrice;
     }
 
-    public void AddImage(string url)
+    public void AddImage(Guid id, string url, DateTime createdAt, string createdBy)
     {
-        var image = new ProductImage(url);
+        var image = new ProductImage(id, url, createdAt, createdBy);
 
         Images.Add(image);
     }
