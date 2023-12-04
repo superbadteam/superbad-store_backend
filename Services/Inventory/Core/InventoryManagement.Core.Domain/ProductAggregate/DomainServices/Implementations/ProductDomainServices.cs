@@ -5,34 +5,30 @@ using BuildingBlock.Core.Domain.Shared.Utils;
 using BuildingBlock.Core.Domain.Specifications.Implementations;
 using InventoryManagement.Core.Domain.CategoryAggregate.Entities;
 using InventoryManagement.Core.Domain.CategoryAggregate.Exceptions;
+using InventoryManagement.Core.Domain.ProductAggregate.DomainServices.Abstractions;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities.Enums;
 using InventoryManagement.Core.Domain.ProductAggregate.Exceptions;
-using InventoryManagement.Core.Domain.UserAggregate.Entities;
-using InventoryManagement.Core.Domain.UserAggregate.Exceptions;
 
-namespace InventoryManagement.Core.Domain.ProductAggregate.DomainServices;
+namespace InventoryManagement.Core.Domain.ProductAggregate.DomainServices.Implementations;
 
 public class ProductDomainService : IProductDomainService
 {
     private readonly IReadOnlyRepository<Category> _categoryReadOnlyRepository;
     private readonly ICurrentUser _currentUser;
     private readonly IReadOnlyRepository<Product> _productReadOnlyRepository;
-    private readonly IReadOnlyRepository<User> _userReadOnlyRepository;
 
     public ProductDomainService(IReadOnlyRepository<Product> productReadOnlyRepository,
-        IReadOnlyRepository<Category> categoryReadOnlyRepository, ICurrentUser currentUser,
-        IReadOnlyRepository<User> userReadOnlyRepository)
+        IReadOnlyRepository<Category> categoryReadOnlyRepository, ICurrentUser currentUser)
     {
         _productReadOnlyRepository = productReadOnlyRepository;
         _categoryReadOnlyRepository = categoryReadOnlyRepository;
         _currentUser = currentUser;
-        _userReadOnlyRepository = userReadOnlyRepository;
     }
 
     public async Task<Product> CreateAsync(string name, string description, Guid categoryId, ProductCondition condition)
     {
-        await CheckValidOnCreateAsync(categoryId, _currentUser.Id);
+        await CheckValidOnCreateAsync(categoryId);
 
         return new Product(name, description, categoryId, condition, _currentUser.Id);
     }
@@ -68,9 +64,9 @@ public class ProductDomainService : IProductDomainService
         return products;
     }
 
-    public ProductType CreateProductType(Product product, string name, int quantity, double price)
+    public ProductType CreateProductType(Product product, string name, int quantity, double price, string? imageUrl)
     {
-        return product.AddTypes(name, quantity, price);
+        return product.AddTypes(name, quantity, price, imageUrl);
     }
 
     public void CreateProductImage(Product product, string url)
@@ -83,9 +79,8 @@ public class ProductDomainService : IProductDomainService
         return GetOrThrowAsync(id);
     }
 
-    private async Task CheckValidOnCreateAsync(Guid categoryId, Guid userId)
+    private async Task CheckValidOnCreateAsync(Guid categoryId)
     {
-        await ThrowIfUserIsNotExistAsync(userId);
         await CheckCategoryValidation(categoryId);
     }
 
@@ -96,13 +91,6 @@ public class ProductDomainService : IProductDomainService
             .ThrowIfNotExist(new CategoryNotFoundException(categoryId)).Get();
 
         if (category.ParentId == null) throw new ValidationException("Cannot choose a parent category");
-    }
-
-    private async Task ThrowIfUserIsNotExistAsync(Guid userId)
-    {
-        Optional<bool>
-            .Of(await _userReadOnlyRepository.CheckIfExistAsync(new EntityIdSpecification<User>(userId)))
-            .ThrowIfNotExist(new UserNotFoundException(userId));
     }
 
     private async Task<Product> CheckValidOnEditAsync(Guid id, string code)

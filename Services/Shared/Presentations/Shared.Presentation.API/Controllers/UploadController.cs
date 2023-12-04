@@ -1,4 +1,4 @@
-using BuildingBlock.Core.Domain.Shared.Constants.Identity;
+using BuildingBlock.Core.Domain.Shared.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

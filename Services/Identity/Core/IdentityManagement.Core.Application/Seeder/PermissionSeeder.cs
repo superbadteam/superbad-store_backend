@@ -1,5 +1,5 @@
 using BuildingBlock.Core.Application;
-using BuildingBlock.Core.Domain.Shared.Constants.Identity;
+using BuildingBlock.Core.Domain.Shared.Constants;
 using BuildingBlock.Core.Domain.Shared.Services;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using IdentityManagement.Core.Domain.PermissionAggregate.DomainServices.Abstractions;

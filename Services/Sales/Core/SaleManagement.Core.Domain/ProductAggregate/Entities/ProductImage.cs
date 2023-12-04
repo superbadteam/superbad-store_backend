@@ -2,15 +2,18 @@ using BuildingBlock.Core.Domain;
 
 namespace SaleManagement.Core.Domain.ProductAggregate.Entities;
 
-public class ProductImage : Entity
+public sealed class ProductImage : Entity
 {
     public ProductImage()
     {
     }
 
-    public ProductImage(string url)
+    public ProductImage(Guid id, string url, DateTime createdAt, string createdBy)
     {
+        Id = id;
         Url = url;
+        CreatedAt = createdAt;
+        CreatedBy = createdBy;
     }
 
     public string Url { get; set; } = null!;

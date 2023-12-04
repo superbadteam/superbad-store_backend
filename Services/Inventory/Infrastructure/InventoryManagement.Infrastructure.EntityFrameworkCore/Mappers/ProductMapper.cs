@@ -1,5 +1,6 @@
 using AutoMapper;
 using InventoryManagement.Core.Application.DTOs.ProductDTOs;
+using InventoryManagement.Core.Application.IntegrationEvents.Events;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
 
 namespace InventoryManagement.Infrastructure.EntityFrameworkCore.Mappers;
@@ -14,5 +15,9 @@ public class ProductMapper : Profile
         CreateMap<Product, ProductDetailDto>();
         CreateMap<ProductType, ProductTypeDto>();
         CreateMap<ProductImage, ProductImageDto>();
+
+        CreateMap<Product, ProductCreatedPayload>();
+        CreateMap<ProductType, ProductTypePayload>();
+        CreateMap<ProductImage, ProductImagePayload>();
     }
 }

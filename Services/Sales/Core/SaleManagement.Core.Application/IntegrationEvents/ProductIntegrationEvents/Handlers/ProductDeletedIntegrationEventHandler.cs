@@ -1,11 +1,11 @@
 using BuildingBlock.Core.Application.IntegrationEvents.Handlers;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Services;
-using SaleManagement.Core.Application.IntegrationEvents.Events;
+using SaleManagement.Core.Application.IntegrationEvents.ProductIntegrationEvents.Events;
 using SaleManagement.Core.Domain.ProductAggregate.DomainServices;
 using SaleManagement.Core.Domain.ProductAggregate.Entities;
 
-namespace SaleManagement.Core.Application.IntegrationEvents.Handlers;
+namespace SaleManagement.Core.Application.IntegrationEvents.ProductIntegrationEvents.Handlers;
 
 public class ProductDeletedIntegrationEventHandler : IIntegrationEventHandler<ProductDeletedIntegrationEvent>
 {

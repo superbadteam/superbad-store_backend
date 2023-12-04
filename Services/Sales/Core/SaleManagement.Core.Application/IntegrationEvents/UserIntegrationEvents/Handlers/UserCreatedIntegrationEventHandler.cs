@@ -1,11 +1,11 @@
 using BuildingBlock.Core.Application.IntegrationEvents.Handlers;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Services;
-using InventoryManagement.Core.Application.IntegrationEvents.UserIntegrationEvents.Events;
-using InventoryManagement.Core.Domain.UserAggregate.DomainServices.Adstractions;
-using InventoryManagement.Core.Domain.UserAggregate.Entities;
+using SaleManagement.Core.Application.IntegrationEvents.UserIntegrationEvents.Events;
+using SaleManagement.Core.Domain.UserAggregate.DomainServices.Adstractions;
+using SaleManagement.Core.Domain.UserAggregate.Entities;
 
-namespace InventoryManagement.Core.Application.IntegrationEvents.UserIntegrationEvents.Handlers;
+namespace SaleManagement.Core.Application.IntegrationEvents.UserIntegrationEvents.Handlers;
 
 public class UserCreatedIntegrationEventHandler : IIntegrationEventHandler<UserCreatedIntegrationEvent>
 {

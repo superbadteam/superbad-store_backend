@@ -1,5 +1,5 @@
 using BuildingBlock.Core.Application.DTOs;
-using BuildingBlock.Core.Domain.Shared.Constants.Identity;
+using BuildingBlock.Core.Domain.Shared.Constants;
 using InventoryManagement.Core.Application.CQRS.Commands.ProductCommands.Requests;
 using InventoryManagement.Core.Application.CQRS.Queries.ProductQueries.Requests;
 using InventoryManagement.Core.Application.DTOs.ProductDTOs;

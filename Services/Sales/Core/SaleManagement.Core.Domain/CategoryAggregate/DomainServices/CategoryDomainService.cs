@@ -15,24 +15,31 @@ public class CategoryDomainService : ICategoryDomainService
         _categoryReadOnlyRepository = categoryReadOnlyRepository;
     }
 
-    public Category Create(string name)
+    public async Task<Category> CreateAsync(Guid id, string name, Guid? parentId, DateTime createdAt, string createdBy)
     {
-        return new Category(name);
+        await CheckValidOnCreateAsync(id, parentId);
+
+        return new Category(id, name, parentId, createdAt, createdBy);
     }
 
-    public async Task<Category> CreateAsync(string name, Guid parentId)
+    private async Task CheckValidOnCreateAsync(Guid id, Guid? parentId)
     {
-        await CheckValidOnCreateAsync(parentId);
+        await ThrowIfCategoryIsExist(id);
 
-        return new Category(name, parentId);
+        if (parentId == null) return;
+
+        await ThrowIfCategoryIsNotExist(parentId.Value);
     }
 
-    private async Task CheckValidOnCreateAsync(Guid parentId)
+    private async Task ThrowIfCategoryIsExist(Guid id)
     {
-        await ThrowIfNotExistAsync(parentId);
+        var categoryIdSpecification = new EntityIdSpecification<Category>(id);
+
+        Optional<bool>.Of(await _categoryReadOnlyRepository.CheckIfExistAsync(categoryIdSpecification))
+            .ThrowIfExist(new CategoryConflictException(id));
     }
 
-    private async Task ThrowIfNotExistAsync(Guid id)
+    private async Task ThrowIfCategoryIsNotExist(Guid id)
     {
         var categoryIdSpecification = new EntityIdSpecification<Category>(id);
 

@@ -5,7 +5,8 @@ using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Services;
 using InventoryManagement.Core.Application.CQRS.Commands.ProductCommands.Requests;
 using InventoryManagement.Core.Application.DTOs.ProductDTOs;
-using InventoryManagement.Core.Domain.ProductAggregate.DomainServices;
+using InventoryManagement.Core.Application.IntegrationEvents.Events;
+using InventoryManagement.Core.Domain.ProductAggregate.DomainServices.Abstractions;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
 
 namespace InventoryManagement.Core.Application.CQRS.Commands.ProductCommands.Handlers;
@@ -15,13 +16,13 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private readonly IOperationRepository<Product> _operationRepository;
-    private readonly IProductDomainService _productService;
+    private readonly IProductDomainService _productDomainService;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateProductCommandHandler(IProductDomainService productService, IMapper mapper,
+    public CreateProductCommandHandler(IProductDomainService productDomainService, IMapper mapper,
         IOperationRepository<Product> operationRepository, IUnitOfWork unitOfWork, IEventBus eventBus)
     {
-        _productService = productService;
+        _productDomainService = productDomainService;
         _mapper = mapper;
         _operationRepository = operationRepository;
         _unitOfWork = unitOfWork;
@@ -30,30 +31,21 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,
 
     public async Task<ProductDetailDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await _productService.CreateAsync(request.Dto.Name, request.Dto.Description,
+        var product = await _productDomainService.CreateAsync(request.Dto.Name, request.Dto.Description,
             request.Dto.CategoryId, request.Dto.Condition);
 
-        var minPrice = double.MaxValue;
-        var maxPrice = double.MinValue;
-
         foreach (var productTypeDto in request.Dto.Types)
-        {
-            var productType = _productService.CreateProductType(product, productTypeDto.Name, productTypeDto.Quantity,
-                productTypeDto.Price);
-
-            if (productType.Price < minPrice) minPrice = productType.Price;
-
-            if (productType.Price > maxPrice) maxPrice = productType.Price;
-        }
+            _productDomainService.CreateProductType(product, productTypeDto.Name,
+                productTypeDto.Quantity, productTypeDto.Price, productTypeDto.ImageUrl);
 
         foreach (var productImageDto in request.Dto.Images)
-            _productService.CreateProductImage(product, productImageDto.Url);
-
-        product.SetPriceRange(minPrice, maxPrice);
+            _productDomainService.CreateProductImage(product, productImageDto.Url);
 
         await _operationRepository.AddAsync(product);
 
         await _unitOfWork.SaveChangesAsync();
+
+        _eventBus.Publish(new ProductCreatedIntegrationEvent(_mapper.Map<ProductCreatedPayload>(product)));
 
         return _mapper.Map<ProductDetailDto>(product);
     }

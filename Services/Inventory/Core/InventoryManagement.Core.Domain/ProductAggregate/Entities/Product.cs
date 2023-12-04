@@ -1,7 +1,6 @@
 using BuildingBlock.Core.Domain;
 using InventoryManagement.Core.Domain.CategoryAggregate.Entities;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities.Enums;
-using InventoryManagement.Core.Domain.UserAggregate.Entities;
 
 namespace InventoryManagement.Core.Domain.ProductAggregate.Entities;
 
@@ -10,10 +9,6 @@ public class Product : AggregateRoot
     public Product()
     {
         Sold = 0;
-        Rating = 0;
-        TotalReviews = 0;
-        MinPrice = 0;
-        MaxPrice = 0;
         Types = new List<ProductType>();
         Images = new List<ProductImage>();
     }
@@ -29,8 +24,6 @@ public class Product : AggregateRoot
 
     public Guid UserId { get; set; }
 
-    public User User { get; set; } = null!;
-
     public string Name { get; set; } = null!;
 
     public string Description { get; set; } = null!;
@@ -43,31 +36,17 @@ public class Product : AggregateRoot
 
     public int Sold { get; set; }
 
-    public double Rating { get; set; }
-
-    public int TotalReviews { get; set; }
-
     public ProductCondition Condition { get; set; }
-
-    public double MinPrice { get; set; }
-
-    public double MaxPrice { get; set; }
 
     public List<ProductImage> Images { get; set; }
 
-    public ProductType AddTypes(string name, int quantity, double price)
+    public ProductType AddTypes(string name, int quantity, double price, string? imageUrl)
     {
-        var type = new ProductType(name, quantity, price);
+        var type = new ProductType(name, quantity, price, imageUrl);
 
         Types.Add(type);
 
         return type;
-    }
-
-    public void SetPriceRange(double minPrice, double maxPrice)
-    {
-        MinPrice = minPrice;
-        MaxPrice = maxPrice;
     }
 
     public void AddImage(string url)

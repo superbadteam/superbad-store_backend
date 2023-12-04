@@ -2,7 +2,6 @@ using BuildingBlock.Core.Application;
 using BuildingBlock.Infrastructure.EntityFrameworkCore;
 using InventoryManagement.Core.Domain.CategoryAggregate.Entities;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
-using InventoryManagement.Core.Domain.UserAggregate.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagement.Infrastructure.EntityFrameworkCore;
@@ -21,7 +20,6 @@ public class InventoryDbContext : BaseDbContext
 
     public DbSet<Category> Categories { get; set; } = null!;
 
-    public DbSet<User> Users { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

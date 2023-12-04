@@ -1,7 +1,10 @@
+using AutoMapper;
 using BuildingBlock.Core.Application;
+using BuildingBlock.Core.Application.EventBus.Abstractions;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Constants;
 using BuildingBlock.Core.Domain.Shared.Services;
+using InventoryManagement.Core.Application.IntegrationEvents.CategoryIntegrationEvents.Events;
 using InventoryManagement.Core.Domain.CategoryAggregate.DomainServices;
 using InventoryManagement.Core.Domain.CategoryAggregate.Entities;
 using Microsoft.Extensions.Logging;
@@ -13,19 +16,23 @@ public class CategorySeeder : IDataSeeder
     private readonly ICategoryDomainService _categoryDomainService;
     private readonly IOperationRepository<Category> _categoryOperationRepository;
     private readonly IReadOnlyRepository<Category> _categoryReadOnlyRepository;
+    private readonly IEventBus _eventBus;
     private readonly ILogger<CategorySeeder> _logger;
+    private readonly IMapper _mapper;
     private readonly IUnitOfWork _unitOfWork;
 
     public CategorySeeder(ICategoryDomainService categoryDomainService,
         IOperationRepository<Category> categoryOperationRepository,
         IReadOnlyRepository<Category> categoryReadOnlyRepository, IUnitOfWork unitOfWork,
-        ILogger<CategorySeeder> logger)
+        ILogger<CategorySeeder> logger, IEventBus eventBus, IMapper mapper)
     {
         _categoryDomainService = categoryDomainService;
         _categoryOperationRepository = categoryOperationRepository;
         _categoryReadOnlyRepository = categoryReadOnlyRepository;
         _unitOfWork = unitOfWork;
         _logger = logger;
+        _eventBus = eventBus;
+        _mapper = mapper;
     }
 
     public int ExecutionOrder => 1;
@@ -48,8 +55,6 @@ public class CategorySeeder : IDataSeeder
 
         await _unitOfWork.SaveChangesAsync();
 
-        // var subCategories = new List<Category>();
-
         foreach (var mainCategory in mainCategories)
         {
             var name = mainCategory.Name;
@@ -64,6 +69,17 @@ public class CategorySeeder : IDataSeeder
         }
 
         await _unitOfWork.SaveChangesAsync();
+
+
+        foreach (var mainCategory in mainCategories)
+        {
+            _eventBus.Publish(new CategoryCreatedIntegrationEvent(_mapper.Map<CategoryCreatedPayload>(mainCategory)));
+
+            foreach (var subCategory in mainCategory.SubCategories)
+                _eventBus.Publish(
+                    new CategoryCreatedIntegrationEvent(_mapper.Map<CategoryCreatedPayload>(subCategory)));
+        }
+
 
         _logger.LogInformation("Category data seeded successfully!");
     }

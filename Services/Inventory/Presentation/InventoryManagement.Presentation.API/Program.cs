@@ -1,10 +1,7 @@
-using BuildingBlock.Core.Application.EventBus.Abstractions;
 using BuildingBlock.Presentation.API.Extensions;
 using BuildingBlock.Presentation.API.Hosts;
 using BuildingBlock.Presentation.API.Middlewares;
 using InventoryManagement.Core.Application;
-using InventoryManagement.Core.Application.IntegrationEvents.UserIntegrationEvents.Events;
-using InventoryManagement.Core.Application.IntegrationEvents.UserIntegrationEvents.Handlers;
 using InventoryManagement.Core.Domain;
 using InventoryManagement.Infrastructure.EntityFrameworkCore;
 using InventoryManagement.Presentation.API.Extensions;
@@ -24,9 +21,5 @@ var app = builder.Build();
 await app.UseDefaultMiddlewares(app.Environment, builder.Configuration);
 
 app.MapControllers();
-
-var eventBus = app.Services.GetRequiredService<IEventBus>();
-
-eventBus.Subscribe<UserCreatedIntegrationEvent, UserCreatedIntegrationEventHandler>();
 
 app.Run();
