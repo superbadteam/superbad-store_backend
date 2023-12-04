@@ -1,3 +1,4 @@
+using BuildingBlock.Core.Application;
 using BuildingBlock.Core.Application.CQRS;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
@@ -6,24 +7,32 @@ using InventoryManagement.Core.Application.CQRS.Queries.ProductQueries.Requests;
 using InventoryManagement.Core.Application.DTOs.ProductDTOs;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
 using InventoryManagement.Core.Domain.ProductAggregate.Exceptions;
+using InventoryManagement.Core.Domain.ProductAggregate.Specifications;
 
 namespace InventoryManagement.Core.Application.CQRS.Queries.ProductQueries.Handlers;
 
-public class GetProductQueryHandler : IQueryHandler<GetProductQuery, ProductDetailDto>
+public class GetCurrentUserProductQueryHandler : IQueryHandler<GetCurrentUserProductQuery, ProductDetailDto>
 {
+    private readonly ICurrentUser _currentUser;
     private readonly IReadOnlyRepository<Product> _productReadOnlyRepository;
 
-    public GetProductQueryHandler(IReadOnlyRepository<Product> productReadOnlyRepository)
+    public GetCurrentUserProductQueryHandler(IReadOnlyRepository<Product> productReadOnlyRepository,
+        ICurrentUser currentUser)
     {
         _productReadOnlyRepository = productReadOnlyRepository;
+        _currentUser = currentUser;
     }
 
-    public async Task<ProductDetailDto> Handle(GetProductQuery query, CancellationToken cancellationToken)
+    public async Task<ProductDetailDto> Handle(GetCurrentUserProductQuery query, CancellationToken cancellationToken)
     {
         var productIdSpecification = new EntityIdSpecification<Product>(query.ProductId);
 
+        var productUserIdSpecification = new ProductUserIdSpecification(_currentUser.Id);
+
+        var specification = productIdSpecification.And(productUserIdSpecification);
+
         return Optional<ProductDetailDto>
-            .Of(await _productReadOnlyRepository.GetAnyAsync<ProductDetailDto>(productIdSpecification))
+            .Of(await _productReadOnlyRepository.GetAnyAsync<ProductDetailDto>(specification))
             .ThrowIfNotExist(new ProductNotFoundException(query.ProductId)).Get();
     }
 }
