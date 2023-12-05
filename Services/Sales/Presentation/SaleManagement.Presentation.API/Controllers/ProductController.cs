@@ -1,7 +1,5 @@
 using BuildingBlock.Core.Application.DTOs;
-using BuildingBlock.Core.Domain.Shared.Constants;
 using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SaleManagement.Core.Application.CQRS.Queries.ProductQueries.Requests;
 using SaleManagement.Core.Application.DTOs.ProductDTOs;
@@ -20,12 +18,19 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Policy = Permissions.Product.View)]
     public async Task<ActionResult<FilterAndPagingResultDto<ProductSummaryDto>>> GetAllAsync(
         [FromQuery] FilterAndPagingProductsDto dto)
     {
         var products = await _mediator.Send(new FilterAndPagingProductsQuery(dto));
 
         return Ok(products);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<ProductDetailDto>> GetCurrentUserProductByIdAsync(Guid id)
+    {
+        var product = await _mediator.Send(new GetProductQuery(id));
+
+        return Ok(product);
     }
 }
