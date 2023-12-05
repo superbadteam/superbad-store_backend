@@ -20,21 +20,22 @@ public class ProductController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet]
-    public async Task<ActionResult<FilterAndPagingResultDto<ProductSummaryDto>>> GetAllAsync(
-        [FromQuery] FilterAndPagingProductsDto dto)
+    [HttpGet("me")]
+    [Authorize(Policy = Permissions.Product.View)]
+    public async Task<ActionResult<FilterAndPagingResultDto<ProductSummaryDto>>> GetCurrentUserProductsAsync(
+        [FromQuery] FilterAndPagingCurrentUserProductsDto dto)
     {
-        var products = await _mediator.Send(new FilterAndPagingProductsQuery(dto));
+        var products = await _mediator.Send(new FilterAndPagingCurrentUserProductsQuery(dto));
 
         return Ok(products);
     }
 
-    [HttpGet("{id:guid}")]
-    [ActionName(nameof(GetByIdAsync))]
+    [HttpGet("me/{id:guid}")]
+    [ActionName(nameof(GetCurrentUserProductByIdAsync))]
     [Authorize(Policy = Permissions.Product.View)]
-    public async Task<ActionResult<ProductDetailDto>> GetByIdAsync(Guid id)
+    public async Task<ActionResult<ProductDetailDto>> GetCurrentUserProductByIdAsync(Guid id)
     {
-        var product = await _mediator.Send(new GetProductQuery(id));
+        var product = await _mediator.Send(new GetCurrentUserProductQuery(id));
 
         return Ok(product);
     }
@@ -45,7 +46,7 @@ public class ProductController : ControllerBase
     {
         var product = await _mediator.Send(new CreateProductCommand(dto));
 
-        return CreatedAtAction(nameof(GetByIdAsync), new { id = product.Id }, product);
+        return CreatedAtAction(nameof(GetCurrentUserProductByIdAsync), new { id = product.Id }, product);
     }
 
     [HttpPut("{id:guid}")]

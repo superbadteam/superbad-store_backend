@@ -1,3 +1,4 @@
+using BuildingBlock.Core.Application;
 using BuildingBlock.Core.Application.CQRS;
 using BuildingBlock.Core.Application.DTOs;
 using BuildingBlock.Core.Domain.Repositories;
@@ -10,20 +11,25 @@ using InventoryManagement.Core.Domain.ProductAggregate.Specifications;
 namespace InventoryManagement.Core.Application.CQRS.Queries.ProductQueries.Handlers;
 
 public class
-    FilterAndPagingProductsQueryHandler : IQueryHandler<FilterAndPagingProductsQuery,
+    FilterAndPagingCurrentUserProductsQueryHandler : IQueryHandler<FilterAndPagingCurrentUserProductsQuery,
         FilterAndPagingResultDto<ProductSummaryDto>>
 {
+    private readonly ICurrentUser _currentUser;
     private readonly IReadOnlyRepository<Product> _repository;
 
-    public FilterAndPagingProductsQueryHandler(IReadOnlyRepository<Product> repository)
+    public FilterAndPagingCurrentUserProductsQueryHandler(IReadOnlyRepository<Product> repository,
+        ICurrentUser currentUser)
     {
         _repository = repository;
+        _currentUser = currentUser;
     }
 
-    public async Task<FilterAndPagingResultDto<ProductSummaryDto>> Handle(FilterAndPagingProductsQuery query,
+    public async Task<FilterAndPagingResultDto<ProductSummaryDto>> Handle(FilterAndPagingCurrentUserProductsQuery query,
         CancellationToken cancellationToken)
     {
         var productNamePartialMatchSpecification = new ProductNamePartialMatchSpecification(query.Dto.Keyword);
+
+        var productUserIdSpecification = new ProductUserIdSpecification(_currentUser.Id);
 
         var productConditionSpecification = new ProductConditionSpecification(query.Dto.Condition);
 
@@ -37,7 +43,8 @@ public class
                 : productCategorySpecifications.Or(categorySpecification);
         }
 
-        var specification = productNamePartialMatchSpecification.And(productConditionSpecification);
+        var specification = productNamePartialMatchSpecification.And(productConditionSpecification)
+            .And(productUserIdSpecification);
 
         specification = productCategorySpecifications == null
             ? specification

@@ -5,7 +5,7 @@ using InventoryManagement.Core.Domain.ProductAggregate.Entities.Enums;
 
 namespace InventoryManagement.Core.Application.DTOs.ProductDTOs;
 
-public class FilterAndPagingProductsDto : FilterAndPagingDto<ProductSortProperty>
+public class FilterAndPagingCurrentUserProductsDto : FilterAndPagingDto<ProductSortProperty>
 {
     private string? _category;
 
