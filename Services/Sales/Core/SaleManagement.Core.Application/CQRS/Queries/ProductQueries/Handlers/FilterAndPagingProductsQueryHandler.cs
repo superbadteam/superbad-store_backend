@@ -1,9 +1,11 @@
 using BuildingBlock.Core.Application.CQRS;
 using BuildingBlock.Core.Application.DTOs;
 using BuildingBlock.Core.Domain.Repositories;
+using BuildingBlock.Core.Domain.Specifications.Abstractions;
 using SaleManagement.Core.Application.CQRS.Queries.ProductQueries.Requests;
 using SaleManagement.Core.Application.DTOs.ProductDTOs;
 using SaleManagement.Core.Domain.ProductAggregate.Entities;
+using SaleManagement.Core.Domain.ProductAggregate.Specifications;
 
 namespace SaleManagement.Core.Application.CQRS.Queries.ProductQueries.Handlers;
 
@@ -21,23 +23,31 @@ public class
     public async Task<FilterAndPagingResultDto<ProductSummaryDto>> Handle(FilterAndPagingProductsQuery query,
         CancellationToken cancellationToken)
     {
-        // var productCodePartialMatchSpecification = new ProductCodePartialMatchSpecification(query.Dto.Keyword);
-        //
-        // var productNamePartialMatchSpecification = new ProductNamePartialMatchSpecification(query.Dto.Keyword);
-        //
-        // var productTypeSpecification = new ProductTypeSpecification(query.Dto.Type);
-        //
-        // var productKeywordPartialMatchSpecification =
-        //     productNamePartialMatchSpecification.Or(productCodePartialMatchSpecification);
-        //
-        // var specification = productKeywordPartialMatchSpecification.And(productTypeSpecification);
-        //
-        // var (products, totalCount) = await _repository.GetFilterAndPagingAsync<ProductSummaryDto>(specification,
-        //     query.Dto.Sort, query.Dto.PageIndex, query.Dto.PageSize);
-        //
-        // return new FilterAndPagingResultDto<ProductSummaryDto>(products, query.Dto.PageIndex, query.Dto.PageSize,
-        //     totalCount);
+        var productNamePartialMatchSpecification = new ProductNamePartialMatchSpecification(query.Dto.Keyword);
 
-        throw new NotImplementedException();
+        var productConditionSpecification = new ProductConditionSpecification(query.Dto.Condition);
+
+        Specification<Product>? productCategorySpecifications = null;
+
+        foreach (var categoryId in query.Dto.CategoryIds)
+        {
+            var categorySpecification = new ProductCategoryIdSpecification(categoryId);
+            productCategorySpecifications = productCategorySpecifications == null
+                ? categorySpecification
+                : productCategorySpecifications.Or(categorySpecification);
+        }
+
+        var specification = productNamePartialMatchSpecification.And(productConditionSpecification);
+
+        specification = productCategorySpecifications == null
+            ? specification
+            : specification.And(productCategorySpecifications);
+
+
+        var (products, totalCount) = await _repository.GetFilterAndPagingAsync<ProductSummaryDto>(
+            specification, query.Dto.Sort, query.Dto.PageIndex, query.Dto.PageSize);
+
+        return new FilterAndPagingResultDto<ProductSummaryDto>(products, query.Dto.PageIndex, query.Dto.PageSize,
+            totalCount);
     }
 }
