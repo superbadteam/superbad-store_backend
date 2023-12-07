@@ -32,6 +32,8 @@ public sealed class User : AggregateRoot
     public string? CoverUrl { get; set; }
 
     public int ProductSold { get; set; }
+    
+    public ICollection<Cart> Carts { get; set; } = null!; 
 
     public ICollection<Product> Products { get; set; } = null!;
 }
