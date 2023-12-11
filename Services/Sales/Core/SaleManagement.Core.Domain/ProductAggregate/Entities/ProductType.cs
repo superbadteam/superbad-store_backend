@@ -1,4 +1,5 @@
 using BuildingBlock.Core.Domain;
+using SaleManagement.Core.Domain.UserAggregate.Entities;
 
 namespace SaleManagement.Core.Domain.ProductAggregate.Entities;
 
@@ -31,4 +32,6 @@ public sealed class ProductType : Entity
     public double Price { get; set; }
 
     public string? ImageUrl { get; set; }
+
+    public ICollection<Cart> Carts { get; set; } = null!;
 }

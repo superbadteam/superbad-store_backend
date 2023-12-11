@@ -2,7 +2,7 @@ using AutoMapper;
 using SaleManagement.Core.Application.DTOs.ProductDTOs;
 using SaleManagement.Core.Domain.ProductAggregate.Entities;
 
-namespace SaleManagement.Infrastructure.EntityFrameworkCore;
+namespace SaleManagement.Infrastructure.EntityFrameworkCore.Mappers;
 
 public class ProductMapper : Profile
 {
