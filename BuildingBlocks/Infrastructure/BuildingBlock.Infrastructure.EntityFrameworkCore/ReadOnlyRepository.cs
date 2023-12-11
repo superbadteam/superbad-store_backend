@@ -24,9 +24,12 @@ public class ReadOnlyRepository<TDbContext, TEntity> : IReadOnlyRepository<TEnti
 
     protected DbSet<TEntity> DbSet => _dbSet ??= _dbContext.Set<TEntity>();
 
-    public Task<TEntity?> GetAnyAsync(ISpecification<TEntity>? specification = null, string? includeTables = null)
+    public Task<TEntity?> GetAnyAsync(ISpecification<TEntity>? specification = null, string? includeTables = null,
+        bool ignoreQueryFilters = false)
     {
         var query = DbSet.AsNoTracking();
+
+        query = IgnoreQueryFilters(query, ignoreQueryFilters);
 
         query = Filter(query, specification);
 
@@ -36,9 +39,11 @@ public class ReadOnlyRepository<TDbContext, TEntity> : IReadOnlyRepository<TEnti
     }
 
     public Task<List<TEntity>> GetAllAsync(ISpecification<TEntity>? specification = null,
-        string? includeTables = null)
+        string? includeTables = null, bool ignoreQueryFilters = false)
     {
         var query = DbSet.AsNoTracking();
+
+        query = IgnoreQueryFilters(query, ignoreQueryFilters);
 
         query = Filter(query, specification);
 
@@ -47,13 +52,12 @@ public class ReadOnlyRepository<TDbContext, TEntity> : IReadOnlyRepository<TEnti
         return query.ToListAsync();
     }
 
-    public async Task<(List<TEntity>, int)> GetFilterAndPagingAsync(
-        ISpecification<TEntity>? specification,
-        string sort,
-        int pageIndex,
-        int pageSize, string? includeTables = null)
+    public async Task<(List<TEntity>, int)> GetFilterAndPagingAsync(ISpecification<TEntity>? specification, string sort,
+        int pageIndex, int pageSize, string? includeTables = null, bool ignoreQueryFilters = false)
     {
         var query = DbSet.AsNoTracking();
+
+        query = IgnoreQueryFilters(query, ignoreQueryFilters);
 
         query = Filter(query, specification);
 
@@ -68,22 +72,23 @@ public class ReadOnlyRepository<TDbContext, TEntity> : IReadOnlyRepository<TEnti
         return (await query.ToListAsync(), totalCount);
     }
 
-    public Task<bool> CheckIfExistAsync(ISpecification<TEntity>? specification = null)
+    public Task<bool> CheckIfExistAsync(ISpecification<TEntity>? specification = null, bool ignoreQueryFilters = false)
     {
         var query = DbSet.AsNoTracking();
+
+        query = IgnoreQueryFilters(query, ignoreQueryFilters);
 
         query = Filter(query, specification);
 
         return query.AnyAsync();
     }
 
-    public async Task<(List<TDto>, int)> GetFilterAndPagingAsync<TDto>(
-        ISpecification<TEntity>? specification,
-        string sort,
-        int pageIndex,
-        int pageSize, string? includeTables = null)
+    public async Task<(List<TDto>, int)> GetFilterAndPagingAsync<TDto>(ISpecification<TEntity>? specification,
+        string sort, int pageIndex, int pageSize, string? includeTables = null, bool ignoreQueryFilters = false)
     {
         var query = DbSet.AsNoTracking();
+
+        query = IgnoreQueryFilters(query, ignoreQueryFilters);
 
         query = Filter(query, specification);
 
@@ -98,9 +103,12 @@ public class ReadOnlyRepository<TDbContext, TEntity> : IReadOnlyRepository<TEnti
         return (await query.ProjectTo<TDto>(_mapper.ConfigurationProvider).ToListAsync(), totalCount);
     }
 
-    public Task<TDto?> GetAnyAsync<TDto>(ISpecification<TEntity>? specification = null, string? includeTables = null)
+    public Task<TDto?> GetAnyAsync<TDto>(ISpecification<TEntity>? specification = null, string? includeTables = null,
+        bool ignoreQueryFilters = false)
     {
         var query = DbSet.AsNoTracking();
+
+        query = IgnoreQueryFilters(query, ignoreQueryFilters);
 
         query = Filter(query, specification);
 
@@ -110,15 +118,22 @@ public class ReadOnlyRepository<TDbContext, TEntity> : IReadOnlyRepository<TEnti
     }
 
     public Task<List<TDto>> GetAllAsync<TDto>(ISpecification<TEntity>? specification = null,
-        string? includeTables = null)
+        string? includeTables = null, bool ignoreQueryFilters = false)
     {
         var query = DbSet.AsNoTracking();
+
+        query = IgnoreQueryFilters(query, ignoreQueryFilters);
 
         query = Filter(query, specification);
 
         query = Include(query, includeTables);
 
         return query.ProjectTo<TDto>(_mapper.ConfigurationProvider).ToListAsync();
+    }
+
+    private static IQueryable<TEntity> IgnoreQueryFilters(IQueryable<TEntity> query, bool ignoreQueryFilters)
+    {
+        return ignoreQueryFilters ? query.IgnoreQueryFilters() : query;
     }
 
     private static IQueryable<TEntity> Filter(IQueryable<TEntity> query, ISpecification<TEntity>? specification)
