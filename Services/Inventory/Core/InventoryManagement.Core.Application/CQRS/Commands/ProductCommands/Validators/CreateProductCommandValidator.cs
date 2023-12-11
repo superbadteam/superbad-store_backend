@@ -7,16 +7,25 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
 {
     public CreateProductCommandValidator()
     {
-        RuleFor(command => command.Dto.Name)
+        RuleFor(x => x.Dto.Name)
             .CheckProductNameValidation();
 
-        RuleFor(command => command.Dto.Description)
+        RuleFor(x => x.Dto.Description)
             .CheckProductDescriptionValidation();
 
-        RuleForEach(command => command.Dto.Types)
+        RuleFor(x => x.Dto.Types)
+            .NotEmpty()
+            .WithMessage("Must has at least one type");
+
+        RuleFor(x => x.Dto.Images)
+            .NotEmpty()
+            .WithMessage("Must has at least one image");
+        ;
+
+        RuleForEach(x => x.Dto.Types)
             .SetValidator(new CreateProductTypeDtoValidator());
 
-        RuleForEach(command => command.Dto.Images)
+        RuleForEach(x => x.Dto.Images)
             .SetValidator(new CreateProductImageDtoValidator());
     }
 }
