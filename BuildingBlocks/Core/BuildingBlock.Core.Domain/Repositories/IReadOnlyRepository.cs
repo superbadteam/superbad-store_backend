@@ -4,19 +4,23 @@ namespace BuildingBlock.Core.Domain.Repositories;
 
 public interface IReadOnlyRepository<TEntity> where TEntity : IEntity
 {
-    Task<List<TDto>> GetAllAsync<TDto>(ISpecification<TEntity>? specification = null, string? includeTables = null);
+    Task<List<TDto>> GetAllAsync<TDto>(ISpecification<TEntity>? specification = null, string? includeTables = null,
+        bool ignoreQueryFilters = false);
 
-    Task<bool> CheckIfExistAsync(ISpecification<TEntity>? specification = null);
+    Task<bool> CheckIfExistAsync(ISpecification<TEntity>? specification = null, bool ignoreQueryFilters = false);
 
     Task<(List<TDto>, int)> GetFilterAndPagingAsync<TDto>(ISpecification<TEntity>? specification,
-        string sort, int pageIndex, int pageSize, string? includeTables = null);
+        string sort, int pageIndex, int pageSize, string? includeTables = null, bool ignoreQueryFilters = false);
 
-    Task<TDto?> GetAnyAsync<TDto>(ISpecification<TEntity>? specification = null, string? includeTables = null);
+    Task<TDto?> GetAnyAsync<TDto>(ISpecification<TEntity>? specification = null, string? includeTables = null,
+        bool ignoreQueryFilters = false);
 
-    Task<TEntity?> GetAnyAsync(ISpecification<TEntity>? specification = null, string? includeTables = null);
+    Task<TEntity?> GetAnyAsync(ISpecification<TEntity>? specification = null, string? includeTables = null,
+        bool ignoreQueryFilters = false);
 
-    Task<List<TEntity>> GetAllAsync(ISpecification<TEntity>? specification = null, string? includeTables = null);
+    Task<List<TEntity>> GetAllAsync(ISpecification<TEntity>? specification = null, string? includeTables = null,
+        bool ignoreQueryFilters = false);
 
     Task<(List<TEntity>, int)> GetFilterAndPagingAsync(ISpecification<TEntity>? specification,
-        string sort, int pageIndex, int pageSize, string? includeTables = null);
+        string sort, int pageIndex, int pageSize, string? includeTables = null, bool ignoreQueryFilters = false);
 }
