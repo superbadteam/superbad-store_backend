@@ -9,6 +9,8 @@ public sealed class User : AggregateRoot
     {
         AverageRating = 0;
         ProductSold = 0;
+        Carts = new List<Cart>();
+        Products = new List<Product>();
     }
 
     public User(DateTime createdAt, string createdBy) : this()
@@ -33,5 +35,14 @@ public sealed class User : AggregateRoot
 
     public int ProductSold { get; set; }
 
-    public ICollection<Product> Products { get; set; } = null!;
+    public List<Cart> Carts { get; set; }
+
+    public List<Product> Products { get; set; }
+
+    public double TotalPrice { get; set; }
+
+    public void AddToCart(ProductType productType, int quantity)
+    {
+        Carts.Add(new Cart(productType, quantity));
+    }
 }

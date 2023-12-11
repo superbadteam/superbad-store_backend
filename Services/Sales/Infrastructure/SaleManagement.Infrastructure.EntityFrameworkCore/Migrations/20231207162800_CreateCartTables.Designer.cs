@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SaleManagement.Infrastructure.EntityFrameworkCore;
@@ -11,9 +12,11 @@ using SaleManagement.Infrastructure.EntityFrameworkCore;
 namespace SaleManagement.Infrastructure.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(SaleDbContext))]
-    partial class SaleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231207162800_CreateCartTables")]
+    partial class CreateCartTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -236,7 +239,7 @@ namespace SaleManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.Property<string>("DeletedBy")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("ProductTypeId")
+                    b.Property<Guid>("ProductId")
                         .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
@@ -258,9 +261,9 @@ namespace SaleManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductTypeId");
+                    b.HasIndex("ProductId");
 
-                    b.HasIndex("UserId", "ProductTypeId")
+                    b.HasIndex("UserId", "ProductId")
                         .IsUnique();
 
                     b.ToTable("Cart");
@@ -305,11 +308,6 @@ namespace SaleManagement.Infrastructure.EntityFrameworkCore.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasDefaultValue(0);
-
-                    b.Property<double>("TotalPrice")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("double precision")
-                        .HasDefaultValue(0.0);
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -374,9 +372,9 @@ namespace SaleManagement.Infrastructure.EntityFrameworkCore.Migrations
 
             modelBuilder.Entity("SaleManagement.Core.Domain.UserAggregate.Entities.Cart", b =>
                 {
-                    b.HasOne("SaleManagement.Core.Domain.ProductAggregate.Entities.ProductType", "ProductType")
-                        .WithMany("Carts")
-                        .HasForeignKey("ProductTypeId")
+                    b.HasOne("SaleManagement.Core.Domain.ProductAggregate.Entities.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -386,7 +384,7 @@ namespace SaleManagement.Infrastructure.EntityFrameworkCore.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ProductType");
+                    b.Navigation("Product");
 
                     b.Navigation("User");
                 });
@@ -403,11 +401,6 @@ namespace SaleManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("Types");
-                });
-
-            modelBuilder.Entity("SaleManagement.Core.Domain.ProductAggregate.Entities.ProductType", b =>
-                {
-                    b.Navigation("Carts");
                 });
 
             modelBuilder.Entity("SaleManagement.Core.Domain.UserAggregate.Entities.User", b =>
