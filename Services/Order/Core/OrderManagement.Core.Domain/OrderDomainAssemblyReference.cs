@@ -4,5 +4,4 @@ namespace OrderManagement.Core.Domain;
 
 public class OrderDomainAssemblyReference : DomainAssemblyReference
 {
-    
 }

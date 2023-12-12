@@ -4,7 +4,7 @@ using OrderManagement.Core.Domain.OrderAggregate.Entities;
 
 namespace OrderManagement.Infrastructure.EntityFrameworkCore.EntityConfigurations.OrderAggregateConfigurations;
 
-public class OrderConfiguration: IEntityTypeConfiguration<Order>
+public class OrderConfiguration : IEntityTypeConfiguration<Order>
 {
     public void Configure(EntityTypeBuilder<Order> builder)
     {

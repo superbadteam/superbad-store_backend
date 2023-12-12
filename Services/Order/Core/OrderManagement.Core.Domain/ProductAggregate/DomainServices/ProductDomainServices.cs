@@ -1,4 +1,3 @@
-using BuildingBlock.Core.Domain.Exceptions;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using BuildingBlock.Core.Domain.Specifications.Implementations;
@@ -84,7 +83,7 @@ public class ProductDomainService : IProductDomainService
             .Of(await _productReadOnlyRepository.CheckIfExistAsync(new EntityIdSpecification<Product>(productId)))
             .ThrowIfExist(new ProductConflictException(productId));
     }
-    
+
 
     private async Task ThrowIfUserIsNotExistAsync(Guid userId)
     {

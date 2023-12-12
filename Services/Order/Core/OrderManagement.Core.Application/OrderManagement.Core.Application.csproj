@@ -7,10 +7,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\..\BuildingBlocks\Core\BuildingBlock.Core.Application\BuildingBlock.Core.Application.csproj" />
-      <ProjectReference Include="..\OrderManagement.Core.Domain\OrderManagement.Core.Domain.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\Core\BuildingBlock.Core.Application\BuildingBlock.Core.Application.csproj"/>
+        <ProjectReference Include="..\OrderManagement.Core.Domain\OrderManagement.Core.Domain.csproj"/>
     </ItemGroup>
 
 
+    <ItemGroup>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+    </ItemGroup>
 
 </Project>

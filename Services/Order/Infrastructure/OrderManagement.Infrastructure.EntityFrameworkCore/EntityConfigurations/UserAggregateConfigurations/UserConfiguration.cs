@@ -4,7 +4,7 @@ using OrderManagement.Core.Domain.UserAggregate.Entities;
 
 namespace OrderManagement.Infrastructure.EntityFrameworkCore.EntityConfigurations.UserAggregateConfigurations;
 
-public class UserConfiguration: IEntityTypeConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {

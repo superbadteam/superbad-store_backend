@@ -17,5 +17,8 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
         builder.HasOne(location => location.ParentLocation)
             .WithMany(location => location.SubLocations)
             .HasForeignKey(location => location.ParentId);
+
+        builder.HasIndex(location => location.Code)
+            .IsUnique();
     }
 }

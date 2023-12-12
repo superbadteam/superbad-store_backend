@@ -18,10 +18,10 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
 
         builder.Property(orderItem => orderItem.Quantity)
             .IsRequired();
-        
+
         builder.Property(orderItem => orderItem.TotalPrice)
             .IsRequired();
-        
+
         builder.HasIndex(e => new { e.OrderId, e.ProductTypeId })
             .IsUnique();
     }

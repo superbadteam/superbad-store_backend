@@ -8,17 +8,10 @@
 
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\..\BuildingBlocks\Core\BuildingBlock.Core.Domain\BuildingBlock.Core.Domain.csproj" />
-
-
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\Core\BuildingBlock.Core.Domain\BuildingBlock.Core.Domain.csproj"/>
 
 
     </ItemGroup>
-
-
-
-
-
 
 
 </Project>

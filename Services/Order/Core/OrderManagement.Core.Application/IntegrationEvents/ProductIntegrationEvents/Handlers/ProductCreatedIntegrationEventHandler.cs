@@ -28,11 +28,9 @@ public class ProductCreatedIntegrationEventHandler : IIntegrationEventHandler<Pr
             @event.Product.CreatedBy);
 
         foreach (var productTypePayload in @event.Product.Types)
-        {
-             _productDomainService.CreateProductType(product, productTypePayload.Id,
+            _productDomainService.CreateProductType(product, productTypePayload.Id,
                 productTypePayload.Name, productTypePayload.Quantity, productTypePayload.Price,
                 productTypePayload.ImageUrl, productTypePayload.CreatedAt, productTypePayload.CreatedBy);
-        }
 
         await _productOperationRepository.AddAsync(product);
 
