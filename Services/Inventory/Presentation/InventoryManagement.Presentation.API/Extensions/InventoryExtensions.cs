@@ -2,7 +2,7 @@ using BuildingBlock.Presentation.API.Extensions;
 
 namespace InventoryManagement.Presentation.API.Extensions;
 
-public static class ProductExtensions
+public static class InventoryExtensions
 {
     public static IServiceCollection AddInventoryExtensions(this IServiceCollection services,
         IConfiguration configuration)

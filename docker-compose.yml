@@ -23,6 +23,9 @@ services:
       - Routes__3__DownstreamHostAndPorts__0__Host=superbad-store.shared.api
       - Routes__3__DownstreamHostAndPorts__0__Port=80
       - SwaggerEndPoints__3__Config__0__Url=http://superbad-store.shared.api/swagger/v1/swagger.json
+      - Routes__4__DownstreamHostAndPorts__0__Host=superbad-store.order.api
+      - Routes__4__DownstreamHostAndPorts__0__Port=80
+      - SwaggerEndPoints__4__Config__0__Url=http://superbad-store.order.api/swagger/v1/swagger.json
     depends_on:
       - identity-service
       - inventory-service
@@ -134,6 +137,33 @@ services:
         condition: service_healthy
       seq:
         condition: service_started
+  order-service:
+    container_name: superbad-store.order.api
+    image: phuc1403/superbad-store.order:dev
+    ports:
+      - "5005:80"
+    build:
+      context: .
+      dockerfile: Services/Order/Presentation/OrderManagement.Presentation.API/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__Postgres=Host=superbad-store.db; Port=5432; Database=Order; Username=postgres; Password=password
+      - ConnectionStrings__RabbitMQ=superbad-store.rabbitmq
+      - ConnectionStrings__Redis=superbad-store.redis
+      - GrpcUrls__Identity=http://superbad-store.identity.api:50051
+      - Serilog__SeqServerUrl=http://superbad-store.seq.:5341
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      seq:
+        condition: service_started
+    links:
+      - db
+      - rabbitmq
   db:
     container_name: superbad-store.db
     image: postgres:latest
