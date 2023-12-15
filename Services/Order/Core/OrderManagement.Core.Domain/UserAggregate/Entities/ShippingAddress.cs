@@ -6,6 +6,8 @@ namespace OrderManagement.Core.Domain.UserAggregate.Entities;
 
 public class ShippingAddress : Entity
 {
+    public string Name { get; set; } = null!;
+
     public string PhoneNumber { get; set; } = null!;
 
     public Guid UserId { get; set; }

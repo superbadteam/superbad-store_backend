@@ -11,7 +11,7 @@ public sealed class Product : AggregateRoot
         Types = new List<ProductType>();
     }
 
-    public Product(Guid id, Guid userId, string name, ProductCondition condition, string image, DateTime createdAt,
+    public Product(Guid id, Guid userId, string name, ProductCondition condition, string imageUrl, DateTime createdAt,
         string createdBy) : this()
     {
         Id = id;
@@ -20,7 +20,7 @@ public sealed class Product : AggregateRoot
         UserId = userId;
         CreatedAt = createdAt;
         CreatedBy = createdBy;
-        Image = image;
+        ImageUrl = imageUrl;
     }
 
     public Guid UserId { get; set; }
@@ -33,7 +33,7 @@ public sealed class Product : AggregateRoot
 
     public ProductCondition Condition { get; set; }
 
-    public string Image { get; set; } = null!;
+    public string ImageUrl { get; set; } = null!;
 
     public ProductType AddTypes(Guid id, string name, int quantity, double price, DateTime createdAt,
         string createdBy)

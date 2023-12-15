@@ -19,5 +19,9 @@ public class ShippingAddressConfiguration : IEntityTypeConfiguration<ShippingAdd
         builder.Property(sa => sa.PhoneNumber)
             .HasMaxLength(20)
             .IsRequired();
+
+        builder.Property(sa => sa.Name)
+            .IsRequired()
+            .HasMaxLength(320);
     }
 }

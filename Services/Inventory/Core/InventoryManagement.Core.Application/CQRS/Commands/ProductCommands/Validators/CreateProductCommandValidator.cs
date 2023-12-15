@@ -20,7 +20,6 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
         RuleFor(x => x.Dto.Images)
             .NotEmpty()
             .WithMessage("Must has at least one image");
-        ;
 
         RuleForEach(x => x.Dto.Types)
             .SetValidator(new CreateProductTypeDtoValidator());
