@@ -39,4 +39,6 @@ eventBus.Subscribe<UserCreatedIntegrationEvent, UserCreatedIntegrationEventHandl
 
 eventBus.Subscribe<CategoryCreatedIntegrationEvent, CategoryCreatedIntegrationEventHandler>();
 
+eventBus.Subscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHandler>();
+
 app.Run();

@@ -2,13 +2,15 @@ using BuildingBlock.Core.Application;
 using BuildingBlock.Infrastructure.EntityFrameworkCore;
 using InventoryManagement.Core.Domain.CategoryAggregate.Entities;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace InventoryManagement.Infrastructure.EntityFrameworkCore;
 
 public class InventoryDbContext : BaseDbContext
 {
-    public InventoryDbContext(DbContextOptions options, ICurrentUser currentUser) : base(options, currentUser)
+    public InventoryDbContext(DbContextOptions options, ICurrentUser currentUser, IMediator mediator) : base(options,
+        currentUser, mediator)
     {
     }
 

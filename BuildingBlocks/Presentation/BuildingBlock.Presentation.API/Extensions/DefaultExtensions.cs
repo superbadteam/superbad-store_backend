@@ -29,7 +29,7 @@ public static class DefaultExtensions
             .AddCurrentUser()
             .AddDatabase<TDbContext>(configuration)
             .AddMapper<TDbContext>()
-            .AddCqrs<TApplicationAssemblyReference>()
+            .AddCqrs<TApplicationAssemblyReference, TDomainAssemblyReference>()
             .AddDefaultOpenApi(configuration)
             .AddEventBus(configuration)
             .AddValidatorsFromAssembly(typeof(TApplicationAssemblyReference).Assembly)

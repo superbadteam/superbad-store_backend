@@ -65,7 +65,7 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasIndex("ParentId");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("OrderManagement.Core.Domain.OrderAggregate.Entities.Order", b =>
@@ -108,7 +108,7 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("OrderManagement.Core.Domain.OrderAggregate.Entities.OrderItem", b =>
@@ -155,7 +155,7 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.HasIndex("OrderId", "ProductTypeId")
                         .IsUnique();
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
                 });
 
             modelBuilder.Entity("OrderManagement.Core.Domain.ProductAggregate.Entities.Product", b =>
@@ -180,7 +180,7 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.Property<string>("DeletedBy")
                         .HasColumnType("text");
 
-                    b.Property<string>("Image")
+                    b.Property<string>("ImageUrl")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -202,7 +202,7 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("OrderManagement.Core.Domain.ProductAggregate.Entities.ProductType", b =>
@@ -248,7 +248,7 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductTypes");
+                    b.ToTable("ProductTypes", (string)null);
                 });
 
             modelBuilder.Entity("OrderManagement.Core.Domain.UserAggregate.Entities.ShippingAddress", b =>
@@ -280,6 +280,11 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.Property<bool>("IsMainAddress")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(320)
+                        .HasColumnType("character varying(320)");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -300,7 +305,7 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("ShippingAddresses");
+                    b.ToTable("ShippingAddresses", (string)null);
                 });
 
             modelBuilder.Entity("OrderManagement.Core.Domain.UserAggregate.Entities.User", b =>
@@ -335,7 +340,7 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("OrderManagement.Core.Domain.LocationAggregate.Entities.Location", b =>

@@ -1,5 +1,6 @@
 using BuildingBlock.Core.Application;
 using BuildingBlock.Infrastructure.EntityFrameworkCore;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OrderManagement.Core.Domain.LocationAggregate.Entities;
 using OrderManagement.Core.Domain.OrderAggregate.Entities;
@@ -10,7 +11,8 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore;
 
 public class OrderDbContext : BaseDbContext
 {
-    public OrderDbContext(DbContextOptions options, ICurrentUser currentUser) : base(options, currentUser)
+    public OrderDbContext(DbContextOptions options, ICurrentUser currentUser, IMediator mediator) : base(options,
+        currentUser, mediator)
     {
     }
 

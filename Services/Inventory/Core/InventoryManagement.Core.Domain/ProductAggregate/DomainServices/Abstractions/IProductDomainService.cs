@@ -15,4 +15,6 @@ public interface IProductDomainService
     ProductType CreateProductType(Product product, string name, int quantity, double price, string? imageUrl);
 
     void CreateProductImage(Product product, string url);
+
+    void IncreaseSold(Product product, Guid productTypeId, int quantity);
 }

@@ -8,6 +8,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\Infrastructure\BuildingBlock.Infrastructure.EntityFrameworkCore\BuildingBlock.Infrastructure.EntityFrameworkCore.csproj"/>
+        <ProjectReference Include="..\..\Core\OrderManagement.Core.Application\OrderManagement.Core.Application.csproj"/>
         <ProjectReference Include="..\..\Core\OrderManagement.Core.Domain\OrderManagement.Core.Domain.csproj"/>
     </ItemGroup>
 

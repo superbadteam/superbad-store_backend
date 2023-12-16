@@ -66,6 +66,23 @@ public class ProductDomainService : IProductDomainService
         return product.AddTypes(id, name, quantity, price, createdAt, createdBy);
     }
 
+    public void Sell(Product product, Guid productTypeId, int quantity)
+    {
+        var productType = CheckValidOnSell(product, productTypeId, quantity);
+
+        productType.Quantity -= quantity;
+    }
+
+    private static ProductType CheckValidOnSell(Product product, Guid productTypeId, int quantity)
+    {
+        var productType = Optional<ProductType>.Of(product.Types.FirstOrDefault(type => type.Id == productTypeId))
+            .ThrowIfNotExist(new ProductTypeNotFoundException(productTypeId)).Get();
+
+        if (productType.Quantity < quantity) throw new ProductTypeQuantityInvalidException();
+
+        return productType;
+    }
+
     private Task<Product> CheckValidOnDeleteAsync(Guid id)
     {
         return GetOrThrowAsync(id);
