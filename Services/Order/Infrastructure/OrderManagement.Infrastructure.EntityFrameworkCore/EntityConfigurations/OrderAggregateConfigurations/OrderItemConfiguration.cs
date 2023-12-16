@@ -9,7 +9,7 @@ public class OrderItemConfiguration : IEntityTypeConfiguration<OrderItem>
     public void Configure(EntityTypeBuilder<OrderItem> builder)
     {
         builder.HasOne(orderItem => orderItem.Order)
-            .WithMany(order => order.OrderItems)
+            .WithMany(order => order.Items)
             .HasForeignKey(orderItem => orderItem.OrderId);
 
         builder.HasOne(orderItem => orderItem.ProductType)

@@ -72,9 +72,8 @@ public class OrderDomainService : IOrderDomainService
 
         var specification = shippingAddressUserIdSpecification.And(shippingAddressIdSpecification);
 
-        await EntityHelper.ThrowIfNotExist(shippingAddressId,
-            new ShippingAddressNotFoundException(shippingAddressId, user.Id), _shippingAddressReadOnlyRepository,
-            specification);
+        await EntityHelper.ThrowIfNotExistAsync(specification,
+            new ShippingAddressNotFoundException(shippingAddressId, user.Id), _shippingAddressReadOnlyRepository);
 
         CheckOrderItems(orderItems);
     }

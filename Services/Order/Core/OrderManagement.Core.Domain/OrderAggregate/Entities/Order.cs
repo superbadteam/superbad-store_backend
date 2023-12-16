@@ -7,15 +7,15 @@ public class Order : AggregateRoot
 {
     public Order()
     {
-        OrderItems = new List<OrderItem>();
+        Items = new List<OrderItem>();
     }
 
-    public Order(Guid userId, Guid shippingAddressId, List<OrderItem> orderItems) : this()
+    public Order(Guid userId, Guid shippingAddressId, List<OrderItem> items) : this()
     {
         UserId = userId;
         ShippingAddressId = shippingAddressId;
-        OrderItems = orderItems;
-        TotalPrice = orderItems.Sum(x => x.TotalPrice);
+        Items = items;
+        TotalPrice = items.Sum(x => x.TotalPrice);
     }
 
     public Guid UserId { get; set; }
@@ -26,7 +26,7 @@ public class Order : AggregateRoot
 
     public ShippingAddress ShippingAddress { get; set; } = null!;
 
-    public List<OrderItem> OrderItems { get; set; }
+    public List<OrderItem> Items { get; set; }
 
     public double TotalPrice { get; set; }
 }

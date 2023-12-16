@@ -76,6 +76,25 @@ public class ProductDomainService : IProductDomainService
         product.AddImage(id, url, createdAt, createdBy);
     }
 
+    public void IncreaseSold(Product product, Guid productTypeId, int quantity)
+    {
+        var productType = CheckValidOnIncreaseSold(product, productTypeId, quantity);
+
+        productType.Quantity -= quantity;
+        product.Sold += quantity;
+    }
+
+    private ProductType CheckValidOnIncreaseSold(Product product, Guid productTypeId, int quantity)
+    {
+        var productType = Optional<ProductType>
+            .Of(product.Types.FirstOrDefault(type => type.Id == productTypeId))
+            .ThrowIfNotExist(new ProductTypeNotFoundException(productTypeId, product.Id)).Get();
+
+        if (productType.Quantity < quantity) throw new ProductTypeQuantityInvalidException();
+
+        return productType;
+    }
+
     private Task<Product> CheckValidOnDeleteAsync(Guid id)
     {
         return GetOrThrowAsync(id);

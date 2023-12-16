@@ -1,7 +1,7 @@
 using BuildingBlock.Core.Application.IntegrationEvents.Events;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities.Enums;
 
-namespace InventoryManagement.Core.Application.IntegrationEvents.Events;
+namespace InventoryManagement.Core.Application.IntegrationEvents.ProductIntegrationEvents.Events;
 
 public record ProductCreatedIntegrationEvent(ProductCreatedPayload Product) : IntegrationEvent;
 

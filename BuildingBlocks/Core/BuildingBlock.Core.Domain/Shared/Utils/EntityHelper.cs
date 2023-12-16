@@ -6,6 +6,12 @@ namespace BuildingBlock.Core.Domain.Shared.Utils;
 
 public static class EntityHelper
 {
+    public static async Task<T> GetOrThrowAsync<T>(Specification<T>? specification, Exception exception,
+        IReadOnlyRepository<T> readOnlyRepository) where T : IEntity
+    {
+        return Optional<T>.Of(await readOnlyRepository.GetAnyAsync(specification)).ThrowIfNotExist(exception).Get();
+    }
+
     public static async Task<T> GetOrThrowAsync<T>(Guid id, Exception exception,
         IReadOnlyRepository<T> readOnlyRepository) where T : IEntity
     {
@@ -14,7 +20,8 @@ public static class EntityHelper
         return Optional<T>.Of(await readOnlyRepository.GetAnyAsync(specification)).ThrowIfNotExist(exception).Get();
     }
 
-    public static async Task ThrowIfNotExist<T>(Guid id, Exception exception, IReadOnlyRepository<T> readOnlyRepository)
+    public static async Task ThrowIfNotExistAsync<T>(Guid id, Exception exception,
+        IReadOnlyRepository<T> readOnlyRepository)
         where T : IEntity
     {
         var specification = new EntityIdSpecification<T>(id);
@@ -22,8 +29,8 @@ public static class EntityHelper
         Optional<bool>.Of(await readOnlyRepository.CheckIfExistAsync(specification)).ThrowIfNotExist(exception);
     }
 
-    public static async Task ThrowIfNotExist<T>(Guid id, Exception exception, IReadOnlyRepository<T> readOnlyRepository,
-        Specification<T>? specification)
+    public static async Task ThrowIfNotExistAsync<T>(Specification<T>? specification, Exception exception,
+        IReadOnlyRepository<T> readOnlyRepository)
         where T : IEntity
     {
         Optional<bool>.Of(await readOnlyRepository.CheckIfExistAsync(specification)).ThrowIfNotExist(exception);
