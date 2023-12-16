@@ -1,6 +1,7 @@
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using BuildingBlock.Core.Domain.Specifications.Implementations;
+using OrderManagement.Core.Domain.OrderAggregate.DomainEvents;
 using OrderManagement.Core.Domain.OrderAggregate.DomainServices.Abstractions;
 using OrderManagement.Core.Domain.OrderAggregate.Entities;
 using OrderManagement.Core.Domain.OrderAggregate.Exceptions;
@@ -38,7 +39,11 @@ public class OrderDomainService : IOrderDomainService
     {
         await CheckValidOnCreateAsync(userId, shippingAddressId, orderItems);
 
-        return new Order(userId, shippingAddressId, orderItems);
+        var order = new Order(userId, shippingAddressId, orderItems);
+
+        order.AddDomainEvent(new OrderItemCreatedDomainEvent(orderItems));
+
+        return order;
     }
 
     private async Task<ProductType> CheckValidOnCreateItemAsync(Guid productTypeId, int quantity)

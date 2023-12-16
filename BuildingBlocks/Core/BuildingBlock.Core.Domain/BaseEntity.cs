@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BuildingBlock.Core.Domain.DomainEvents;
 
 namespace BuildingBlock.Core.Domain;
 
@@ -65,4 +66,20 @@ public abstract class Entity : AuditEntity<Guid>, IEntity
 
 public abstract class AggregateRoot : Entity, IAggregateRoot
 {
+    public List<IDomainEvent> DomainEvents { get; } = new();
+
+    public void AddDomainEvent(IDomainEvent domainEvent)
+    {
+        DomainEvents.Add(domainEvent);
+    }
+
+    public void RemoveDomainEvent(IDomainEvent domainEvent)
+    {
+        DomainEvents.Remove(domainEvent);
+    }
+
+    public void ClearDomainEvents()
+    {
+        DomainEvents.Clear();
+    }
 }

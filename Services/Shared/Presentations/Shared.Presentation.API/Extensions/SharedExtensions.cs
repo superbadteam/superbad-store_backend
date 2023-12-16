@@ -42,7 +42,7 @@ public static class SharedExtensions
             .AddApplicationCors(configuration)
             .AddHttpContextAccessor()
             .AddCurrentUser()
-            .AddCqrs<SharedApplicationAssemblyReference>()
+            .AddCqrs<SharedApplicationAssemblyReference, SharedApplicationAssemblyReference>()
             .AddDefaultOpenApi(configuration)
             .AddValidatorsFromAssembly(typeof(SharedApplicationAssemblyReference).Assembly)
             .AddInMemoryCache(configuration);

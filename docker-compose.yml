@@ -30,10 +30,14 @@ services:
       - identity-service
       - inventory-service
       - sale-service
+      - order-service
+      - shared-service
     links:
       - identity-service
       - inventory-service
       - sale-service
+      - order-service
+      - shared-service
   identity-service:
     container_name: superbad-store.identity.api
     image: phuc1403/superbad-store.identity:dev

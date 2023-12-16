@@ -17,6 +17,5 @@ public class OrderMapper : Profile
             .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.ProductType.Product.Id))
             .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.ProductType.Product.ImageUrl))
             .ForMember(dest => dest.Seller, opt => opt.MapFrom(src => src.ProductType.Product.User));
-        ;
     }
 }
