@@ -21,6 +21,8 @@ public class ImageService : IImageService
         foreach (var image in images)
         {
             var filePath = CreateImagePath(image);
+            
+            _logger.LogInformation($"Saving image to {filePath}");
 
             var stream = new FileStream(filePath, FileMode.Create);
 
@@ -41,6 +43,6 @@ public class ImageService : IImageService
         var fileName =
             $"{Path.GetFileNameWithoutExtension(image.FileName)}-{DateTime.Now.ToString("yyyyMMddHHmmssfff")}{Path.GetExtension(image.FileName)}";
 
-        return Path.Combine(Directory.GetCurrentDirectory(), "Uploads", fileName);
+        return Path.Combine(Directory.GetCurrentDirectory(), fileName);
     }
 }
