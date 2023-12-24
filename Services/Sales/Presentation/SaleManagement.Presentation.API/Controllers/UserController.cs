@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SaleManagement.Core.Application.CQRS.Commands.UserCommands.Requests;
+using SaleManagement.Core.Application.CQRS.Queries.UserQueries.Requests;
 using SaleManagement.Core.Application.DTOs.UserDTOs;
 
 namespace SaleManagement.Presentation.API.Controllers;
@@ -25,5 +26,13 @@ public class UserController : ControllerBase
         var users = await _mediator.Send(new AddToCartCommand(dto));
 
         return Ok(users);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<ActionResult<UserDto>> GetByIdAsync(Guid id)
+    {
+        var user = await _mediator.Send(new GetUserByIdQuery(id));
+
+        return Ok(user);
     }
 }

@@ -11,6 +11,7 @@ public class UserMapper : Profile
     {
         CreateMap<User, CartDto>()
             .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Carts));
+        CreateMap<User, UserDto>();
         CreateMap<Cart, CartItemDto>();
         CreateMap<ProductType, ProductTypeCartDto>();
         CreateMap<Product, ProductCartDto>()
