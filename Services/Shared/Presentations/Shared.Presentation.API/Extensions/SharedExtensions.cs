@@ -35,7 +35,9 @@ public static class SharedExtensions
 
             var cloudinary = new Cloudinary(cloudinaryConnectionString);
 
-            return new CloudinaryCloudStorageService(cloudinary, fileSystemService, saveLocation);
+            var logger = sp.GetRequiredService<ILogger<CloudinaryCloudStorageService>>();
+
+            return new CloudinaryCloudStorageService(cloudinary, fileSystemService, saveLocation, logger);
         });
 
         services
