@@ -21,11 +21,11 @@ public class UserController : ControllerBase
 
     [HttpPost("cart")]
     [Authorize(Policy = Permissions.Product.View)]
-    public async Task<ActionResult<CartDto>> GetAllAsync([FromQuery] AddToCartDto dto)
+    public async Task<ActionResult<CartDto>> GetAllAsync(AddToCartDto dto)
     {
-        var users = await _mediator.Send(new AddToCartCommand(dto));
+        var cart = await _mediator.Send(new AddToCartCommand(dto));
 
-        return Ok(users);
+        return Ok(cart);
     }
 
     [HttpGet("{id:guid}")]
@@ -34,5 +34,14 @@ public class UserController : ControllerBase
         var user = await _mediator.Send(new GetUserByIdQuery(id));
 
         return Ok(user);
+    }
+
+    [HttpGet("me/cart")]
+    [Authorize(Policy = Permissions.Product.View)]
+    public async Task<ActionResult<CartDto>> GetCartAsync()
+    {
+        var cart = await _mediator.Send(new GetCartQuery());
+
+        return Ok(cart);
     }
 }

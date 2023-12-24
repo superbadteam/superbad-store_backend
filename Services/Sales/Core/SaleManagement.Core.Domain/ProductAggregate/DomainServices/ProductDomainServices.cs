@@ -90,7 +90,7 @@ public class ProductDomainService : IProductDomainService
             .Of(product.Types.FirstOrDefault(type => type.Id == productTypeId))
             .ThrowIfNotExist(new ProductTypeNotFoundException(productTypeId, product.Id)).Get();
 
-        if (productType.Quantity < quantity) throw new ProductTypeQuantityInvalidException();
+        if (productType.Quantity < quantity) throw new InvalidProductTypeQuantityException();
 
         return productType;
     }

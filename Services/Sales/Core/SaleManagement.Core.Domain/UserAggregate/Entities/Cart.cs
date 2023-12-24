@@ -9,11 +9,11 @@ public class Cart : Entity
     {
     }
 
-    public Cart(ProductType productType, int quantity)
+    public Cart(Guid productTypeId, double price, int quantity)
     {
-        ProductType = productType;
+        ProductTypeId = productTypeId;
         Quantity = quantity;
-        TotalPrice = productType.Price * quantity;
+        TotalPrice = price * quantity;
     }
 
     public Guid UserId { get; set; }
@@ -27,4 +27,10 @@ public class Cart : Entity
     public int Quantity { get; set; }
 
     public double TotalPrice { get; set; }
+
+    public void UpdateQuantity(int quantity, double price)
+    {
+        Quantity = quantity;
+        TotalPrice = price * quantity;
+    }
 }
