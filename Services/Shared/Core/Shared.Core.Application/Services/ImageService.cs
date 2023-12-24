@@ -1,9 +1,17 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Shared.Core.Application.Services;
 
 public class ImageService : IImageService
 {
+    private readonly ILogger<ImageService> _logger;
+
+    public ImageService(ILogger<ImageService> logger)
+    {
+        _logger = logger;
+    }
+
     public async Task<IEnumerable<string>> SaveAsync(IEnumerable<IFormFile> images)
     {
         var filePaths = new List<string>();
@@ -19,6 +27,8 @@ public class ImageService : IImageService
             saveFileTasks.Add(image.CopyToAsync(stream));
 
             filePaths.Add(filePath);
+
+            _logger.LogInformation($"Image saved to {filePath}");
         }
 
         await Task.WhenAll(saveFileTasks);

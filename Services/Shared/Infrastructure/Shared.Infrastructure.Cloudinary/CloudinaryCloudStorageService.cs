@@ -1,5 +1,6 @@
 ﻿using CloudinaryDotNet;
 using CloudinaryDotNet.Actions;
+using Microsoft.Extensions.Logging;
 using Shared.Core.Application.Services;
 
 namespace Shared.Infrastructure.Cloudinary;
@@ -8,19 +9,22 @@ public class CloudinaryCloudStorageService : ICloudStorageService
 {
     private readonly CloudinaryDotNet.Cloudinary _cloudinary;
     private readonly IFileSystemService _fileSystemService;
+    private readonly ILogger<CloudinaryCloudStorageService> _logger;
     private readonly string _saveLocation;
 
     public CloudinaryCloudStorageService(CloudinaryDotNet.Cloudinary cloudinary, IFileSystemService fileSystemService,
-        string saveLocation)
+        string saveLocation, ILogger<CloudinaryCloudStorageService> logger)
     {
         _cloudinary = cloudinary;
         _fileSystemService = fileSystemService;
         _saveLocation = saveLocation;
+        _logger = logger;
     }
 
 
     public async Task<string> UploadAsync(string imagePath)
     {
+        _logger.LogInformation($"Uploading {imagePath} to cloudinary at folder {_saveLocation}");
         var cloudImage = new ImageUploadParams
         {
             File = new FileDescription(imagePath),
@@ -32,6 +36,8 @@ public class CloudinaryCloudStorageService : ICloudStorageService
         _fileSystemService.DeleteFile(imagePath);
 
         if (uploadResult.Error != null) throw new Exception(uploadResult.Error.Message);
+
+        _logger.LogInformation($"Image uploaded to {uploadResult.Url}");
 
         return uploadResult.Url.ToString();
     }
