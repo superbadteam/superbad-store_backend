@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SaleManagement.Core.Domain.UserAggregate.Entities;
+using OrderManagement.Core.Domain.UserAggregate.Entities;
 
-namespace SaleManagement.Infrastructure.EntityFrameworkCore.EntityConfigurations.CartAggregate;
+namespace OrderManagement.Infrastructure.EntityFrameworkCore.EntityConfigurations.UserAggregateConfigurations;
 
 public class CartConfiguration : IEntityTypeConfiguration<Cart>
 {

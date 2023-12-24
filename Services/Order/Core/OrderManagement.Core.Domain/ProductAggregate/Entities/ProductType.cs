@@ -1,5 +1,6 @@
 using BuildingBlock.Core.Domain;
 using OrderManagement.Core.Domain.OrderAggregate.Entities;
+using OrderManagement.Core.Domain.UserAggregate.Entities;
 
 namespace OrderManagement.Core.Domain.ProductAggregate.Entities;
 
@@ -7,6 +8,8 @@ public sealed class ProductType : Entity
 {
     public ProductType()
     {
+        OrderItems = new List<OrderItem>();
+        Carts = new List<Cart>();
     }
 
     public ProductType(Guid id, string name, int quantity, double price, DateTime createdAt,
@@ -30,5 +33,7 @@ public sealed class ProductType : Entity
 
     public double Price { get; set; }
 
-    public List<OrderItem> OrderItems { get; set; } = null!;
+    public List<OrderItem> OrderItems { get; set; }
+    
+    public List<Cart> Carts { get; set; }
 }

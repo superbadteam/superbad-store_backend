@@ -11,6 +11,7 @@ public sealed class User : AggregateRoot
         ShippingAddresses = new List<ShippingAddress>();
         Orders = new List<Order>();
         Products = new List<Product>();
+        Carts = new List<Cart>();
     }
 
     public User(DateTime createdAt, string createdBy) : this()
@@ -32,4 +33,6 @@ public sealed class User : AggregateRoot
     public List<Order> Orders { get; set; }
 
     public List<Product> Products { get; set; }
+    
+    public List<Cart> Carts { get; set; }
 }
