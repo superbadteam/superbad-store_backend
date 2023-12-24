@@ -39,7 +39,7 @@ public class AddToCartCommandHandler : ICommandHandler<AddToCartCommand, CartDto
         var userIdSpecification = new UserIdSpecification(_currentUser.Id);
 
         var user = Optional<User>
-            .Of(await _userReadOnlyRepository.GetAnyAsync(userIdSpecification, "Carts.ProductType.Product.Images"))
+            .Of(await _userReadOnlyRepository.GetAnyAsync(userIdSpecification, "Carts"))
             .ThrowIfNotExist(new UserNotFoundException(_currentUser.Id)).Get();
 
         await _userDomainService.AddToCartAsync(user, request.Dto.ProductTypeId, request.Dto.Quantity);
@@ -48,6 +48,8 @@ public class AddToCartCommandHandler : ICommandHandler<AddToCartCommand, CartDto
 
         await _unitOfWork.SaveChangesAsync();
 
-        return _mapper.Map<CartDto>(user);
+        return Optional<CartDto>
+            .Of(await _userReadOnlyRepository.GetAnyAsync<CartDto>(userIdSpecification))
+            .ThrowIfNotExist(new UserNotFoundException(_currentUser.Id)).Get();
     }
 }

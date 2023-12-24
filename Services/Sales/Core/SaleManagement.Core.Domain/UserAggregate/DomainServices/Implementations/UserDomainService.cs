@@ -1,6 +1,5 @@
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
-using BuildingBlock.Core.Domain.Specifications.Implementations;
 using SaleManagement.Core.Domain.ProductAggregate.Entities;
 using SaleManagement.Core.Domain.ProductAggregate.Exceptions;
 using SaleManagement.Core.Domain.UserAggregate.DomainServices.Adstractions;
@@ -12,17 +11,14 @@ namespace SaleManagement.Core.Domain.UserAggregate.DomainServices.Implementation
 
 public class UserDomainService : IUserDomainService
 {
-    private readonly IReadOnlyRepository<Cart> _cartReadOnlyRepository;
     private readonly IReadOnlyRepository<ProductType> _productTypeReadOnlyRepository;
     private readonly IReadOnlyRepository<User> _userReadOnlyRepository;
 
     public UserDomainService(IReadOnlyRepository<User> userReadOnlyRepository,
-        IReadOnlyRepository<ProductType> productTypeReadOnlyRepository,
-        IReadOnlyRepository<Cart> cartReadOnlyRepository)
+        IReadOnlyRepository<ProductType> productTypeReadOnlyRepository)
     {
         _userReadOnlyRepository = userReadOnlyRepository;
         _productTypeReadOnlyRepository = productTypeReadOnlyRepository;
-        _cartReadOnlyRepository = cartReadOnlyRepository;
     }
 
     public async Task<User> CreateAsync(Guid id, string name, DateTime createdAt, string createdBy)
@@ -36,44 +32,38 @@ public class UserDomainService : IUserDomainService
 
     public async Task AddToCartAsync(User user, Guid productTypeId, int quantity)
     {
-        var productType = await CheckValidOnAddToCartAsync(user, productTypeId, quantity);
+        var cartItem = user.Carts.FirstOrDefault(item => item.ProductTypeId == productTypeId);
 
-        user.AddToCart(productType, quantity);
+        var productType = await CheckValidOnAddToCartAsync(cartItem, productTypeId, quantity);
 
-        user.TotalPrice += productType.Price * quantity;
+        if (cartItem is not null)
+        {
+            cartItem.UpdateQuantity(quantity + cartItem.Quantity, productType.Price);
+
+            user.UpdateTotalPrice();
+        }
+        else
+        {
+            user.AddToCart(productTypeId, productType.Price, quantity);
+        }
     }
 
-    private async Task<ProductType> CheckValidOnAddToCartAsync(User user, Guid productTypeId, int quantity)
+    private async Task<ProductType> CheckValidOnAddToCartAsync(Cart? item, Guid productTypeId, int quantity)
     {
-        var productType = await GetOrThrowProductTypeAsync(productTypeId);
+        var productType = await EntityHelper.GetOrThrowAsync(productTypeId,
+            new ProductTypeNotFoundException(productTypeId), _productTypeReadOnlyRepository);
 
-        ThrowIfQuantityIsInvalid(productType, quantity);
-
-        await ThrowIfProductTypeIsExistInCart(user, productTypeId);
+        if (item is null)
+            ThrowIfQuantityIsInvalid(productType, quantity);
+        else
+            ThrowIfQuantityIsInvalid(productType, quantity + item.Quantity);
 
         return productType;
     }
 
     private static void ThrowIfQuantityIsInvalid(ProductType productType, int quantity)
     {
-        if (productType.Quantity < quantity) throw new ProductTypeQuantityInvalidException();
-    }
-
-    private async Task ThrowIfProductTypeIsExistInCart(User user, Guid productTypeId)
-    {
-        var cartProductTypeIdSpecification = new CartProductTypeIdSpecification(user.Id, productTypeId);
-
-        Optional<Cart>.Of(await _cartReadOnlyRepository.GetAnyAsync(cartProductTypeIdSpecification))
-            .ThrowIfExist(new CartConflictException(productTypeId));
-    }
-
-    private async Task<ProductType> GetOrThrowProductTypeAsync(Guid productTypeId)
-    {
-        var productTypeIdSpecification = new EntityIdSpecification<ProductType>(productTypeId);
-
-        return Optional<ProductType>
-            .Of(await _productTypeReadOnlyRepository.GetAnyAsync(productTypeIdSpecification, "Product.Images"))
-            .ThrowIfNotExist(new ProductTypeNotFoundException(productTypeId)).Get();
+        if (productType.Quantity < quantity) throw new InvalidProductTypeQuantityException();
     }
 
     private async Task CheckValidOnCreateAsync(Guid id)
