@@ -58,7 +58,7 @@ public class OrderDomainService : IOrderDomainService
 
     private static void ThrowIfQuantityIsInvalid(ProductType productType, int quantity)
     {
-        if (productType.Quantity < quantity) throw new ProductTypeQuantityInvalidException();
+        if (productType.Quantity < quantity) throw new InvalidProductTypeQuantityException();
     }
 
     private async Task CheckValidOnCreateAsync(Guid userId, Guid shippingAddressId, IEnumerable<OrderItem> orderItems)

@@ -27,4 +27,10 @@ public class Cart : Entity
     public int Quantity { get; set; }
 
     public double TotalPrice { get; set; }
+
+    public void UpdateQuantity(int quantity, double price)
+    {
+        Quantity = quantity;
+        TotalPrice = price * quantity;
+    }
 }

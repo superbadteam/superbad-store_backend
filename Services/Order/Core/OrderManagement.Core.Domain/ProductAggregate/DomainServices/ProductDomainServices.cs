@@ -78,7 +78,7 @@ public class ProductDomainService : IProductDomainService
         var productType = Optional<ProductType>.Of(product.Types.FirstOrDefault(type => type.Id == productTypeId))
             .ThrowIfNotExist(new ProductTypeNotFoundException(productTypeId)).Get();
 
-        if (productType.Quantity < quantity) throw new ProductTypeQuantityInvalidException();
+        if (productType.Quantity < quantity) throw new InvalidProductTypeQuantityException();
 
         return productType;
     }

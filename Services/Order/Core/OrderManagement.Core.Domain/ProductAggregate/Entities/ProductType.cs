@@ -34,6 +34,6 @@ public sealed class ProductType : Entity
     public double Price { get; set; }
 
     public List<OrderItem> OrderItems { get; set; }
-    
+
     public List<Cart> Carts { get; set; }
 }

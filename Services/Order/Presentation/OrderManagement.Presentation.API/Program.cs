@@ -32,5 +32,6 @@ var eventBus = app.Services.GetRequiredService<IEventBus>();
 eventBus.Subscribe<ProductCreatedIntegrationEvent, ProductCreatedIntegrationEventHandler>();
 
 eventBus.Subscribe<UserCreatedIntegrationEvent, UserCreatedIntegrationEventHandler>();
+eventBus.Subscribe<CartItemAddedIntegrationEvent, CartItemAddedIntegrationEventHandler>();
 
 app.Run();
