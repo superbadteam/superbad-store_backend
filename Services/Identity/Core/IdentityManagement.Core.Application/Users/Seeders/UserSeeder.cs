@@ -50,8 +50,8 @@ public class UserSeeder : IDataSeeder
 
             var userCreationDto = await _userReadOnlyRepository.GetByEmailAsync<UserCreationDto>("user@123");
 
-            _eventBus.Publish(new UserCreatedIntegrationEvent(user.Id, user.Name, userCreationDto!.CreatedAt,
-                userCreationDto.CreatedBy));
+            _eventBus.Publish(new UserCreatedIntegrationEvent(user.Id, user.Name, user.AvatarUrl, user.CoverUrl,
+                userCreationDto!.CreatedAt, userCreationDto.CreatedBy));
         }
         else
         {

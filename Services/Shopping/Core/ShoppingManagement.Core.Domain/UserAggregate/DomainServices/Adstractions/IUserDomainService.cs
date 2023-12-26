@@ -4,7 +4,8 @@ namespace ShoppingManagement.Core.Domain.UserAggregate.DomainServices.Adstractio
 
 public interface IUserDomainService
 {
-    Task<User> CreateAsync(Guid id, string name, DateTime dateTime, string createdBy);
+    Task<User> CreateAsync(Guid id, string name, string? avatarUrl, string? coverUrl, DateTime dateTime,
+        string createdBy);
 
     Task<Cart> AddToCartAsync(User user, Guid productTypeId, int quantity);
 

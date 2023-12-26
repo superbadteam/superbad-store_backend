@@ -21,11 +21,12 @@ public class UserDomainService : IUserDomainService
         _productTypeReadOnlyRepository = productTypeReadOnlyRepository;
     }
 
-    public async Task<User> CreateAsync(Guid id, string name, DateTime createdAt, string createdBy)
+    public async Task<User> CreateAsync(Guid id, string name, string? avatarUrl, string? coverUrl, DateTime createdAt,
+        string createdBy)
     {
         await CheckValidOnCreateAsync(id);
 
-        var user = new User(id, name, createdAt, createdBy);
+        var user = new User(id, name, avatarUrl, coverUrl, createdAt, createdBy);
 
         return user;
     }

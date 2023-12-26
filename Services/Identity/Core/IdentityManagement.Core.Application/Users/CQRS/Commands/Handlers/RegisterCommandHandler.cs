@@ -61,8 +61,8 @@ public class RegisterCommandHandler : ICommandHandler<RegisterCommand, UserSumma
 
         var userCreationDto = await _userReadOnlyRepository.GetByIdAsync<UserCreationDto>(user.Id);
 
-        _eventBus.Publish(new UserCreatedIntegrationEvent(user.Id, user.Name, userCreationDto!.CreatedAt,
-            userCreationDto.CreatedBy));
+        _eventBus.Publish(new UserCreatedIntegrationEvent(user.Id, user.Name, user.AvatarUrl, user.CoverUrl,
+            userCreationDto!.CreatedAt, userCreationDto.CreatedBy));
 
         return _mapper.Map<UserSummaryDto>(user);
     }
