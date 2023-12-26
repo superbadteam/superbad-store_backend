@@ -1,6 +1,6 @@
 using BuildingBlock.Presentation.API.Hosts;
-using BuildingBlock.Presentation.API.Middlewares;
 using Shared.Presentation.API.Extensions;
+using Shared.Presentation.API.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,7 +10,7 @@ builder.Host.UseDefaultHosts(builder.Configuration);
 
 var app = builder.Build();
 
-await app.UseDefaultMiddlewares(app.Environment, builder.Configuration);
+await app.UseSharedMiddlewaresAsync(app.Environment, builder.Configuration);
 
 app.MapControllers();
 
