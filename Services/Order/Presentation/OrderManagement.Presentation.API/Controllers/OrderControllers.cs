@@ -2,10 +2,10 @@ using BuildingBlock.Core.Domain.Shared.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using OrderManagement.Core.Application.CQRS.Commands.OrderCommands.Requests;
-using OrderManagement.Core.Application.CQRS.Queries.OrderQueries.Requests;
-using OrderManagement.Core.Application.DTOs.OrderDTOs;
-using OrderManagement.Core.Application.DTOs.OrderDTOs.Enums;
+using OrderManagement.Core.Application.Orders.CQRS.Commands.Requests;
+using OrderManagement.Core.Application.Orders.CQRS.Queries.Requests;
+using OrderManagement.Core.Application.Orders.DTOs;
+using OrderManagement.Core.Application.Orders.DTOs.Enums;
 
 namespace OrderManagement.Presentation.API.Controllers;
 

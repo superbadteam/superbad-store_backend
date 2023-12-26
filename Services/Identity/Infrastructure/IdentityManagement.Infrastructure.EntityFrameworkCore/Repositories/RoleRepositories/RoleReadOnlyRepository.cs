@@ -1,6 +1,6 @@
 using AutoMapper;
 using BuildingBlock.Core.Domain.Repositories;
-using IdentityManagement.Core.Application.DTOs.RoleDTOs;
+using IdentityManagement.Core.Application.Roles.DTOs;
 using IdentityManagement.Core.Domain.RoleAggregate.Entities;
 using IdentityManagement.Core.Domain.RoleAggregate.Repositories;
 using IdentityManagement.Infrastructure.Identity.RoleAggregate.Entities;

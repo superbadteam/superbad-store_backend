@@ -1,5 +1,5 @@
-using IdentityManagement.Core.Application.CQRS.Commands.UserCommands.Requests;
-using IdentityManagement.Core.Application.DTOs.UserDTOs;
+using IdentityManagement.Core.Application.Users.CQRS.Commands.Requests;
+using IdentityManagement.Core.Application.Users.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

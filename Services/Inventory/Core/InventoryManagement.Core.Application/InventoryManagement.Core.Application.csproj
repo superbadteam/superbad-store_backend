@@ -13,9 +13,5 @@
 
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="CQRS\Commands\ProductCommands\"/>
-        <Folder Include="CQRS\Queries\ProductQueries\"/>
-    </ItemGroup>
 
 </Project>

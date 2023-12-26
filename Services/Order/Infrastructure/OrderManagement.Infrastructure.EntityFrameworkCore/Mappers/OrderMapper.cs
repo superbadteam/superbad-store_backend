@@ -1,6 +1,6 @@
 using AutoMapper;
-using OrderManagement.Core.Application.DTOs.OrderDTOs;
-using OrderManagement.Core.Application.IntegrationEvents.ProductIntegrationEvents.Events;
+using OrderManagement.Core.Application.Orders.DTOs;
+using OrderManagement.Core.Application.Orders.IntegrationEvents.Events;
 using OrderManagement.Core.Domain.OrderAggregate.Entities;
 
 namespace OrderManagement.Infrastructure.EntityFrameworkCore.Mappers;

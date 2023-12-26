@@ -29,21 +29,21 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlock.Infrastructur
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "APIGateway", "APIGateway\APIGateway.csproj", "{21370C15-0A19-4570-B1AE-6CCD18290E38}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sales", "Sales", "{79B78A98-AC05-4430-A2B3-F36FCE872BEF}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shopping", "Shopping", "{79B78A98-AC05-4430-A2B3-F36FCE872BEF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{3ED0DFE3-F289-412A-80DA-06285AB42E6F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SaleManagement.Presentation.API", "Services\Sales\Presentation\SaleManagement.Presentation.API\SaleManagement.Presentation.API.csproj", "{0D304855-E242-4D8C-A173-FC35DA236AED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingManagement.Presentation.API", "Services\Shopping\Presentation\ShoppingManagement.Presentation.API\ShoppingManagement.Presentation.API.csproj", "{0D304855-E242-4D8C-A173-FC35DA236AED}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{7DC85928-C843-42E5-A8A8-B962CE387985}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SaleManagement.Core.Application", "Services\Sales\Core\SaleManagement.Core.Application\SaleManagement.Core.Application.csproj", "{50E2DAE4-6137-4028-B885-808310187E47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingManagement.Core.Application", "Services\Shopping\Core\ShoppingManagement.Core.Application\ShoppingManagement.Core.Application.csproj", "{50E2DAE4-6137-4028-B885-808310187E47}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SaleManagement.Core.Domain", "Services\Sales\Core\SaleManagement.Core.Domain\SaleManagement.Core.Domain.csproj", "{631A22BC-AC4C-4EC7-88C6-9901EA74E86C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingManagement.Core.Domain", "Services\Shopping\Core\ShoppingManagement.Core.Domain\ShoppingManagement.Core.Domain.csproj", "{631A22BC-AC4C-4EC7-88C6-9901EA74E86C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{02C681E7-D0DB-4A7E-B8AD-A45F75216877}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SaleManagement.Infrastructure.EntityFrameworkCore", "Services\Sales\Infrastructure\SaleManagement.Infrastructure.EntityFrameworkCore\SaleManagement.Infrastructure.EntityFrameworkCore.csproj", "{0AEF4F47-AF5B-45F5-86F3-868B68091B90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShoppingManagement.Infrastructure.EntityFrameworkCore", "Services\Shopping\Infrastructure\ShoppingManagement.Infrastructure.EntityFrameworkCore\ShoppingManagement.Infrastructure.EntityFrameworkCore.csproj", "{0AEF4F47-AF5B-45F5-86F3-868B68091B90}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DockerCompose", "DockerCompose", "{63B658D7-3949-494D-A453-9594DFE3E261}"
 	ProjectSection(SolutionItems) = preProject

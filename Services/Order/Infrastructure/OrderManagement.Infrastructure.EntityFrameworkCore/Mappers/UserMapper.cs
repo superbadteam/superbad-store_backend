@@ -1,5 +1,5 @@
 using AutoMapper;
-using OrderManagement.Core.Application.DTOs.UserDTOs;
+using OrderManagement.Core.Application.Users.DTOs;
 using OrderManagement.Core.Domain.UserAggregate.Entities;
 
 namespace OrderManagement.Infrastructure.EntityFrameworkCore.Mappers;
