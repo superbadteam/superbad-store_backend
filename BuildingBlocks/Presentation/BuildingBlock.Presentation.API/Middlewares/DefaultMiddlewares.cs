@@ -1,3 +1,4 @@
+using BuildingBlock.Core.Application;
 using BuildingBlock.Presentation.API.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -7,8 +8,10 @@ namespace BuildingBlock.Presentation.API.Middlewares;
 
 public static class DefaultMiddlewares
 {
-    public static async Task<IApplicationBuilder> UseDefaultMiddlewares(this IApplicationBuilder app,
+    public static async Task<IApplicationBuilder> UseDefaultMiddlewares<TApplicationAssemblyReference>(
+        this IApplicationBuilder app,
         IHostEnvironment env, IConfiguration configuration)
+        where TApplicationAssemblyReference : ApplicationAssemblyReference
     {
         app.UseHttpExceptionHandler(env);
 
@@ -25,6 +28,8 @@ public static class DefaultMiddlewares
         app.UseAuthorization();
 
         await app.SeedDataAsync();
+
+        app.RegisterEventBusSubcriptions<TApplicationAssemblyReference>();
 
         return app;
     }

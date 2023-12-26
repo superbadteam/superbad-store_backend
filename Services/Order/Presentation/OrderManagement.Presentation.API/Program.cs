@@ -1,12 +1,7 @@
-using BuildingBlock.Core.Application.EventBus.Abstractions;
 using BuildingBlock.Presentation.API.Extensions;
 using BuildingBlock.Presentation.API.Hosts;
 using BuildingBlock.Presentation.API.Middlewares;
 using OrderManagement.Core.Application;
-using OrderManagement.Core.Application.Orders.IntegrationEvents.Events;
-using OrderManagement.Core.Application.Orders.IntegrationEvents.Handlers;
-using OrderManagement.Core.Application.Users.IntegrationEvents.Events;
-using OrderManagement.Core.Application.Users.IntegrationEvents.Handlers;
 using OrderManagement.Core.Domain;
 using OrderManagement.Infrastructure.EntityFrameworkCore;
 using OrderManagement.Presentation.API.Extensions;
@@ -23,15 +18,8 @@ builder.Host.UseDefaultHosts(builder.Configuration);
 
 var app = builder.Build();
 
-await app.UseDefaultMiddlewares(app.Environment, builder.Configuration);
+await app.UseDefaultMiddlewares<OrderApplicationAssemblyReference>(app.Environment, builder.Configuration);
 
 app.MapControllers();
-
-var eventBus = app.Services.GetRequiredService<IEventBus>();
-
-eventBus.Subscribe<ProductCreatedIntegrationEvent, ProductCreatedIntegrationEventHandler>();
-
-eventBus.Subscribe<UserCreatedIntegrationEvent, UserCreatedIntegrationEventHandler>();
-eventBus.Subscribe<CartItemAddedIntegrationEvent, CartItemAddedIntegrationEventHandler>();
 
 app.Run();
