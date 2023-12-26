@@ -1,11 +1,12 @@
-using AutoMapper;
 using BuildingBlock.Core.Application;
 using BuildingBlock.Core.Application.CQRS;
+using BuildingBlock.Core.Application.EventBus.Abstractions;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Services;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using SaleManagement.Core.Application.CQRS.Commands.UserCommands.Requests;
 using SaleManagement.Core.Application.DTOs.UserDTOs;
+using SaleManagement.Core.Application.IntegrationEvents.UserIntegrationEvents.Events;
 using SaleManagement.Core.Domain.UserAggregate.DomainServices.Adstractions;
 using SaleManagement.Core.Domain.UserAggregate.Entities;
 using SaleManagement.Core.Domain.UserAggregate.Exceptions;
@@ -16,7 +17,7 @@ namespace SaleManagement.Core.Application.CQRS.Commands.UserCommands.Handlers;
 public class AddToCartCommandHandler : ICommandHandler<AddToCartCommand, CartDto>
 {
     private readonly ICurrentUser _currentUser;
-    private readonly IMapper _mapper;
+    private readonly IEventBus _eventBus;
     private readonly IUnitOfWork _unitOfWork;
     private readonly IUserDomainService _userDomainService;
     private readonly IOperationRepository<User> _userOperationRepository;
@@ -24,14 +25,14 @@ public class AddToCartCommandHandler : ICommandHandler<AddToCartCommand, CartDto
 
     public AddToCartCommandHandler(IReadOnlyRepository<User> userReadOnlyRepository, ICurrentUser currentUser,
         IUserDomainService userDomainService, IOperationRepository<User> userOperationRepository,
-        IUnitOfWork unitOfWork, IMapper mapper)
+        IUnitOfWork unitOfWork, IEventBus eventBus)
     {
         _userReadOnlyRepository = userReadOnlyRepository;
         _currentUser = currentUser;
         _userDomainService = userDomainService;
         _userOperationRepository = userOperationRepository;
         _unitOfWork = unitOfWork;
-        _mapper = mapper;
+        _eventBus = eventBus;
     }
 
     public async Task<CartDto> Handle(AddToCartCommand request, CancellationToken cancellationToken)
@@ -42,11 +43,14 @@ public class AddToCartCommandHandler : ICommandHandler<AddToCartCommand, CartDto
             .Of(await _userReadOnlyRepository.GetAnyAsync(userIdSpecification, "Carts"))
             .ThrowIfNotExist(new UserNotFoundException(_currentUser.Id)).Get();
 
-        await _userDomainService.AddToCartAsync(user, request.Dto.ProductTypeId, request.Dto.Quantity);
+        var cartItem = await _userDomainService.AddToCartAsync(user, request.Dto.ProductTypeId, request.Dto.Quantity);
 
         _userOperationRepository.Update(user);
 
         await _unitOfWork.SaveChangesAsync();
+
+        _eventBus.Publish(new CartItemAddedIntegrationEvent(_currentUser.Id, cartItem.Id, request.Dto.ProductTypeId,
+            request.Dto.Quantity));
 
         return Optional<CartDto>
             .Of(await _userReadOnlyRepository.GetAnyAsync<CartDto>(userIdSpecification))

@@ -2,20 +2,20 @@ using BuildingBlock.Core.Domain.DomainEvents;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using BuildingBlock.Core.Domain.Specifications.Implementations;
-using OrderManagement.Core.Domain.OrderAggregate.DomainEvents;
+using OrderManagement.Core.Domain.OrderAggregate.DomainEvents.Events;
 using OrderManagement.Core.Domain.ProductAggregate.DomainServices;
 using OrderManagement.Core.Domain.ProductAggregate.Entities;
 using OrderManagement.Core.Domain.ProductAggregate.Exceptions;
 
-namespace OrderManagement.Core.Domain.ProductAggregate.DomainEvents;
+namespace OrderManagement.Core.Domain.ProductAggregate.DomainEvents.Handlers;
 
-public class OrderItemCreatedDomainEventEventHandler : IDomainEventHandler<OrderItemCreatedDomainEvent>
+public class OrderItemCreatedDomainEventHandler : IDomainEventHandler<OrderItemCreatedDomainEvent>
 {
     private readonly IProductDomainService _productDomainService;
     private readonly IOperationRepository<Product> _productOperationRepository;
     private readonly IReadOnlyRepository<ProductType> _productTypeReadOnlyRepository;
 
-    public OrderItemCreatedDomainEventEventHandler(IReadOnlyRepository<ProductType> productTypeReadOnlyRepository,
+    public OrderItemCreatedDomainEventHandler(IReadOnlyRepository<ProductType> productTypeReadOnlyRepository,
         IProductDomainService productDomainService, IOperationRepository<Product> productOperationRepository)
     {
         _productTypeReadOnlyRepository = productTypeReadOnlyRepository;

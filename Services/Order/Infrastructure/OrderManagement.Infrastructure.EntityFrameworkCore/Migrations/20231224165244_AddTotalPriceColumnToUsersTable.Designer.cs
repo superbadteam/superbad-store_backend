@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using OrderManagement.Infrastructure.EntityFrameworkCore;
@@ -11,9 +12,11 @@ using OrderManagement.Infrastructure.EntityFrameworkCore;
 namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(OrderDbContext))]
-    partial class OrderDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231224165244_AddTotalPriceColumnToUsersTable")]
+    partial class AddTotalPriceColumnToUsersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,8 +64,7 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique()
-                        .HasFilter("\"DeletedAt\" IS NULL");
+                        .IsUnique();
 
                     b.HasIndex("ParentId");
 
@@ -255,6 +257,7 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
             modelBuilder.Entity("OrderManagement.Core.Domain.UserAggregate.Entities.Cart", b =>
                 {
                     b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -295,8 +298,7 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.HasIndex("ProductTypeId");
 
                     b.HasIndex("UserId", "ProductTypeId")
-                        .IsUnique()
-                        .HasFilter("\"DeletedAt\" IS NULL");
+                        .IsUnique();
 
                     b.ToTable("Cart");
                 });

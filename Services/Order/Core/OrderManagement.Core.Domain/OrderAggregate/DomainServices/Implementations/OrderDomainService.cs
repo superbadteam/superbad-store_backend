@@ -1,7 +1,7 @@
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using BuildingBlock.Core.Domain.Specifications.Implementations;
-using OrderManagement.Core.Domain.OrderAggregate.DomainEvents;
+using OrderManagement.Core.Domain.OrderAggregate.DomainEvents.Events;
 using OrderManagement.Core.Domain.OrderAggregate.DomainServices.Abstractions;
 using OrderManagement.Core.Domain.OrderAggregate.Entities;
 using OrderManagement.Core.Domain.OrderAggregate.Exceptions;
@@ -15,17 +15,20 @@ namespace OrderManagement.Core.Domain.OrderAggregate.DomainServices.Implementati
 
 public class OrderDomainService : IOrderDomainService
 {
+    private readonly IReadOnlyRepository<Cart> _cartReadOnlyRepository;
     private readonly IReadOnlyRepository<ProductType> _productTypeReadOnlyRepository;
     private readonly IReadOnlyRepository<ShippingAddress> _shippingAddressReadOnlyRepository;
     private readonly IReadOnlyRepository<User> _userReadOnlyRepository;
 
     public OrderDomainService(IReadOnlyRepository<ProductType> productTypeReadOnlyRepository,
         IReadOnlyRepository<User> userReadOnlyRepository,
-        IReadOnlyRepository<ShippingAddress> shippingAddressReadOnlyRepository)
+        IReadOnlyRepository<ShippingAddress> shippingAddressReadOnlyRepository,
+        IReadOnlyRepository<Cart> cartReadOnlyRepository)
     {
         _productTypeReadOnlyRepository = productTypeReadOnlyRepository;
         _userReadOnlyRepository = userReadOnlyRepository;
         _shippingAddressReadOnlyRepository = shippingAddressReadOnlyRepository;
+        _cartReadOnlyRepository = cartReadOnlyRepository;
     }
 
     public async Task<OrderItem> CreateItemAsync(Guid productTypeId, int quantity)
@@ -35,13 +38,21 @@ public class OrderDomainService : IOrderDomainService
         return new OrderItem(productTypeId, quantity, productType.Price * quantity);
     }
 
-    public async Task<Order> CreateAsync(Guid userId, Guid shippingAddressId, List<OrderItem> orderItems)
+    public async Task<OrderItem> CreateItemAsync(Guid userId, Guid cartItemId)
+    {
+        var cartItem = await CheckValidOnCreateItemAsync(userId, cartItemId);
+
+        return new OrderItem(cartItem.ProductTypeId, cartItem.Quantity, cartItem.TotalPrice);
+    }
+
+    public async Task<Order> CreateAsync(Guid userId, Guid shippingAddressId, List<OrderItem> orderItems,
+        IEnumerable<Guid>? cartItemIds)
     {
         await CheckValidOnCreateAsync(userId, shippingAddressId, orderItems);
 
         var order = new Order(userId, shippingAddressId, orderItems);
 
-        order.AddDomainEvent(new OrderItemCreatedDomainEvent(orderItems));
+        order.AddDomainEvent(new OrderItemCreatedDomainEvent(orderItems, cartItemIds, userId));
 
         return order;
     }
@@ -56,24 +67,36 @@ public class OrderDomainService : IOrderDomainService
         return productType;
     }
 
+    private async Task<Cart> CheckValidOnCreateItemAsync(Guid userId, Guid cartItemId)
+    {
+        var cartUserIdSpecification = new CartUserIdSpecification(userId);
+
+        var cartIdSpecification = new EntityIdSpecification<Cart>(cartItemId);
+
+        var specification = cartUserIdSpecification.And(cartIdSpecification);
+
+        return await EntityHelper.GetOrThrowAsync(specification, new CartItemNotFoundException(cartItemId, userId),
+            _cartReadOnlyRepository);
+    }
+
     private static void ThrowIfQuantityIsInvalid(ProductType productType, int quantity)
     {
-        if (productType.Quantity < quantity) throw new ProductTypeQuantityInvalidException();
+        if (productType.Quantity < quantity) throw new InvalidProductTypeQuantityException();
     }
 
     private async Task CheckValidOnCreateAsync(Guid userId, Guid shippingAddressId, IEnumerable<OrderItem> orderItems)
     {
-        var user = await EntityHelper.GetOrThrowAsync(userId, new UserNotFoundException(userId),
+        await EntityHelper.ThrowIfNotExistAsync(userId, new UserNotFoundException(userId),
             _userReadOnlyRepository);
 
-        var shippingAddressUserIdSpecification = new ShippingAddressUserIdSpecification(user.Id);
+        var shippingAddressUserIdSpecification = new ShippingAddressUserIdSpecification(userId);
 
         var shippingAddressIdSpecification = new EntityIdSpecification<ShippingAddress>(shippingAddressId);
 
         var specification = shippingAddressUserIdSpecification.And(shippingAddressIdSpecification);
 
         await EntityHelper.ThrowIfNotExistAsync(specification,
-            new ShippingAddressNotFoundException(shippingAddressId, user.Id), _shippingAddressReadOnlyRepository);
+            new ShippingAddressNotFoundException(shippingAddressId, userId), _shippingAddressReadOnlyRepository);
 
         CheckOrderItems(orderItems);
     }

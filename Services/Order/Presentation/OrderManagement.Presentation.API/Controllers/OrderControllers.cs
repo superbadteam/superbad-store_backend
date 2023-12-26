@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using OrderManagement.Core.Application.CQRS.Commands.OrderCommands.Requests;
 using OrderManagement.Core.Application.CQRS.Queries.OrderQueries.Requests;
 using OrderManagement.Core.Application.DTOs.OrderDTOs;
+using OrderManagement.Core.Application.DTOs.OrderDTOs.Enums;
 
 namespace OrderManagement.Presentation.API.Controllers;
 
@@ -21,9 +22,9 @@ public class OrderControllers : ControllerBase
 
     [HttpPost]
     [Authorize(Policy = Permissions.Product.View)]
-    public async Task<ActionResult<OrderDetailDto>> CreateAsync(CreateOrderDto dto)
+    public async Task<ActionResult<OrderDetailDto>> CreateAsync([FromQuery] AddItemMethod method, CreateOrderDto dto)
     {
-        var order = await _mediator.Send(new CreateOrderCommand(dto));
+        var order = await _mediator.Send(new CreateOrderCommand(method, dto));
 
         return CreatedAtAction(nameof(GetCurrentUserOrderByIdAsync), new { id = order.Id }, order);
     }

@@ -1,15 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SaleManagement.Core.Domain.UserAggregate.Entities;
+using OrderManagement.Core.Domain.UserAggregate.Entities;
 
-namespace SaleManagement.Infrastructure.EntityFrameworkCore.EntityConfigurations.CartAggregate;
+namespace OrderManagement.Infrastructure.EntityFrameworkCore.EntityConfigurations.UserAggregateConfigurations;
 
 public class CartConfiguration : IEntityTypeConfiguration<Cart>
 {
     public void Configure(EntityTypeBuilder<Cart> builder)
     {
+        builder.Property(cart => cart.Id).ValueGeneratedNever();
+
         builder.HasIndex(cart => new { cart.UserId, cart.ProductTypeId })
-            .IsUnique();
+            .IsUnique().HasFilter("\"DeletedAt\" IS NULL");
 
         builder.Property(cart => cart.TotalPrice)
             .IsRequired();

@@ -6,5 +6,8 @@ public interface IOrderDomainService
 {
     Task<OrderItem> CreateItemAsync(Guid productTypeId, int quantity);
 
-    Task<Order> CreateAsync(Guid userId, Guid shippingAddressId, List<OrderItem> orderItems);
+    Task<OrderItem> CreateItemAsync(Guid userId, Guid cartItemId);
+
+    Task<Order> CreateAsync(Guid userId, Guid shippingAddressId, List<OrderItem> orderItems,
+        IEnumerable<Guid>? cartItemIds);
 }

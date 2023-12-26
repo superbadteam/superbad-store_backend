@@ -16,10 +16,10 @@ public interface IReadOnlyRepository<TEntity> where TEntity : IEntity
         bool ignoreQueryFilters = false);
 
     Task<TEntity?> GetAnyAsync(ISpecification<TEntity>? specification = null, string? includeTables = null,
-        bool ignoreQueryFilters = false);
+        bool ignoreQueryFilters = false, bool track = false);
 
     Task<List<TEntity>> GetAllAsync(ISpecification<TEntity>? specification = null, string? includeTables = null,
-        bool ignoreQueryFilters = false);
+        bool ignoreQueryFilters = false, bool track = false);
 
     Task<(List<TEntity>, int)> GetFilterAndPagingAsync(ISpecification<TEntity>? specification,
         string sort, int pageIndex, int pageSize, string? includeTables = null, bool ignoreQueryFilters = false);

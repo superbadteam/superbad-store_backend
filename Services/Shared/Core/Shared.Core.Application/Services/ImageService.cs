@@ -21,7 +21,7 @@ public class ImageService : IImageService
         foreach (var image in images)
         {
             var filePath = CreateImagePath(image);
-            
+
             _logger.LogInformation($"Saving image to {filePath}");
 
             var stream = new FileStream(filePath, FileMode.Create);
