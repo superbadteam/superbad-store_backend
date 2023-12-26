@@ -30,22 +30,28 @@ public class UserDomainService : IUserDomainService
         return user;
     }
 
-    public async Task AddToCartAsync(User user, Guid productTypeId, int quantity)
+    public async Task<Cart> AddToCartAsync(User user, Guid productTypeId, int quantity)
     {
         var cartItem = user.Carts.FirstOrDefault(item => item.ProductTypeId == productTypeId);
 
         var productType = await CheckValidOnAddToCartAsync(cartItem, productTypeId, quantity);
 
-        if (cartItem is not null)
-        {
-            cartItem.UpdateQuantity(quantity + cartItem.Quantity, productType.Price);
+        if (cartItem is null) return user.AddToCart(productTypeId, productType.Price, quantity);
 
-            user.UpdateTotalPrice();
-        }
-        else
-        {
-            user.AddToCart(productTypeId, productType.Price, quantity);
-        }
+        cartItem.UpdateQuantity(quantity + cartItem.Quantity, productType.Price);
+
+        user.UpdateTotalPrice();
+
+        return cartItem;
+    }
+
+    public void RemoveFromCart(User user, Guid cartItemId)
+    {
+        var cartItem = user.Carts.FirstOrDefault(item => item.Id == cartItemId);
+
+        if (cartItem is null) throw new CartItemNotFoundException(cartItemId, user.Id);
+
+        user.RemoveFromCart(cartItem);
     }
 
     private async Task<ProductType> CheckValidOnAddToCartAsync(Cart? item, Guid productTypeId, int quantity)

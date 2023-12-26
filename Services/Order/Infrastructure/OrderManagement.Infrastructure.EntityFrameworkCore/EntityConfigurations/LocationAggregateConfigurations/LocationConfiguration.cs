@@ -19,6 +19,6 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
             .HasForeignKey(location => location.ParentId);
 
         builder.HasIndex(location => location.Code)
-            .IsUnique();
+            .IsUnique().HasFilter("\"DeletedAt\" IS NULL");
     }
 }

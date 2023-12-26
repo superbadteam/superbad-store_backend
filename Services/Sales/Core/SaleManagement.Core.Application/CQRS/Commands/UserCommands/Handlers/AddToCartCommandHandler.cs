@@ -43,13 +43,13 @@ public class AddToCartCommandHandler : ICommandHandler<AddToCartCommand, CartDto
             .Of(await _userReadOnlyRepository.GetAnyAsync(userIdSpecification, "Carts"))
             .ThrowIfNotExist(new UserNotFoundException(_currentUser.Id)).Get();
 
-        await _userDomainService.AddToCartAsync(user, request.Dto.ProductTypeId, request.Dto.Quantity);
+        var cartItem = await _userDomainService.AddToCartAsync(user, request.Dto.ProductTypeId, request.Dto.Quantity);
 
         _userOperationRepository.Update(user);
 
         await _unitOfWork.SaveChangesAsync();
 
-        _eventBus.Publish(new CartItemAddedIntegrationEvent(_currentUser.Id, request.Dto.ProductTypeId,
+        _eventBus.Publish(new CartItemAddedIntegrationEvent(_currentUser.Id, cartItem.Id, request.Dto.ProductTypeId,
             request.Dto.Quantity));
 
         return Optional<CartDto>

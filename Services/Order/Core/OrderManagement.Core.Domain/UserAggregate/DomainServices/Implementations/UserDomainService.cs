@@ -30,9 +30,9 @@ public class UserDomainService : IUserDomainService
         return user;
     }
 
-    public async Task AddToCartAsync(User user, Guid productTypeId, int quantity)
+    public async Task AddToCartAsync(User user, Guid cartItemId, Guid productTypeId, int quantity)
     {
-        var cartItem = user.Carts.FirstOrDefault(item => item.ProductTypeId == productTypeId);
+        var cartItem = user.Carts.FirstOrDefault(item => item.Id == cartItemId);
 
         var productType = await CheckValidOnAddToCartAsync(cartItem, productTypeId, quantity);
 
@@ -44,9 +44,19 @@ public class UserDomainService : IUserDomainService
         }
         else
         {
-            user.AddToCart(productTypeId, productType.Price, quantity);
+            user.AddToCart(cartItemId, productTypeId, productType.Price, quantity);
         }
     }
+
+    public void RemoveFromCart(User user, Guid cartItemId)
+    {
+        var cartItem = user.Carts.FirstOrDefault(item => item.Id == cartItemId);
+
+        if (cartItem is null) throw new CartItemNotFoundException(cartItemId, user.Id);
+
+        user.RemoveFromCart(cartItem);
+    }
+
 
     private async Task<ProductType> CheckValidOnAddToCartAsync(Cart? item, Guid productTypeId, int quantity)
     {
@@ -54,9 +64,15 @@ public class UserDomainService : IUserDomainService
             new ProductTypeNotFoundException(productTypeId), _productTypeReadOnlyRepository);
 
         if (item is null)
+        {
             ThrowIfQuantityIsInvalid(productType, quantity);
+        }
         else
+        {
+            if (item.ProductTypeId != productTypeId)
+                throw new InvalidProductTypeInCartItemException(productTypeId, item.Id);
             ThrowIfQuantityIsInvalid(productType, quantity + item.Quantity);
+        }
 
         return productType;
     }

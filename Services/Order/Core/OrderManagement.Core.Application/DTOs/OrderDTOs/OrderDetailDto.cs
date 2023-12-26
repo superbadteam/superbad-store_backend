@@ -8,7 +8,7 @@ public class OrderDetailDto
 
     public ShippingAddressDto ShippingAddress { get; set; } = null!;
 
-    public IEnumerable<OrderItemDto> OrderItems { get; set; } = null!;
+    public IEnumerable<OrderItemDto> Items { get; set; } = null!;
 
     public double TotalPrice { get; set; }
 }

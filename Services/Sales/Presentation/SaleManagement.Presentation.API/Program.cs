@@ -40,5 +40,5 @@ eventBus.Subscribe<UserCreatedIntegrationEvent, UserCreatedIntegrationEventHandl
 eventBus.Subscribe<CategoryCreatedIntegrationEvent, CategoryCreatedIntegrationEventHandler>();
 
 eventBus.Subscribe<OrderCreatedIntegrationEvent, OrderCreatedIntegrationEventHandler>();
-
+eventBus.Subscribe<CartItemsRemovedIntegrationEvent, CartItemsRemovedIntegrationEventHandler>();
 app.Run();

@@ -25,9 +25,9 @@ public class ReadOnlyRepository<TDbContext, TEntity> : IReadOnlyRepository<TEnti
     protected DbSet<TEntity> DbSet => _dbSet ??= _dbContext.Set<TEntity>();
 
     public Task<TEntity?> GetAnyAsync(ISpecification<TEntity>? specification = null, string? includeTables = null,
-        bool ignoreQueryFilters = false)
+        bool ignoreQueryFilters = false, bool track = false)
     {
-        var query = DbSet.AsNoTracking();
+        var query = InitQuery(track);
 
         query = IgnoreQueryFilters(query, ignoreQueryFilters);
 
@@ -39,9 +39,9 @@ public class ReadOnlyRepository<TDbContext, TEntity> : IReadOnlyRepository<TEnti
     }
 
     public Task<List<TEntity>> GetAllAsync(ISpecification<TEntity>? specification = null,
-        string? includeTables = null, bool ignoreQueryFilters = false)
+        string? includeTables = null, bool ignoreQueryFilters = false, bool track = false)
     {
-        var query = DbSet.AsNoTracking();
+        var query = InitQuery(track);
 
         query = IgnoreQueryFilters(query, ignoreQueryFilters);
 
@@ -129,6 +129,11 @@ public class ReadOnlyRepository<TDbContext, TEntity> : IReadOnlyRepository<TEnti
         query = Include(query, includeTables);
 
         return query.ProjectTo<TDto>(_mapper.ConfigurationProvider).ToListAsync();
+    }
+
+    private IQueryable<TEntity> InitQuery(bool track)
+    {
+        return track ? DbSet : DbSet.AsNoTracking();
     }
 
     private static IQueryable<TEntity> IgnoreQueryFilters(IQueryable<TEntity> query, bool ignoreQueryFilters)

@@ -8,8 +8,10 @@ public class CartConfiguration : IEntityTypeConfiguration<Cart>
 {
     public void Configure(EntityTypeBuilder<Cart> builder)
     {
+        builder.Property(cart => cart.Id).ValueGeneratedNever();
+
         builder.HasIndex(cart => new { cart.UserId, cart.ProductTypeId })
-            .IsUnique();
+            .IsUnique().HasFilter("\"DeletedAt\" IS NULL");
 
         builder.Property(cart => cart.TotalPrice)
             .IsRequired();

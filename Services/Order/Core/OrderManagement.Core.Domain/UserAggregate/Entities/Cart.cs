@@ -3,14 +3,15 @@ using OrderManagement.Core.Domain.ProductAggregate.Entities;
 
 namespace OrderManagement.Core.Domain.UserAggregate.Entities;
 
-public class Cart : Entity
+public sealed class Cart : Entity
 {
     public Cart()
     {
     }
 
-    public Cart(Guid productTypeId, double price, int quantity)
+    public Cart(Guid id, Guid productTypeId, double price, int quantity)
     {
+        Id = id;
         ProductTypeId = productTypeId;
         Quantity = quantity;
         TotalPrice = price * quantity;

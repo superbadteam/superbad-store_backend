@@ -61,7 +61,8 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("\"DeletedAt\" IS NULL");
 
                     b.HasIndex("ParentId");
 
@@ -254,7 +255,6 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
             modelBuilder.Entity("OrderManagement.Core.Domain.UserAggregate.Entities.Cart", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -295,7 +295,8 @@ namespace OrderManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.HasIndex("ProductTypeId");
 
                     b.HasIndex("UserId", "ProductTypeId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("\"DeletedAt\" IS NULL");
 
                     b.ToTable("Cart");
                 });
