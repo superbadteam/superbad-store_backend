@@ -17,9 +17,9 @@ services:
       - Routes__1__DownstreamHostAndPorts__0__Host=superbad-store.inventory.api
       - Routes__1__DownstreamHostAndPorts__0__Port=80
       - SwaggerEndPoints__1__Config__0__Url=http://superbad-store.inventory.api/swagger/v1/swagger.json
-      - Routes__2__DownstreamHostAndPorts__0__Host=superbad-store.sales.api
+      - Routes__2__DownstreamHostAndPorts__0__Host=superbad-store.shopping.api
       - Routes__2__DownstreamHostAndPorts__0__Port=80
-      - SwaggerEndPoints__2__Config__0__Url=http://superbad-store.sales.api/swagger/v1/swagger.json
+      - SwaggerEndPoints__2__Config__0__Url=http://superbad-store.shopping.api/swagger/v1/swagger.json
       - Routes__3__DownstreamHostAndPorts__0__Host=superbad-store.shared.api
       - Routes__3__DownstreamHostAndPorts__0__Port=80
       - SwaggerEndPoints__3__Config__0__Url=http://superbad-store.shared.api/swagger/v1/swagger.json
@@ -29,13 +29,13 @@ services:
     depends_on:
       - identity-service
       - inventory-service
-      - sale-service
+      - shopping-service
       - order-service
       - shared-service
     links:
       - identity-service
       - inventory-service
-      - sale-service
+      - shopping-service
       - order-service
       - shared-service
   identity-service:
@@ -90,22 +90,22 @@ services:
         condition: service_healthy
       seq:
         condition: service_started
-      sale-service:
+      shopping-service:
         condition: service_started
     links:
       - db
       - rabbitmq
-  sale-service:
-    container_name: superbad-store.sales.api
-    image: phuc1403/superbad-store.sales:dev
+  shopping-service:
+    container_name: superbad-store.shopping.api
+    image: phuc1403/superbad-store.shopping:dev
     ports:
       - "5002:80"
     build:
       context: .
-      dockerfile: Services/Sales/Presentation/SaleManagement.Presentation.API/Dockerfile
+      dockerfile: Services/Shopping/Presentation/ShoppingManagement.Presentation.API/Dockerfile
     environment:
       - ASPNETCORE_URLS=http://+:80
-      - ConnectionStrings__Postgres=Host=superbad-store.db; Port=5432; Database=Sales; Username=postgres; Password=password
+      - ConnectionStrings__Postgres=Host=superbad-store.db; Port=5432; Database=Shopping; Username=postgres; Password=password
       - ConnectionStrings__RabbitMQ=superbad-store.rabbitmq
       - ConnectionStrings__Redis=superbad-store.redis
       - GrpcUrls__Identity=http://superbad-store.identity.api:50051

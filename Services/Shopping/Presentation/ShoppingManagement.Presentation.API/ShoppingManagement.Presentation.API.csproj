@@ -7,7 +7,6 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
-
     <ItemGroup>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10">
             <PrivateAssets>all</PrivateAssets>
@@ -16,11 +15,10 @@
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0"/>
     </ItemGroup>
 
-
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\Presentation\BuildingBlock.Presentation.API\BuildingBlock.Presentation.API.csproj"/>
-        <ProjectReference Include="..\..\Core\InventoryManagement.Core.Application\InventoryManagement.Core.Application.csproj"/>
-        <ProjectReference Include="..\..\Infrastructure\InventoryManagement.Infrastructure.EntityFrameworkCore\InventoryManagement.Infrastructure.EntityFrameworkCore.csproj"/>
+        <ProjectReference Include="..\..\Core\ShoppingManagement.Core.Application\ShoppingManagement.Core.Application.csproj"/>
+        <ProjectReference Include="..\..\Infrastructure\ShoppingManagement.Infrastructure.EntityFrameworkCore\ShoppingManagement.Infrastructure.EntityFrameworkCore.csproj"/>
     </ItemGroup>
 
 
@@ -29,6 +27,5 @@
             <Link>.dockerignore</Link>
         </Content>
     </ItemGroup>
-
 
 </Project>
