@@ -1,11 +1,11 @@
 using BuildingBlock.Core.Application.CQRS;
 using BuildingBlock.Core.Domain.Repositories;
+using InventoryManagement.Core.Application.Categories.CQRS.Queries.Requests;
 using InventoryManagement.Core.Application.Categories.DTOs;
-using InventoryManagement.Core.Application.Products.CQRS.Queries.Requests;
 using InventoryManagement.Core.Domain.CategoryAggregate.Entities;
 using InventoryManagement.Core.Domain.CategoryAggregate.Specifications;
 
-namespace InventoryManagement.Core.Application.Products.CQRS.Queries.Handlers;
+namespace InventoryManagement.Core.Application.Categories.CQRS.Queries.Handlers;
 
 public class GetAllCategoriesQueryHandler : IQueryHandler<GetAllCategoriesQuery, List<CategoryDto>>
 {
