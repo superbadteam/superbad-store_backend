@@ -1,5 +1,5 @@
+using InventoryManagement.Core.Application.Categories.CQRS.Queries.Requests;
 using InventoryManagement.Core.Application.Categories.DTOs;
-using InventoryManagement.Core.Application.Products.CQRS.Queries.Requests;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
