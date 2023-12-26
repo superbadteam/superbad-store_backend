@@ -23,7 +23,8 @@ public class UserCreatedIntegrationEventHandler : IIntegrationEventHandler<UserC
 
     public async Task HandleAsync(UserCreatedIntegrationEvent @event)
     {
-        var user = await _userDomainService.CreateAsync(@event.UserId, @event.Name, @event.CreatedAt, @event.CreatedBy);
+        var user = await _userDomainService.CreateAsync(@event.UserId, @event.Name, @event.AvatarUrl, @event.CoverUrl,
+            @event.CreatedAt, @event.CreatedBy);
 
         await _userOperationRepository.AddAsync(user);
 

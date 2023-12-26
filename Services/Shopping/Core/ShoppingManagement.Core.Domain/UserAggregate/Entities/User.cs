@@ -19,10 +19,13 @@ public sealed class User : AggregateRoot
         CreatedBy = createdBy;
     }
 
-    public User(Guid id, string name, DateTime createdAt, string createdBy) : this(createdAt, createdBy)
+    public User(Guid id, string name, string? avatarUrl, string? coverUrl, DateTime createdAt, string createdBy) : this(
+        createdAt, createdBy)
     {
         Id = id;
         Name = name;
+        AvatarUrl = avatarUrl;
+        CoverUrl = coverUrl;
     }
 
     public string Name { get; set; } = null!;
