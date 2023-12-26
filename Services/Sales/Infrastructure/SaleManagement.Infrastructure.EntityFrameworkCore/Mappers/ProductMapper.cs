@@ -1,5 +1,5 @@
 using AutoMapper;
-using SaleManagement.Core.Application.DTOs.ProductDTOs;
+using SaleManagement.Core.Application.Products.DTOs;
 using SaleManagement.Core.Domain.ProductAggregate.Entities;
 
 namespace SaleManagement.Infrastructure.EntityFrameworkCore.Mappers;

@@ -1,8 +1,8 @@
 using BuildingBlock.Core.Application.DTOs;
 using BuildingBlock.Core.Domain.Shared.Constants;
-using IdentityManagement.Core.Application.CQRS.Commands.UserCommands.Requests;
-using IdentityManagement.Core.Application.CQRS.Queries.UserQueries.Requests;
-using IdentityManagement.Core.Application.DTOs.UserDTOs;
+using IdentityManagement.Core.Application.Users.CQRS.Commands.Requests;
+using IdentityManagement.Core.Application.Users.CQRS.Queries.Requests;
+using IdentityManagement.Core.Application.Users.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

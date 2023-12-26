@@ -1,8 +1,8 @@
 using BuildingBlock.Core.Application.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SaleManagement.Core.Application.CQRS.Queries.ProductQueries.Requests;
-using SaleManagement.Core.Application.DTOs.ProductDTOs;
+using SaleManagement.Core.Application.Products.CQRS.Queries.Requests;
+using SaleManagement.Core.Application.Products.DTOs;
 
 namespace SaleManagement.Presentation.API.Controllers;
 

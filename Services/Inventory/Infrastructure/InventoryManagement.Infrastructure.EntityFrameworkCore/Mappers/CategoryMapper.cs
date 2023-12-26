@@ -1,6 +1,6 @@
 using AutoMapper;
-using InventoryManagement.Core.Application.DTOs.CategoryDTOs;
-using InventoryManagement.Core.Application.IntegrationEvents.CategoryIntegrationEvents.Events;
+using InventoryManagement.Core.Application.Categories.DTOs;
+using InventoryManagement.Core.Application.Categories.IntegrationEvents.Events;
 using InventoryManagement.Core.Domain.CategoryAggregate.Entities;
 
 namespace InventoryManagement.Infrastructure.EntityFrameworkCore.Mappers;

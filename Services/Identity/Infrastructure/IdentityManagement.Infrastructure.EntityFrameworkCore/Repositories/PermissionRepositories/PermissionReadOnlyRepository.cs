@@ -1,6 +1,6 @@
 using AutoMapper;
 using BuildingBlock.Core.Domain.Repositories;
-using IdentityManagement.Core.Application.DTOs.PermissionDTOs;
+using IdentityManagement.Core.Application.Permissions.DTOs;
 using IdentityManagement.Core.Domain.PermissionAggregate.Entities;
 using IdentityManagement.Core.Domain.PermissionAggregate.Repositories;
 using IdentityManagement.Infrastructure.Identity.PermissionAggregate.Entities;

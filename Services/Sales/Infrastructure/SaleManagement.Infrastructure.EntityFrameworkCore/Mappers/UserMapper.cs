@@ -1,5 +1,5 @@
 using AutoMapper;
-using SaleManagement.Core.Application.DTOs.UserDTOs;
+using SaleManagement.Core.Application.Users.DTOs;
 using SaleManagement.Core.Domain.ProductAggregate.Entities;
 using SaleManagement.Core.Domain.UserAggregate.Entities;
 

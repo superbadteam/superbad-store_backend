@@ -1,5 +1,5 @@
 using AutoMapper;
-using IdentityManagement.Core.Application.DTOs.UserDTOs;
+using IdentityManagement.Core.Application.Users.DTOs;
 using IdentityManagement.Core.Domain.UserAggregate.Entities;
 using IdentityManagement.Infrastructure.Identity.UserAggregate.Entities;
 

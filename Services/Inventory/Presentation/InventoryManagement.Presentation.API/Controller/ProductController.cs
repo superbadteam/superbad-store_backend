@@ -1,8 +1,8 @@
 using BuildingBlock.Core.Application.DTOs;
 using BuildingBlock.Core.Domain.Shared.Constants;
-using InventoryManagement.Core.Application.CQRS.Commands.ProductCommands.Requests;
-using InventoryManagement.Core.Application.CQRS.Queries.ProductQueries.Requests;
-using InventoryManagement.Core.Application.DTOs.ProductDTOs;
+using InventoryManagement.Core.Application.Products.CQRS.Commands.Requests;
+using InventoryManagement.Core.Application.Products.CQRS.Queries.Requests;
+using InventoryManagement.Core.Application.Products.ProductDTOs;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

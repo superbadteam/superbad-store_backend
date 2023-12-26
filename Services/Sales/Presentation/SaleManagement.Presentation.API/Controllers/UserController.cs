@@ -2,9 +2,9 @@ using BuildingBlock.Core.Domain.Shared.Constants;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SaleManagement.Core.Application.CQRS.Commands.UserCommands.Requests;
-using SaleManagement.Core.Application.CQRS.Queries.UserQueries.Requests;
-using SaleManagement.Core.Application.DTOs.UserDTOs;
+using SaleManagement.Core.Application.Users.CQRS.Commands.Requests;
+using SaleManagement.Core.Application.Users.CQRS.Queries.Requests;
+using SaleManagement.Core.Application.Users.DTOs;
 
 namespace SaleManagement.Presentation.API.Controllers;
 
