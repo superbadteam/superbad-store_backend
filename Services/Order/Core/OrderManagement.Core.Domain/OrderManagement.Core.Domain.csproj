@@ -14,4 +14,9 @@
     </ItemGroup>
 
 
+    <ItemGroup>
+        <PackageReference Include="libphonenumber-csharp" Version="8.13.27"/>
+    </ItemGroup>
+
+
 </Project>

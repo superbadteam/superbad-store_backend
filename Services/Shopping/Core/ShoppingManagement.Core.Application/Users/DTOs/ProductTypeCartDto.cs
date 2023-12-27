@@ -2,6 +2,8 @@ namespace ShoppingManagement.Core.Application.Users.DTOs;
 
 public class ProductTypeCartDto
 {
+    public Guid Id { get; set; }
+
     public string Name { get; set; } = null!;
 
     public double Price { get; set; }
