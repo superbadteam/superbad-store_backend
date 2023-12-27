@@ -10,7 +10,9 @@ public class UserMapper : Profile
     {
         CreateMap<ShippingAddress, ShippingAddressDto>()
             .ForMember(dest => dest.City, opt => opt.MapFrom(src => src.District.ParentLocation.Name))
-            .ForMember(dest => dest.District, opt => opt.MapFrom(src => src.District.Name));
+            .ForMember(dest => dest.District, opt => opt.MapFrom(src => src.District.Name))
+            .ForMember(dest => dest.PhoneNumber,
+                opt => opt.MapFrom(src => $"+{src.PhoneNumber.CountryCode}{src.PhoneNumber.NationalNumber}"));
 
         CreateMap<User, SellerDto>();
     }

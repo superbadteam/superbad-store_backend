@@ -16,12 +16,21 @@ public class ShippingAddressConfiguration : IEntityTypeConfiguration<ShippingAdd
             .WithMany(location => location.ShippingAddresses)
             .HasForeignKey(sa => sa.DistrictId);
 
-        builder.Property(sa => sa.PhoneNumber)
-            .HasMaxLength(20)
-            .IsRequired();
-
         builder.Property(sa => sa.Name)
             .IsRequired()
             .HasMaxLength(320);
+
+        builder.OwnsOne(sa => sa.PhoneNumber, phoneNumber =>
+        {
+            phoneNumber.Property(pn => pn.CountryCode)
+                .IsRequired();
+
+            phoneNumber.Property(pn => pn.NationalNumber)
+                .IsRequired();
+        });
+
+        builder.HasIndex(sa => new { sa.UserId, sa.IsMainAddress })
+            .IsUnique()
+            .HasFilter("\"DeletedAt\" IS NULL AND \"IsMainAddress\" = true");
     }
 }
