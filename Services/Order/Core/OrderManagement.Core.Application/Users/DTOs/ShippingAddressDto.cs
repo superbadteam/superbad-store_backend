@@ -13,4 +13,6 @@ public class ShippingAddressDto
     public string District { get; set; } = null!;
 
     public string City { get; set; } = null!;
+
+    public bool IsMainAddress { get; set; }
 }

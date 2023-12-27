@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OrderManagement.Core.Application.Users.CQRS.Commands.Requests;
+using OrderManagement.Core.Application.Users.CQRS.Queries.Requests;
 using OrderManagement.Core.Application.Users.DTOs;
 
 namespace OrderManagement.Presentation.API.Controllers;
@@ -25,6 +26,15 @@ public class UserController : ControllerBase
         var shippingAddress = await _mediator.Send(new CreateShippingAddressCommand(dto));
 
         return Created("", shippingAddress);
+    }
+
+    [HttpGet("me/shipping-addresses")]
+    [Authorize(Policy = Permissions.Product.View)]
+    public async Task<ActionResult<IEnumerable<ShippingAddressDto>>> GetAllShippingAddressesAsync()
+    {
+        var shippingAddresses = await _mediator.Send(new GetAllShippingAddressesQuery());
+
+        return Ok(shippingAddresses);
     }
 
     [HttpPost("me/shipping-addresses/{id:guid}")]
