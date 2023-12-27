@@ -37,7 +37,12 @@ public class
 
         foreach (var categoryId in query.Dto.CategoryIds)
         {
-            var categorySpecification = new ProductCategoryIdSpecification(categoryId);
+            var productCategoryIdSpecification = new ProductCategoryIdSpecification(categoryId);
+
+            var productParentCategoryIdSpecification = new ProductParentCategoryIdSpecification(categoryId);
+
+            var categorySpecification = productCategoryIdSpecification.Or(productParentCategoryIdSpecification);
+
             productCategorySpecifications = productCategorySpecifications == null
                 ? categorySpecification
                 : productCategorySpecifications.Or(categorySpecification);
