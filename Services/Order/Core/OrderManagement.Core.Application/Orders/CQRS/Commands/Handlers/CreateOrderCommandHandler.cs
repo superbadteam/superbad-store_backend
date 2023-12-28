@@ -51,7 +51,8 @@ public class CreateOrderCommandHandler : ICommandHandler<CreateOrderCommand, Ord
 
         await _unitOfWork.SaveChangesAsync();
 
-        _eventBus.Publish(new OrderCreatedIntegrationEvent(_mapper.Map<IEnumerable<OrderItemPayload>>(orderItems)));
+        _eventBus.Publish(new OrderCreatedIntegrationEvent(_mapper.Map<IEnumerable<OrderItemPayload>>(orderItems),
+            _currentUser.Id));
 
         if (request.Method == AddItemMethod.TakeFromCart)
             _eventBus.Publish(new CartItemsRemovedIntegrationEvent(_currentUser.Id, request.Dto.CartItemIds!));

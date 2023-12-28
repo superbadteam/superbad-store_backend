@@ -6,6 +6,14 @@ namespace OrderManagement.Core.Domain.UserAggregate.ValueObjects;
 
 public sealed class PhoneNumber : ValueObject
 {
+    public PhoneNumber(int countryCode, ulong nationalNumber)
+    {
+        CountryCode = countryCode;
+        NationalNumber = nationalNumber;
+
+        ValidateValues();
+    }
+
     public int CountryCode { get; }
 
     public ulong NationalNumber { get; }
@@ -18,9 +26,9 @@ public sealed class PhoneNumber : ValueObject
     protected override void ValidateValues()
     {
         var phoneNumberUtil = PhoneNumberUtil.GetInstance();
-        
+
         PhoneNumbers.PhoneNumber parsedPhoneNumber;
-        
+
         try
         {
             parsedPhoneNumber = phoneNumberUtil.Parse($"+{CountryCode}{NationalNumber}", null);
@@ -29,19 +37,8 @@ public sealed class PhoneNumber : ValueObject
         {
             throw new ValidationException(ex.Message);
         }
-        
+
         if (CountryCode != parsedPhoneNumber.CountryCode || NationalNumber != parsedPhoneNumber.NationalNumber)
-        {
             throw new ValidationException("Invalid country code or national number.");
-        }
-       
-    }
-
-    public PhoneNumber(int countryCode, ulong nationalNumber)
-    {
-        CountryCode = countryCode;
-        NationalNumber = nationalNumber;
-
-        ValidateValues();
     }
 }

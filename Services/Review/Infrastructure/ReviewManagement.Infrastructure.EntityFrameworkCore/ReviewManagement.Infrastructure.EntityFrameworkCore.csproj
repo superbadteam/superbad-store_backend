@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\Core\BuildingBlock.Core.Domain\BuildingBlock.Core.Domain.csproj"/>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\Infrastructure\BuildingBlock.Infrastructure.EntityFrameworkCore\BuildingBlock.Infrastructure.EntityFrameworkCore.csproj"/>
+        <ProjectReference Include="..\..\Core\ReviewManagement.Core.Application\ReviewManagement.Core.Application.csproj"/>
+        <ProjectReference Include="..\..\Core\ReviewManagement.Core.Domain\ReviewManagement.Core.Domain.csproj"/>
+    </ItemGroup>
+
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.10"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.4"/>
+    </ItemGroup>
+
+
+</Project>

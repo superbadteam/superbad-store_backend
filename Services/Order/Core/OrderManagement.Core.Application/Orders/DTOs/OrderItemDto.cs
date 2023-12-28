@@ -4,6 +4,8 @@ namespace OrderManagement.Core.Application.Orders.DTOs;
 
 public class OrderItemDto
 {
+    public Guid Id { get; set; }
+
     public int Quantity { get; set; }
 
     public double TotalPrice { get; set; }
