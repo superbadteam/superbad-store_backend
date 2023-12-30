@@ -1,5 +1,5 @@
 using AutoMapper;
-using ReviewManagement.Core.Application.Users.DTOs;
+using ReviewManagement.Core.Application.Orders.DTOs;
 using ReviewManagement.Core.Domain.UserAggregate.Entities;
 
 namespace ReviewManagement.Infrastructure.EntityFrameworkCore.Mapper;

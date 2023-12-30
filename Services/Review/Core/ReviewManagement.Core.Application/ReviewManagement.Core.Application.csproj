@@ -17,6 +17,7 @@
     <ItemGroup>
         <Folder Include="Products\"/>
         <Folder Include="Reviews\CQRS\Commands\"/>
+        <Folder Include="Users\DTOs\"/>
     </ItemGroup>
 
 </Project>

@@ -1,8 +1,9 @@
-using AutoMapper;
 using BuildingBlock.Core.Application;
 using BuildingBlock.Core.Application.CQRS;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Services;
+using BuildingBlock.Core.Domain.Shared.Utils;
+using BuildingBlock.Core.Domain.Specifications.Implementations;
 using ReviewManagement.Core.Application.Reviews.CQRS.Commands.Requests;
 using ReviewManagement.Core.Application.Reviews.DTOs;
 using ReviewManagement.Core.Domain.ReviewAggregate.DomainEvents.Abstractions;
@@ -14,19 +15,20 @@ namespace ReviewManagement.Core.Application.Reviews.CQRS.Commands.Handlers;
 public class CreateReviewCommandHandler : ICommandHandler<CreateReviewCommand, ReviewDto>
 {
     private readonly ICurrentUser _currentUser;
-    private readonly IMapper _mapper;
     private readonly IReviewDomainService _reviewDomainService;
     private readonly IOperationRepository<Review> _reviewOperationRepository;
+    private readonly IReadOnlyRepository<Review> _reviewReadOnlyRepository;
     private readonly IUnitOfWork _unitOfWork;
 
-    public CreateReviewCommandHandler(IMapper mapper, IUnitOfWork unitOfWork, IReviewDomainService reviewDomainService,
-        IOperationRepository<Review> reviewOperationRepository, ICurrentUser currentUser)
+    public CreateReviewCommandHandler(IUnitOfWork unitOfWork, IReviewDomainService reviewDomainService,
+        IOperationRepository<Review> reviewOperationRepository, ICurrentUser currentUser,
+        IReadOnlyRepository<Review> reviewReadOnlyRepository)
     {
-        _mapper = mapper;
         _unitOfWork = unitOfWork;
         _reviewDomainService = reviewDomainService;
         _reviewOperationRepository = reviewOperationRepository;
         _currentUser = currentUser;
+        _reviewReadOnlyRepository = reviewReadOnlyRepository;
     }
 
     public async Task<ReviewDto> Handle(CreateReviewCommand request, CancellationToken cancellationToken)
@@ -40,6 +42,8 @@ public class CreateReviewCommandHandler : ICommandHandler<CreateReviewCommand, R
 
         await _unitOfWork.SaveChangesAsync();
 
-        return _mapper.Map<ReviewDto>(review);
+        return Optional<ReviewDto>
+            .Of(await _reviewReadOnlyRepository.GetAnyAsync<ReviewDto>(new EntityIdSpecification<Review>(review.Id)))
+            .Get();
     }
 }

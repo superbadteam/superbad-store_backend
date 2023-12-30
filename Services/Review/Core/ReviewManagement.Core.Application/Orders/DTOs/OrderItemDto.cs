@@ -1,5 +1,3 @@
-using ReviewManagement.Core.Application.Users.DTOs;
-
 namespace ReviewManagement.Core.Application.Orders.DTOs;
 
 public class OrderItemDto
