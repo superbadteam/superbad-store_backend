@@ -9,7 +9,8 @@ public class CategoryMapper : Profile
 {
     public CategoryMapper()
     {
-        CreateMap<Category, CategoryDto>();
+        CreateMap<Category, CategoryDto>()
+            .ForMember(dest => dest.SubCategories, opt => opt.MapFrom(src => src.SubCategories.OrderBy(c => c.Name)));
 
         CreateMap<Category, CategoryCreatedPayload>();
     }

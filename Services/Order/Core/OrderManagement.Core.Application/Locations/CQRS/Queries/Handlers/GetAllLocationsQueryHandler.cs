@@ -20,6 +20,10 @@ public class GetAllLocationsQueryHandler : IQueryHandler<GetAllLocationsQuery, L
     {
         var locationIsCitySpecification = new LocationIsCitySpecification();
 
-        return _locationReadOnlyRepository.GetAllAsync<CityDto>(locationIsCitySpecification);
+        return _locationReadOnlyRepository
+            .InitQueryBuilder()
+            .Where(locationIsCitySpecification)
+            .OrderBy("Name")
+            .ToListAsync<CityDto>();
     }
 }

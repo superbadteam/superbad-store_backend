@@ -23,4 +23,18 @@ public interface IReadOnlyRepository<TEntity> where TEntity : IEntity
 
     Task<(List<TEntity>, int)> GetFilterAndPagingAsync(ISpecification<TEntity>? specification,
         string sort, int pageIndex, int pageSize, string? includeTables = null, bool ignoreQueryFilters = false);
+
+    Task<List<TDto>> ToListAsync<TDto>();
+
+    IReadOnlyRepository<TEntity> InitQueryBuilder();
+
+    IReadOnlyRepository<TEntity> AsNoTracking();
+
+    IReadOnlyRepository<TEntity> IgnoreQueryFilters();
+
+    IReadOnlyRepository<TEntity> Join(string includeTables);
+
+    IReadOnlyRepository<TEntity> Where(ISpecification<TEntity> specification);
+
+    IReadOnlyRepository<TEntity> OrderBy(string sort);
 }
