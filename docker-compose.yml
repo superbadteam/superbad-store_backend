@@ -114,6 +114,33 @@ services:
     links:
       - db
       - rabbitmq
+  shopping-service:
+    container_name: superbad-store.shopping.api
+    image: phuc1403/superbad-store.shopping:dev
+    ports:
+      - "5002:80"
+    build:
+      context: .
+      dockerfile: Services/Shopping/Presentation/ShoppingManagement.Presentation.API/Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://+:80
+      - ConnectionStrings__Postgres=Host=superbad-store.db; Port=5432; Database=Shopping; Username=postgres; Password=password
+      - ConnectionStrings__RabbitMQ=superbad-store.rabbitmq
+      - ConnectionStrings__Redis=superbad-store.redis
+      - GrpcUrls__Identity=http://superbad-store.identity.api:50051
+      - Serilog__SeqServerUrl=http://superbad-store.seq.:5341
+    depends_on:
+      db:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      seq:
+        condition: service_started
+    links:
+      - db
+      - rabbitmq
   db:
     container_name: superbad-store.db
     image: postgres:latest

@@ -81,4 +81,10 @@ public sealed class Product : AggregateRoot
 
         Images.Add(image);
     }
+
+    public void UpdateRating(double rating, int totalReviews)
+    {
+        Rating = rating;
+        TotalReviews = totalReviews;
+    }
 }

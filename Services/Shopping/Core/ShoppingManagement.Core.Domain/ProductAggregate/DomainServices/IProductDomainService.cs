@@ -19,4 +19,6 @@ public interface IProductDomainService
     void CreateProductImage(Product product, Guid id, string url, DateTime createdAt, string createdBy);
 
     void IncreaseSold(Product product, Guid productTypeId, int quantity);
+
+    void AddRating(Product product, int rating);
 }

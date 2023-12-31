@@ -84,6 +84,17 @@ public class ProductDomainService : IProductDomainService
         product.Sold += quantity;
     }
 
+    public void AddRating(Product product, int rating)
+    {
+        var newTotalRating = product.Rating * product.TotalReviews + rating;
+
+        var newTotalReviews = product.TotalReviews + 1;
+
+        var newRating = newTotalRating / newTotalReviews;
+
+        product.UpdateRating(newRating, newTotalReviews);
+    }
+
     private ProductType CheckValidOnIncreaseSold(Product product, Guid productTypeId, int quantity)
     {
         var productType = Optional<ProductType>
