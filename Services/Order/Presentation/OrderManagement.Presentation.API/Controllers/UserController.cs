@@ -36,11 +36,4 @@ public class UserController : ControllerBase
 
         return Ok(shippingAddresses);
     }
-
-    [HttpPost("me/shipping-addresses/{id:guid}")]
-    [Authorize(Policy = Permissions.Product.View)]
-    public ActionResult<ShippingAddressDto> GetShippingAddressById()
-    {
-        throw new NotImplementedException();
-    }
 }

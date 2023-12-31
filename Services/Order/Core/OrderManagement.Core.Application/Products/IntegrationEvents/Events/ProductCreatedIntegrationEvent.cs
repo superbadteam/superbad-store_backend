@@ -1,7 +1,7 @@
 using BuildingBlock.Core.Application.IntegrationEvents.Events;
 using OrderManagement.Core.Domain.ProductAggregate.Entities.Enums;
 
-namespace OrderManagement.Core.Application.Orders.IntegrationEvents.Events;
+namespace OrderManagement.Core.Application.Products.IntegrationEvents.Events;
 
 public record ProductCreatedIntegrationEvent(ProductCreatedPayload Product) : IntegrationEvent;
 

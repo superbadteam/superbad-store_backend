@@ -1,11 +1,11 @@
 using BuildingBlock.Core.Application.IntegrationEvents.Handlers;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Services;
-using OrderManagement.Core.Application.Orders.IntegrationEvents.Events;
+using OrderManagement.Core.Application.Products.IntegrationEvents.Events;
 using OrderManagement.Core.Domain.ProductAggregate.DomainServices;
 using OrderManagement.Core.Domain.ProductAggregate.Entities;
 
-namespace OrderManagement.Core.Application.Orders.IntegrationEvents.Handlers;
+namespace OrderManagement.Core.Application.Products.IntegrationEvents.Handlers;
 
 public class ProductCreatedIntegrationEventHandler : IIntegrationEventHandler<ProductCreatedIntegrationEvent>
 {
