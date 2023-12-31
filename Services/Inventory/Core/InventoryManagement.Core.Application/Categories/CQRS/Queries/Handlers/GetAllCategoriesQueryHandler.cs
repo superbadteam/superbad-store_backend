@@ -20,6 +20,11 @@ public class GetAllCategoriesQueryHandler : IQueryHandler<GetAllCategoriesQuery,
     {
         var categoryIsParentSpecification = new CategoryIsParentSpecification();
 
-        return _categoryReadonlyRepository.GetAllAsync<CategoryDto>(categoryIsParentSpecification, "SubCategories");
+        return _categoryReadonlyRepository
+            .InitQueryBuilder()
+            .AsNoTracking()
+            .Where(categoryIsParentSpecification)
+            .OrderBy("Name")
+            .ToListAsync<CategoryDto>();
     }
 }

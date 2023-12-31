@@ -9,7 +9,8 @@ public class LocationMapper : Profile
     public LocationMapper()
     {
         CreateMap<Location, CityDto>()
-            .ForMember(dest => dest.Districts, opt => opt.MapFrom(src => src.SubLocations));
+            .ForMember(dest => dest.Districts,
+                opt => opt.MapFrom(src => src.SubLocations.OrderBy(location => location.Name)));
         CreateMap<Location, DistrictDto>();
     }
 }
