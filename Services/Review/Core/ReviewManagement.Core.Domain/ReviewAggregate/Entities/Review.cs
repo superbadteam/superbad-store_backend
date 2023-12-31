@@ -11,6 +11,7 @@ public class Review : AggregateRoot
     {
         Likes = 0;
         Replies = new List<Review>();
+        LikedReviews = new List<LikedReview>();
     }
 
     public Review(Guid productTypeId, Rating rating, Content? content, Guid userId) : this()
@@ -40,4 +41,17 @@ public class Review : AggregateRoot
     public List<Review> Replies { get; set; }
 
     public int Likes { get; set; }
+
+    public List<LikedReview> LikedReviews { get; set; }
+
+    public LikedReview Like(Guid userId)
+    {
+        var likedReview = new LikedReview(Id, UserId);
+
+        LikedReviews.Add(likedReview);
+
+        Likes++;
+
+        return likedReview;
+    }
 }

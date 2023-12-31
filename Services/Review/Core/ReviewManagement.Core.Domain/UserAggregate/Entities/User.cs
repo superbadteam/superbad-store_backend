@@ -10,6 +10,7 @@ public sealed class User : AggregateRoot
     {
         Reviews = new List<Review>();
         OrderItems = new List<OrderItem>();
+        LikedReviews = new List<LikedReview>();
     }
 
     public User(DateTime createdAt, string createdBy) : this()
@@ -33,4 +34,6 @@ public sealed class User : AggregateRoot
     public List<Review> Reviews { get; set; }
 
     public List<OrderItem> OrderItems { get; set; }
+
+    public List<LikedReview> LikedReviews { get; set; }
 }

@@ -38,4 +38,22 @@ public class ReviewController : ControllerBase
 
         return Ok(reviews);
     }
+
+    [HttpGet("products/{productId:guid}")]
+    public async Task<ActionResult<FilterAndPagingResultDto<ReviewDto>>> GetProductReviewsAsync(
+        [FromQuery] FilterAndPagingProductReviewsDto dto, Guid productId)
+    {
+        var reviews = await _mediator.Send(new FilterAndPagingProductReviewsQuery(productId, dto));
+
+        return Ok(reviews);
+    }
+
+    [HttpPost("{reviewId:guid}/like")]
+    [Authorize(Policy = Permissions.Product.View)]
+    public async Task<ActionResult> LikeReviewAsync(Guid reviewId)
+    {
+        var review = await _mediator.Send(new LikeReviewCommand(reviewId));
+
+        return Ok(review);
+    }
 }
