@@ -25,7 +25,7 @@ public class GetCartQueryHandler : IQueryHandler<GetCartQuery, CartDto>
     {
         var specification = new UserIdSpecification(_currentUser.Id);
 
-        return Optional<CartDto>.Of(await _userReadOnlyRepository.GetAnyAsync<CartDto>(specification))
+        return Optional<CartDto>.Of(await _userReadOnlyRepository.GetAnyAsync<CartDto>(specification, null, true))
             .ThrowIfNotExist(new UserNotFoundException(_currentUser.Id)).Get();
     }
 }

@@ -10,7 +10,11 @@ public class UserMapper : Profile
     public UserMapper()
     {
         CreateMap<User, CartDto>()
-            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Carts));
+            .ForMember(dest => dest.TotalPrice,
+                opt => opt.MapFrom(src =>
+                    src.Carts.Where(cart => cart.DeletedAt == null && cart.ProductType.DeletedAt == null)
+                        .Sum(cart => cart.ProductType.Price * cart.Quantity)))
+            .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Carts.Where(cart => cart.DeletedAt == null)));
         CreateMap<User, UserDto>();
         CreateMap<Cart, CartItemDto>();
         CreateMap<ProductType, ProductTypeCartDto>();

@@ -19,9 +19,5 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.Property(user => user.ProductSold)
             .IsRequired()
             .HasDefaultValue(0);
-
-        builder.Property(user => user.TotalPrice)
-            .IsRequired()
-            .HasDefaultValue(0);
     }
 }
