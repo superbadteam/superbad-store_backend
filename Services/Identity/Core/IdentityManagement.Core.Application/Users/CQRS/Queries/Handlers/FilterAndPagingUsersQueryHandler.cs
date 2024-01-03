@@ -25,8 +25,7 @@ public class
     {
         var (users, totalCount) =
             await _userReadOnlyRepository.FilterAndPagingUsers(request.Dto.Keyword, request.Dto.Sort,
-                request.Dto.PageIndex,
-                request.Dto.PageSize);
+                request.Dto.PageIndex, request.Dto.PageSize, null, true);
 
         return new FilterAndPagingResultDto<UserDetailDto>(_mapper.Map<IEnumerable<UserDetailDto>>(users),
             request.Dto.PageIndex, request.Dto.PageSize, totalCount);

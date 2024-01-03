@@ -33,12 +33,12 @@ public class UserSeeder : IDataSeeder
     {
         _logger.LogInformation("Start seeding users");
 
-        var admin = await _userReadOnlyRepository.GetByEmailAsync("admin@123");
+        var admin = await _userReadOnlyRepository.GetByEmailAsync("admin@123", null, true);
 
         if (admin == null)
             await _userOperationRepository.CreateAsync(new User("admin@123", "Admin"), "Admin@123");
 
-        var user = await _userReadOnlyRepository.GetByEmailAsync("user@123");
+        var user = await _userReadOnlyRepository.GetByEmailAsync("user@123", null, true);
 
         if (user == null)
         {

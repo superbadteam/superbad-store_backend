@@ -74,4 +74,13 @@ public class UserController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpDelete("{userId:guid}")]
+    [Authorize(Policy = Permissions.User.DeleteAll)]
+    public async Task<ActionResult> DeleteUserAsync(Guid userId)
+    {
+        await _mediator.Send(new DeleteUserCommand(userId));
+
+        return NoContent();
+    }
 }

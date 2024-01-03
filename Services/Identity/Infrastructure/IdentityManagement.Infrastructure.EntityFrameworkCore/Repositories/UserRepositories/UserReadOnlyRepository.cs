@@ -32,21 +32,24 @@ public class UserReadOnlyRepository : IUserReadOnlyRepository
         return _mapper.Map<User?>(applicationUser);
     }
 
-    public async Task<TDto?> GetByIdAsync<TDto>(Guid id, string? includeTables = null)
+    public async Task<TDto?> GetByIdAsync<TDto>(Guid id, string? includeTables = null, bool ignoreQueryFilters = false)
     {
         var userIdSpecification = new UserIdSpecification(id);
 
-        var applicationUser = await _userReadOnlyRepository.GetAnyAsync(userIdSpecification, includeTables);
+        var applicationUser =
+            await _userReadOnlyRepository.GetAnyAsync(userIdSpecification, includeTables, ignoreQueryFilters);
 
         return _mapper.Map<TDto?>(applicationUser);
     }
 
-    public async Task<User?> GetByEmailAsync(string email, string? includeTables = null)
+    public async Task<User?> GetByEmailAsync(string email, string? includeTables = null,
+        bool ignoreQueryFilters = false)
     {
         var userEmailExactMatchSpecification = new UserEmailExactMatchSpecification(email);
 
         var applicationUser =
-            await _userReadOnlyRepository.GetAnyAsync(userEmailExactMatchSpecification, includeTables);
+            await _userReadOnlyRepository.GetAnyAsync(userEmailExactMatchSpecification, includeTables,
+                ignoreQueryFilters);
 
         return _mapper.Map<User?>(applicationUser);
     }
@@ -59,12 +62,12 @@ public class UserReadOnlyRepository : IUserReadOnlyRepository
     }
 
     public async Task<(IEnumerable<User> users, int totalCount)> FilterAndPagingUsers(string keyword, string sort,
-        int pageIndex, int pageSize)
+        int pageIndex, int pageSize, string? includeTables = null, bool ignoreQueryFilters = false)
     {
         var specification = new UserEmailPartialMatchSpecification(keyword);
 
         var (applicationUsers, totalCount) = await _userReadOnlyRepository.GetFilterAndPagingAsync(specification, sort,
-            pageIndex, pageSize);
+            pageIndex, pageSize, includeTables, ignoreQueryFilters);
 
         var user = _mapper.Map<IEnumerable<User>>(applicationUsers);
 
