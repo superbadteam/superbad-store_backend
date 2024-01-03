@@ -25,6 +25,11 @@ public class UserDomainService : IUserDomainService
         return user;
     }
 
+    public void Delete(User user, DateTime? deletedAt, string? deletedBy)
+    {
+        user.Delete(deletedAt, deletedBy);
+    }
+
     private async Task CheckValidOnCreateAsync(Guid id)
     {
         await EntityHelper.ThrowIfExistAsync(id, new UserConflictException(id), _userReadOnlyRepository);

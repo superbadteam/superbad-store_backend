@@ -12,8 +12,8 @@ using ReviewManagement.Infrastructure.EntityFrameworkCore;
 namespace ReviewManagement.Infrastructure.EntityFrameworkCore.Migrations
 {
     [DbContext(typeof(ReviewDbContext))]
-    [Migration("20240103144057_RemoveTotalPriceFromUsersTable")]
-    partial class RemoveTotalPriceFromUsersTable
+    [Migration("20240103172547_AddNameConstraintToProductsTable")]
+    partial class AddNameConstraintToProductsTable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -96,7 +96,8 @@ namespace ReviewManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -313,7 +314,7 @@ namespace ReviewManagement.Infrastructure.EntityFrameworkCore.Migrations
             modelBuilder.Entity("ReviewManagement.Core.Domain.ProductAggregate.Entities.Product", b =>
                 {
                     b.HasOne("ReviewManagement.Core.Domain.UserAggregate.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -400,6 +401,8 @@ namespace ReviewManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.Navigation("LikedReviews");
 
                     b.Navigation("OrderItems");
+
+                    b.Navigation("Products");
 
                     b.Navigation("Reviews");
                 });

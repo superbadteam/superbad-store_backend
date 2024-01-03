@@ -28,9 +28,9 @@ public class UserDeletedIntegrationEventHandler : IIntegrationEventHandler<UserD
 
     public async Task HandleAsync(UserDeletedIntegrationEvent @event)
     {
-        var user = Optional<User>
-            .Of(await _userReadOnlyRepository.GetAnyAsync(new EntityIdSpecification<User>(@event.UserId),
-                "Products.Types"))
+        var userIdSpecification = new EntityIdSpecification<User>(@event.UserId);
+
+        var user = Optional<User>.Of(await _userReadOnlyRepository.GetAnyAsync(userIdSpecification, "Products.Types"))
             .ThrowIfNotExist(new UserNotFoundException(@event.UserId)).Get();
 
         _userDomainService.Delete(user, @event.DeletedAt, @event.DeletedBy);
