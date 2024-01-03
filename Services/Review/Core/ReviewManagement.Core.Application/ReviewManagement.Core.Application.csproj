@@ -9,15 +9,6 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\Core\BuildingBlock.Core.Application\BuildingBlock.Core.Application.csproj"/>
         <ProjectReference Include="..\ReviewManagement.Core.Domain\ReviewManagement.Core.Domain.csproj"/>
-
-
-    </ItemGroup>
-
-
-    <ItemGroup>
-        <Folder Include="Products\"/>
-        <Folder Include="Reviews\CQRS\Commands\"/>
-        <Folder Include="Users\DTOs\"/>
     </ItemGroup>
 
 </Project>

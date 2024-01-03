@@ -2,18 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
-using ReviewManagement.Infrastructure.EntityFrameworkCore;
+using ShoppingManagement.Infrastructure.EntityFrameworkCore;
 
 #nullable disable
 
-namespace ReviewManagement.Infrastructure.EntityFrameworkCore.Migrations
+namespace ShoppingManagement.Infrastructure.EntityFrameworkCore.Migrations
 {
-    [DbContext(typeof(ReviewDbContext))]
-    partial class ReviewDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ShoppingDbContext))]
+    [Migration("20240103112948_RemoveTotalPriceFromUsersTable")]
+    partial class RemoveTotalPriceFromUsersTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,7 +25,202 @@ namespace ReviewManagement.Infrastructure.EntityFrameworkCore.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ReviewManagement.Core.Domain.OrderAggregate.Entities.OrderItem", b =>
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.CategoryAggregate.Entities.Category", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<Guid?>("ParentId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Categories");
+                });
+
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.ProductAggregate.Entities.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Condition")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("MaxPrice")
+                        .HasColumnType("double precision");
+
+                    b.Property<double>("MinPrice")
+                        .HasColumnType("double precision");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<double>("Rating")
+                        .HasColumnType("double precision");
+
+                    b.Property<int>("Sold")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("TotalReviews")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.ProductAggregate.Entities.ProductImage", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
+                });
+
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.ProductAggregate.Entities.ProductType", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(256)
+                        .HasColumnType("character varying(256)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("double precision");
+
+                    b.Property<Guid>("ProductId")
+                        .HasColumnType("uuid");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductTypes");
+                });
+
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.UserAggregate.Entities.Cart", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,7 +243,9 @@ namespace ReviewManagement.Infrastructure.EntityFrameworkCore.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<int>("Quantity")
-                        .HasColumnType("integer");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(1);
 
                     b.Property<double>("TotalPrice")
                         .HasColumnType("double precision");
@@ -63,201 +263,28 @@ namespace ReviewManagement.Infrastructure.EntityFrameworkCore.Migrations
 
                     b.HasIndex("ProductTypeId");
 
-                    b.HasIndex("UserId");
-
-                    b.ToTable("OrderItems");
-                });
-
-            modelBuilder.Entity("ReviewManagement.Core.Domain.ProductAggregate.Entities.Product", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("text");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("ReviewManagement.Core.Domain.ProductAggregate.Entities.ProductType", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("text");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(256)
-                        .HasColumnType("character varying(256)");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("double precision");
-
-                    b.Property<Guid>("ProductId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductTypes");
-                });
-
-            modelBuilder.Entity("ReviewManagement.Core.Domain.ReviewAggregate.Entities.LikedReview", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("ReviewId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("ReviewId", "UserId")
+                    b.HasIndex("UserId", "ProductTypeId")
                         .IsUnique()
                         .HasFilter("\"DeletedAt\" IS NULL");
 
-                    b.ToTable("LikedReview");
+                    b.ToTable("Cart");
                 });
 
-            modelBuilder.Entity("ReviewManagement.Core.Domain.ReviewAggregate.Entities.Review", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("Content")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("DeletedBy")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Likes")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ProductTypeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("integer");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.HasIndex("ProductTypeId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("ReviewManagement.Core.Domain.UserAggregate.Entities.User", b =>
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.UserAggregate.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<string>("AvatarUrl")
+                        .HasColumnType("text");
+
+                    b.Property<double>("AverageRating")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("double precision")
+                        .HasDefaultValue(0.0);
+
+                    b.Property<string>("CoverUrl")
                         .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
@@ -278,6 +305,11 @@ namespace ReviewManagement.Infrastructure.EntityFrameworkCore.Migrations
                         .HasMaxLength(320)
                         .HasColumnType("character varying(320)");
 
+                    b.Property<int>("ProductSold")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(0);
+
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -289,39 +321,48 @@ namespace ReviewManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("ReviewManagement.Core.Domain.OrderAggregate.Entities.OrderItem", b =>
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.CategoryAggregate.Entities.Category", b =>
                 {
-                    b.HasOne("ReviewManagement.Core.Domain.ProductAggregate.Entities.ProductType", "ProductType")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("ProductTypeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("ShoppingManagement.Core.Domain.CategoryAggregate.Entities.Category", "Parent")
+                        .WithMany("SubCategories")
+                        .HasForeignKey("ParentId");
 
-                    b.HasOne("ReviewManagement.Core.Domain.UserAggregate.Entities.User", "User")
-                        .WithMany("OrderItems")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ProductType");
-
-                    b.Navigation("User");
+                    b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("ReviewManagement.Core.Domain.ProductAggregate.Entities.Product", b =>
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.ProductAggregate.Entities.Product", b =>
                 {
-                    b.HasOne("ReviewManagement.Core.Domain.UserAggregate.Entities.User", "User")
+                    b.HasOne("ShoppingManagement.Core.Domain.CategoryAggregate.Entities.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ShoppingManagement.Core.Domain.UserAggregate.Entities.User", "User")
                         .WithMany("Products")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Category");
+
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ReviewManagement.Core.Domain.ProductAggregate.Entities.ProductType", b =>
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.ProductAggregate.Entities.ProductImage", b =>
                 {
-                    b.HasOne("ReviewManagement.Core.Domain.ProductAggregate.Entities.Product", "Product")
+                    b.HasOne("ShoppingManagement.Core.Domain.ProductAggregate.Entities.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.ProductAggregate.Entities.ProductType", b =>
+                {
+                    b.HasOne("ShoppingManagement.Core.Domain.ProductAggregate.Entities.Product", "Product")
                         .WithMany("Types")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -330,78 +371,49 @@ namespace ReviewManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("ReviewManagement.Core.Domain.ReviewAggregate.Entities.LikedReview", b =>
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.UserAggregate.Entities.Cart", b =>
                 {
-                    b.HasOne("ReviewManagement.Core.Domain.ReviewAggregate.Entities.Review", "Review")
-                        .WithMany("LikedReviews")
-                        .HasForeignKey("ReviewId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ReviewManagement.Core.Domain.UserAggregate.Entities.User", "User")
-                        .WithMany("LikedReviews")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Review");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("ReviewManagement.Core.Domain.ReviewAggregate.Entities.Review", b =>
-                {
-                    b.HasOne("ReviewManagement.Core.Domain.ReviewAggregate.Entities.Review", "Parent")
-                        .WithMany("Replies")
-                        .HasForeignKey("ParentId");
-
-                    b.HasOne("ReviewManagement.Core.Domain.ProductAggregate.Entities.ProductType", "ProductType")
-                        .WithMany("Reviews")
+                    b.HasOne("ShoppingManagement.Core.Domain.ProductAggregate.Entities.ProductType", "ProductType")
+                        .WithMany("Carts")
                         .HasForeignKey("ProductTypeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ReviewManagement.Core.Domain.UserAggregate.Entities.User", "User")
-                        .WithMany("Reviews")
+                    b.HasOne("ShoppingManagement.Core.Domain.UserAggregate.Entities.User", "User")
+                        .WithMany("Carts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Parent");
 
                     b.Navigation("ProductType");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ReviewManagement.Core.Domain.ProductAggregate.Entities.Product", b =>
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.CategoryAggregate.Entities.Category", b =>
                 {
+                    b.Navigation("Products");
+
+                    b.Navigation("SubCategories");
+                });
+
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.ProductAggregate.Entities.Product", b =>
+                {
+                    b.Navigation("Images");
+
                     b.Navigation("Types");
                 });
 
-            modelBuilder.Entity("ReviewManagement.Core.Domain.ProductAggregate.Entities.ProductType", b =>
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.ProductAggregate.Entities.ProductType", b =>
                 {
-                    b.Navigation("OrderItems");
-
-                    b.Navigation("Reviews");
+                    b.Navigation("Carts");
                 });
 
-            modelBuilder.Entity("ReviewManagement.Core.Domain.ReviewAggregate.Entities.Review", b =>
+            modelBuilder.Entity("ShoppingManagement.Core.Domain.UserAggregate.Entities.User", b =>
                 {
-                    b.Navigation("LikedReviews");
-
-                    b.Navigation("Replies");
-                });
-
-            modelBuilder.Entity("ReviewManagement.Core.Domain.UserAggregate.Entities.User", b =>
-                {
-                    b.Navigation("LikedReviews");
-
-                    b.Navigation("OrderItems");
+                    b.Navigation("Carts");
 
                     b.Navigation("Products");
-
-                    b.Navigation("Reviews");
                 });
 #pragma warning restore 612, 618
         }

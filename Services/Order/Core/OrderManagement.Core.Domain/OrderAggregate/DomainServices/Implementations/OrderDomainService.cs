@@ -5,6 +5,7 @@ using OrderManagement.Core.Domain.OrderAggregate.DomainEvents.Events;
 using OrderManagement.Core.Domain.OrderAggregate.DomainServices.Abstractions;
 using OrderManagement.Core.Domain.OrderAggregate.Entities;
 using OrderManagement.Core.Domain.OrderAggregate.Exceptions;
+using OrderManagement.Core.Domain.OrderAggregate.Specifications;
 using OrderManagement.Core.Domain.ProductAggregate.Entities;
 using OrderManagement.Core.Domain.ProductAggregate.Exceptions;
 using OrderManagement.Core.Domain.UserAggregate.Entities;
@@ -73,10 +74,16 @@ public class OrderDomainService : IOrderDomainService
 
         var cartIdSpecification = new EntityIdSpecification<Cart>(cartItemId);
 
-        var specification = cartUserIdSpecification.And(cartIdSpecification);
+        var cartItemIsNotDeletedSpecification = new CartItemIsNotDeletedSpecification();
 
-        return await EntityHelper.GetOrThrowAsync(specification, new CartItemNotFoundException(cartItemId, userId),
-            _cartReadOnlyRepository);
+        var specification = cartUserIdSpecification.And(cartIdSpecification).And(cartItemIsNotDeletedSpecification);
+
+        var cartItem = Optional<Cart>.Of(await _cartReadOnlyRepository.GetAnyAsync(specification, "ProductType", true))
+            .ThrowIfNotExist(new CartItemNotFoundException(cartItemId, userId)).Get();
+
+        if (cartItem.ProductType is null) throw new ProductTypeNotFoundException(cartItem.ProductTypeId);
+
+        return cartItem;
     }
 
     private static void ThrowIfQuantityIsInvalid(ProductType productType, int quantity)

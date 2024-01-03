@@ -36,24 +36,13 @@ public sealed class User : AggregateRoot
 
     public List<Cart> Carts { get; set; }
 
-    public double TotalPrice { get; set; }
-
-    public void UpdateTotalPrice()
-    {
-        TotalPrice = Carts.Sum(item => item.TotalPrice);
-    }
-
     public void AddToCart(Guid cartItemId, Guid productTypeId, double price, int quantity)
     {
         Carts.Add(new Cart(cartItemId, productTypeId, price, quantity));
-
-        UpdateTotalPrice();
     }
 
     public void RemoveFromCart(Cart cartItem)
     {
         Carts.Remove(cartItem);
-
-        UpdateTotalPrice();
     }
 }

@@ -41,8 +41,6 @@ public class UserDomainService : IUserDomainService
 
         cartItem.UpdateQuantity(quantity + cartItem.Quantity, productType.Price);
 
-        user.UpdateTotalPrice();
-
         return cartItem;
     }
 
@@ -53,6 +51,11 @@ public class UserDomainService : IUserDomainService
         if (cartItem is null) throw new CartItemNotFoundException(cartItemId, user.Id);
 
         user.RemoveFromCart(cartItem);
+    }
+
+    public void Delete(User user, DateTime? deletedAt, string? deletedBy)
+    {
+        user.Delete(deletedAt, deletedBy);
     }
 
     private async Task<ProductType> CheckValidOnAddToCartAsync(Cart? item, Guid productTypeId, int quantity)

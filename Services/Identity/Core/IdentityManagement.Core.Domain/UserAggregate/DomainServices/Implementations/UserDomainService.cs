@@ -1,5 +1,6 @@
 using BuildingBlock.Core.Domain.Exceptions;
 using BuildingBlock.Core.Domain.Shared.Utils;
+using IdentityManagement.Core.Domain.RoleAggregate.Repositories;
 using IdentityManagement.Core.Domain.UserAggregate.DomainServices.Abstractions;
 using IdentityManagement.Core.Domain.UserAggregate.Entities;
 using IdentityManagement.Core.Domain.UserAggregate.Exceptions;
@@ -9,11 +10,14 @@ namespace IdentityManagement.Core.Domain.UserAggregate.DomainServices.Implementa
 
 public class UserDomainService : IUserDomainService
 {
+    private readonly IRoleReadOnlyRepository _roleReadOnlyRepository;
     private readonly IUserReadOnlyRepository _userReadOnlyRepository;
 
-    public UserDomainService(IUserReadOnlyRepository userReadOnlyRepository)
+    public UserDomainService(IUserReadOnlyRepository userReadOnlyRepository,
+        IRoleReadOnlyRepository roleReadOnlyRepository)
     {
         _userReadOnlyRepository = userReadOnlyRepository;
+        _roleReadOnlyRepository = roleReadOnlyRepository;
     }
 
     public void AddRefreshToken(User user, string refreshToken)
@@ -37,6 +41,18 @@ public class UserDomainService : IUserDomainService
             new ValidationException("Password and confirm password don't match"));
 
         return await _userReadOnlyRepository.GetPasswordResetToken(user);
+    }
+
+    public async Task DeleteAsync(User user)
+    {
+        await CheckValidOnDeleteAsync(user);
+    }
+
+    private async Task CheckValidOnDeleteAsync(User user)
+    {
+        var roles = await _roleReadOnlyRepository.GetByUserIdAsync(user.Id);
+
+        if (roles.Any(role => role.Name == "admin")) throw new ValidationException("Admin user can not be deleted");
     }
 
     private async Task CheckValidOnCreate(string email, string password, string confirmPassword)

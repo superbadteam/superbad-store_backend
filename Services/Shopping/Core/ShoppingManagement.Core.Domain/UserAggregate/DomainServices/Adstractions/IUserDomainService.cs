@@ -10,4 +10,6 @@ public interface IUserDomainService
     Task<Cart> AddToCartAsync(User user, Guid productTypeId, int quantity);
 
     void RemoveFromCart(User user, Guid cartItemId);
+
+    void Delete(User user, DateTime? deletedAt, string? deletedBy);
 }

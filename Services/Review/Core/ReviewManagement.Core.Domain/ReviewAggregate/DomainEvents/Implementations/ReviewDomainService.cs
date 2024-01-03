@@ -4,6 +4,7 @@ using BuildingBlock.Core.Domain.Specifications.Implementations;
 using ReviewManagement.Core.Domain.OrderAggregate.Entities;
 using ReviewManagement.Core.Domain.OrderAggregate.Exceptions;
 using ReviewManagement.Core.Domain.OrderAggregate.Specifications;
+using ReviewManagement.Core.Domain.ProductAggregate.Exceptions;
 using ReviewManagement.Core.Domain.ReviewAggregate.DomainEvents.Abstractions;
 using ReviewManagement.Core.Domain.ReviewAggregate.Entities;
 using ReviewManagement.Core.Domain.ReviewAggregate.Exceptions;
@@ -60,8 +61,11 @@ public class ReviewDomainService : IReviewDomainService
         var orderItemSpecification = orderItemUserIdSpecification.And(orderItemIdSpecification);
 
         var orderItem = Optional<OrderItem>
-            .Of(await _orderItemReadOnlyRepository.GetAnyAsync(orderItemSpecification, "ProductType"))
+            .Of(await _orderItemReadOnlyRepository.GetAnyAsync(orderItemSpecification, "ProductType.Product", true))
             .ThrowIfNotExist(new OrderItemNotFoundException(orderItemId, userId)).Get();
+
+        if (orderItem.ProductType.Product.DeletedAt is not null)
+            throw new ProductNotFoundException(orderItem.ProductType.ProductId);
 
         var reviewProductIdSpecification = new ReviewProductIdSpecification(orderItem.ProductType.ProductId);
         var reviewUserIdSpecification = new ReviewUserIdSpecification(userId);
