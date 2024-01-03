@@ -14,11 +14,11 @@ namespace IdentityManagement.Core.Application.Users.CQRS.Commands.Handlers;
 
 public class DeleteUserCommandHandler : ICommandHandler<DeleteUserCommand>
 {
-    private readonly IUserReadOnlyRepository _userReadOnlyRepository;
+    private readonly IEventBus _eventBus;
+    private readonly IUnitOfWork _unitOfWork;
     private readonly IUserDomainService _userDomainService;
     private readonly IUserOperationRepository _userOperationRepository;
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IEventBus _eventBus;
+    private readonly IUserReadOnlyRepository _userReadOnlyRepository;
 
     public DeleteUserCommandHandler(IUserReadOnlyRepository userReadOnlyRepository, IUnitOfWork unitOfWork,
         IUserDomainService userDomainService, IUserOperationRepository userOperationRepository, IEventBus eventBus)
@@ -44,6 +44,7 @@ public class DeleteUserCommandHandler : ICommandHandler<DeleteUserCommand>
         var userDeletionDto = Optional<UserDeletionDto>
             .Of(await _userReadOnlyRepository.GetByIdAsync<UserDeletionDto>(request.UserId, null, true)).Get();
 
-        _eventBus.Publish(new UserDeletedIntegrationEvent(user.Id, userDeletionDto.DeletedAt, userDeletionDto.DeletedBy));
+        _eventBus.Publish(
+            new UserDeletedIntegrationEvent(user.Id, userDeletionDto.DeletedAt, userDeletionDto.DeletedBy));
     }
 }

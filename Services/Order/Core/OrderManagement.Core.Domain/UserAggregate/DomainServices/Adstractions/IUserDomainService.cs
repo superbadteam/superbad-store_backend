@@ -16,4 +16,6 @@ public interface IUserDomainService
         bool isMainAddress);
 
     Task RemoveMainAddressStatusFromCurrentShippingAddressAsync(User user);
+
+    void Delete(User user, DateTime? deletedAt, string? deletedBy);
 }

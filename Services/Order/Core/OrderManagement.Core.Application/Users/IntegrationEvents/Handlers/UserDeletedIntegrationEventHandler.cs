@@ -2,6 +2,7 @@ using BuildingBlock.Core.Application.IntegrationEvents.Handlers;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Services;
 using BuildingBlock.Core.Domain.Shared.Utils;
+using BuildingBlock.Core.Domain.Specifications.Implementations;
 using OrderManagement.Core.Application.Users.IntegrationEvents.Events;
 using OrderManagement.Core.Domain.UserAggregate.DomainServices.Adstractions;
 using OrderManagement.Core.Domain.UserAggregate.Entities;
@@ -27,10 +28,12 @@ public class UserDeletedIntegrationEventHandler : IIntegrationEventHandler<UserD
 
     public async Task HandleAsync(UserDeletedIntegrationEvent @event)
     {
-        var user = await EntityHelper.GetOrThrowAsync(@event.UserId, new UserNotFoundException(@event.UserId),
-            _userReadOnlyRepository);
+        var user = Optional<User>
+            .Of(await _userReadOnlyRepository.GetAnyAsync(new EntityIdSpecification<User>(@event.UserId),
+                "Products.Types"))
+            .ThrowIfNotExist(new UserNotFoundException(@event.UserId)).Get();
 
-        // _userDomainService.Delete(user);
+        _userDomainService.Delete(user, @event.DeletedAt, @event.DeletedBy);
 
         _userOperationRepository.Delete(user);
 

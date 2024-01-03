@@ -47,15 +47,9 @@ public class UserDomainService : IUserDomainService
         var productType = await CheckValidOnAddToCartAsync(cartItem, productTypeId, quantity);
 
         if (cartItem is not null)
-        {
             cartItem.UpdateQuantity(quantity + cartItem.Quantity, productType.Price);
-
-            user.UpdateTotalPrice();
-        }
         else
-        {
             user.AddToCart(cartItemId, productTypeId, productType.Price, quantity);
-        }
     }
 
     public void RemoveFromCart(User user, Guid cartItemId)
@@ -92,6 +86,11 @@ public class UserDomainService : IUserDomainService
         shippingAddress.IsMainAddress = false;
 
         user.ShippingAddresses.Add(shippingAddress);
+    }
+
+    public void Delete(User user, DateTime? deletedAt, string? deletedBy)
+    {
+        user.Delete(deletedAt, deletedBy);
     }
 
     private async Task CheckValidOnCreateShippingAddressAsync(Guid districtId)

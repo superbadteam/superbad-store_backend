@@ -55,8 +55,8 @@ public class UserRoleSeeder : IDataSeeder
             await _roleOperationRepository.UpdateAsync(adminRole);
         }
 
-        var user = Optional<User>.Of(await _userReadOnlyRepository.GetByEmailAsync("user@123"))
-            .ThrowIfNotExist(new UserNotFoundException("email", "admin@123")).Get();
+        var user = Optional<User>.Of(await _userReadOnlyRepository.GetByEmailAsync("user@123", null, true))
+            .ThrowIfNotExist(new UserNotFoundException("email", "user@123")).Get();
 
         var userRole = Optional<Role>.Of(await _roleReadOnlyRepository.GetByNameAsync("user"))
             .ThrowIfNotExist(new RoleNotFoundException("user")).Get();

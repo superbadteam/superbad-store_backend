@@ -30,7 +30,8 @@ public class GetCurrentUserOrderQueryHandler : IQueryHandler<GetCurrentUserOrder
 
         var specification = orderUserIdSpecification.And(orderIdSpecification);
 
-        return Optional<OrderDetailDto>.Of(await _orderReadOnlyRepository.GetAnyAsync<OrderDetailDto>(specification))
+        return Optional<OrderDetailDto>
+            .Of(await _orderReadOnlyRepository.GetAnyAsync<OrderDetailDto>(specification, null, true))
             .ThrowIfNotExist(new OrderNotFoundException(request.Id)).Get();
     }
 }
