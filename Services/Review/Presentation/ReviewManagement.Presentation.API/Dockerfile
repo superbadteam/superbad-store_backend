@@ -28,4 +28,5 @@ RUN dotnet publish "ReviewManagement.Presentation.API.csproj" -c Release -o /app
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY SeedReviewData.sql .
 ENTRYPOINT ["dotnet", "ReviewManagement.Presentation.API.dll"]

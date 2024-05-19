@@ -4,5 +4,5 @@ using InventoryManagement.Core.Application.Products.ProductDTOs;
 
 namespace InventoryManagement.Core.Application.Products.CQRS.Queries.Requests;
 
-public record FilterAndPagingCurrentUserProductsQuery
-    (FilterAndPagingCurrentUserProductsDto Dto) : IQuery<FilterAndPagingResultDto<ProductSummaryDto>>;
+public record FilterAndPagingCurrentUserProductsQuery(FilterAndPagingCurrentUserProductsDto Dto)
+    : IQuery<FilterAndPagingResultDto<ProductSummaryDto>>;

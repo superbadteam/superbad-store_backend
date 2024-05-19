@@ -4,5 +4,5 @@ using ReviewManagement.Core.Application.Reviews.DTOs;
 
 namespace ReviewManagement.Core.Application.Reviews.CQRS.Queries.Requests;
 
-public record FilterAndPagingCurrentUserReviewsQuery
-    (FilterAndPagingCurrentUserReviewsDto Dto) : IQuery<FilterAndPagingResultDto<ReviewDto>>;
+public record FilterAndPagingCurrentUserReviewsQuery(FilterAndPagingCurrentUserReviewsDto Dto)
+    : IQuery<FilterAndPagingResultDto<ReviewDto>>;

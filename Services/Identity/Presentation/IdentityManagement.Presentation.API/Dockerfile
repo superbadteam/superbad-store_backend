@@ -29,4 +29,5 @@ RUN dotnet publish "IdentityManagement.Presentation.API.csproj" -c Release -o /a
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY SeedIdentityData.sql .
 ENTRYPOINT ["dotnet", "IdentityManagement.Presentation.API.dll"]

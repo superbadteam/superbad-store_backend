@@ -28,4 +28,5 @@ RUN dotnet publish "InventoryManagement.Presentation.API.csproj" -c Release -o /
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY SeedInventoryData.sql .
 ENTRYPOINT ["dotnet", "InventoryManagement.Presentation.API.dll"]

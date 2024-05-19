@@ -11,7 +11,7 @@ namespace ShoppingManagement.Core.Application.Products.CQRS.Queries.Handlers;
 
 public class
     FilterAndPagingProductsQueryHandler : IQueryHandler<FilterAndPagingProductsQuery,
-        FilterAndPagingResultDto<ProductSummaryDto>>
+    FilterAndPagingResultDto<ProductSummaryDto>>
 {
     private readonly IReadOnlyRepository<Product> _repository;
 

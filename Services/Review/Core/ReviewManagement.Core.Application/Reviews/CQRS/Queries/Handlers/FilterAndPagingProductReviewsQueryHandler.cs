@@ -10,7 +10,7 @@ namespace ReviewManagement.Core.Application.Reviews.CQRS.Queries.Handlers;
 
 public class
     FilterAndPagingProductReviewsQueryHandler : IQueryHandler<FilterAndPagingProductReviewsQuery,
-        FilterAndPagingResultDto<ReviewDto>>
+    FilterAndPagingResultDto<ReviewDto>>
 {
     private readonly IReadOnlyRepository<Review> _reviewReadOnlyRepository;
 

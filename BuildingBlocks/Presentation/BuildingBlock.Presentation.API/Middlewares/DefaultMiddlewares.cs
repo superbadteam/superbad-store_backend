@@ -31,6 +31,8 @@ public static class DefaultMiddlewares
 
         app.RegisterEventBusSubcriptions<TApplicationAssemblyReference>();
 
+        app.RunSqlScripts(configuration);
+
         return app;
     }
 }

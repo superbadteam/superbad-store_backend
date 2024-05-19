@@ -28,4 +28,5 @@ RUN dotnet publish "ShoppingManagement.Presentation.API.csproj" -c Release -o /a
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY SeedShoppingData.sql .
 ENTRYPOINT ["dotnet", "ShoppingManagement.Presentation.API.dll"]

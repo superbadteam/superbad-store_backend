@@ -28,4 +28,5 @@ RUN dotnet publish "OrderManagement.Presentation.API.csproj" -c Release -o /app/
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+COPY SeedOrderData.sql .
 ENTRYPOINT ["dotnet", "OrderManagement.Presentation.API.dll"]

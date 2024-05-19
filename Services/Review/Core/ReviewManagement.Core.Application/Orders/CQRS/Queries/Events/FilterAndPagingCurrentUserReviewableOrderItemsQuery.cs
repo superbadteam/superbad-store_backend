@@ -4,5 +4,5 @@ using ReviewManagement.Core.Application.Orders.DTOs;
 
 namespace ReviewManagement.Core.Application.Orders.CQRS.Queries.Events;
 
-public record FilterAndPagingCurrentUserReviewableOrderItemsQuery
-    (FilterAndPagingCurrentUserReviewableOrderItemsDto Dto) : IQuery<FilterAndPagingResultDto<OrderItemDto>>;
+public record FilterAndPagingCurrentUserReviewableOrderItemsQuery(FilterAndPagingCurrentUserReviewableOrderItemsDto Dto)
+    : IQuery<FilterAndPagingResultDto<OrderItemDto>>;

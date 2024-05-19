@@ -12,7 +12,7 @@ namespace InventoryManagement.Core.Application.Products.CQRS.Queries.Handlers;
 
 public class
     FilterAndPagingCurrentUserProductsQueryHandler : IQueryHandler<FilterAndPagingCurrentUserProductsQuery,
-        FilterAndPagingResultDto<ProductSummaryDto>>
+    FilterAndPagingResultDto<ProductSummaryDto>>
 {
     private readonly ICurrentUser _currentUser;
     private readonly IReadOnlyRepository<Product> _repository;
