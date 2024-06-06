@@ -13,6 +13,8 @@ public static class SqlScriptMiddleware
         var scriptFileNames = configuration.GetSection("SqlScripts").Get<List<string>>();
 
         if (scriptFileNames == null) return;
+        
+        
 
         foreach (var script in scriptFileNames
                      .Select(scriptFileName => Path.Combine(Directory.GetCurrentDirectory(), scriptFileName))
