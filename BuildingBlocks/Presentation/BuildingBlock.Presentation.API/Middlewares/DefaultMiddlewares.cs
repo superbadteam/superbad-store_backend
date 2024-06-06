@@ -2,7 +2,10 @@ using BuildingBlock.Core.Application;
 using BuildingBlock.Presentation.API.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using ILogger = Serilog.ILogger;
 
 namespace BuildingBlock.Presentation.API.Middlewares;
 
@@ -30,8 +33,8 @@ public static class DefaultMiddlewares
         await app.SeedDataAsync();
 
         app.RegisterEventBusSubcriptions<TApplicationAssemblyReference>();
-
-        app.RunSqlScripts(configuration);
+        var logger = app.ApplicationServices.GetRequiredService<ILogger>();
+        app.RunSqlScripts(configuration, logger);
 
         return app;
     }
