@@ -4,6 +4,7 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/Shopping/Presentation/ShoppingManagement.Presentation.API/ShoppingManagement.Presentation.API.csproj", "Services/Shopping/Presentation/ShoppingManagement.Presentation.API/"]
 COPY ["BuildingBlocks/Presentation/BuildingBlock.Presentation.API/BuildingBlock.Presentation.API.csproj", "BuildingBlocks/Presentation/BuildingBlock.Presentation.API/"]
@@ -20,13 +21,14 @@ COPY ["Services/Shopping/Infrastructure/ShoppingManagement.Infrastructure.Entity
 RUN dotnet restore "Services/Shopping/Presentation/ShoppingManagement.Presentation.API/ShoppingManagement.Presentation.API.csproj"
 COPY . .
 WORKDIR "/src/Services/Shopping/Presentation/ShoppingManagement.Presentation.API"
-RUN dotnet build "ShoppingManagement.Presentation.API.csproj" -c Release -o /app/build
+RUN dotnet build "ShoppingManagement.Presentation.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "ShoppingManagement.Presentation.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "ShoppingManagement.Presentation.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY SeedShoppingData.sql .
+COPY ["Services/Shopping/Presentation/ShoppingManagement.Presentation.API/SeedShoppingData.sql", ""]
 ENTRYPOINT ["dotnet", "ShoppingManagement.Presentation.API.dll"]

@@ -4,6 +4,7 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/Order/Presentation/OrderManagement.Presentation.API/OrderManagement.Presentation.API.csproj", "Services/Order/Presentation/OrderManagement.Presentation.API/"]
 COPY ["BuildingBlocks/Presentation/BuildingBlock.Presentation.API/BuildingBlock.Presentation.API.csproj", "BuildingBlocks/Presentation/BuildingBlock.Presentation.API/"]
@@ -20,13 +21,14 @@ COPY ["Services/Order/Infrastructure/OrderManagement.Infrastructure.EntityFramew
 RUN dotnet restore "Services/Order/Presentation/OrderManagement.Presentation.API/OrderManagement.Presentation.API.csproj"
 COPY . .
 WORKDIR "/src/Services/Order/Presentation/OrderManagement.Presentation.API"
-RUN dotnet build "OrderManagement.Presentation.API.csproj" -c Release -o /app/build
+RUN dotnet build "OrderManagement.Presentation.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "OrderManagement.Presentation.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "OrderManagement.Presentation.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY SeedOrderData.sql .
+COPY ["Services/Order/Presentation/OrderManagement.Presentation.API/SeedOrderData.sql", ""]
 ENTRYPOINT ["dotnet", "OrderManagement.Presentation.API.dll"]
