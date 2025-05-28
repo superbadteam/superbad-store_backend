@@ -1,5 +1,4 @@
 using BuildingBlock.Core.Application;
-using BuildingBlock.Core.Domain.Exceptions;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using BuildingBlock.Core.Domain.Specifications.Implementations;
@@ -26,11 +25,12 @@ public class ProductDomainService : IProductDomainService
         _currentUser = currentUser;
     }
 
-    public async Task<Product> CreateAsync(string name, string description, Guid categoryId, ProductCondition condition)
+    public async Task<Product> CreateAsync(string id, string name, string description, Guid categoryId,
+        ProductCondition condition)
     {
         await CheckValidOnCreateAsync(categoryId);
 
-        return new Product(name, description, categoryId, condition, _currentUser.Id);
+        return new Product(id, name, description, categoryId, condition, _currentUser.Id);
     }
 
     public async Task<Product> EditAsync(Guid id, string code, string name, double price, bool isAvailable,
@@ -105,11 +105,9 @@ public class ProductDomainService : IProductDomainService
 
     private async Task CheckCategoryValidation(Guid categoryId)
     {
-        var category = Optional<Category>
+        Optional<Category>
             .Of(await _categoryReadOnlyRepository.GetAnyAsync(new EntityIdSpecification<Category>(categoryId)))
             .ThrowIfNotExist(new CategoryNotFoundException(categoryId)).Get();
-
-        if (category.ParentId == null) throw new ValidationException("Cannot choose a parent category");
     }
 
     private async Task<Product> CheckValidOnEditAsync(Guid id, string code)

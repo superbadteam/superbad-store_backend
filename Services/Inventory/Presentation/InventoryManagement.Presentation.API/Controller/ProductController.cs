@@ -66,4 +66,12 @@ public class ProductController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPost("sync")]
+    public async Task<ActionResult> SyncProductsAmongServicesAsync()
+    {
+        await _mediator.Send(new SyncProductsAmongServicesCommand());
+
+        return NoContent();
+    }
 }

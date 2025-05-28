@@ -46,7 +46,7 @@ public class RegisterCommandHandler : ICommandHandler<RegisterCommand, UserSumma
     public async Task<UserSummaryDto> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         var user = await _userDomainService.CreateAsync(request.Dto.Email, request.Dto.Name, request.Dto.Password,
-            request.Dto.ConfirmPassword);
+            request.Dto.ConfirmPassword, request.Dto.Id);
 
         await _userOperationRepository.CreateAsync(user, request.Dto.Password);
 

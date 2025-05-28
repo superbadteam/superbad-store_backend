@@ -48,7 +48,9 @@ public class CategorySeeder : IDataSeeder
 
         var categories = BuildingBlock.Core.Domain.Shared.Constants.Categories.GetCategories();
 
-        var mainCategories = categories.Select(category => _categoryDomainService.Create(category.Key)).ToList();
+        var mainCategories = new List<Category>();
+
+        foreach (var category in categories) mainCategories.Add(await _categoryDomainService.CreateAsync(category.Key));
 
         await _categoryOperationRepository.AddRangeAsync(mainCategories);
 

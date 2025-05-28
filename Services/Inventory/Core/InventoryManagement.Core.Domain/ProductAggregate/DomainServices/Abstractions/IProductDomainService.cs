@@ -5,7 +5,7 @@ namespace InventoryManagement.Core.Domain.ProductAggregate.DomainServices.Abstra
 
 public interface IProductDomainService
 {
-    Task<Product> CreateAsync(string name, string description, Guid categoryId, ProductCondition condition);
+    Task<Product> CreateAsync(string id, string name, string description, Guid categoryId, ProductCondition condition);
 
     Task<Product> EditAsync(Guid id, string code, string name, double price, bool isAvailable,
         ProductCondition condition);

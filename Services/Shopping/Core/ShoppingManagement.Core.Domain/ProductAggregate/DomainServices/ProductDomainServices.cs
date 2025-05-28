@@ -1,4 +1,3 @@
-using BuildingBlock.Core.Domain.Exceptions;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using BuildingBlock.Core.Domain.Specifications.Implementations;
@@ -127,11 +126,9 @@ public class ProductDomainService : IProductDomainService
 
     private async Task CheckCategoryValidation(Guid categoryId)
     {
-        var category = Optional<Category>
+        Optional<Category>
             .Of(await _categoryReadOnlyRepository.GetAnyAsync(new EntityIdSpecification<Category>(categoryId)))
             .ThrowIfNotExist(new CategoryNotFoundException(categoryId)).Get();
-
-        if (category.ParentId == null) throw new ValidationException("Cannot choose a parent category");
     }
 
     private async Task ThrowIfUserIsNotExistAsync(Guid userId)

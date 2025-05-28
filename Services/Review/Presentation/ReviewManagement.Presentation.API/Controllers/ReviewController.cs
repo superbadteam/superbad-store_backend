@@ -56,4 +56,20 @@ public class ReviewController : ControllerBase
 
         return Ok(review);
     }
+
+    [HttpPost("migrate")]
+    public async Task<ActionResult> CreateAsync([FromBody] MigrateReviewDto dto)
+    {
+        await _mediator.Send(new MigrateReviewCommand(dto));
+
+        return NoContent();
+    }
+
+    [HttpPost("sync")]
+    public async Task<ActionResult> SyncReviewsAmongServicesAsync()
+    {
+        await _mediator.Send(new SyncReviewsAmongServicesCommand());
+
+        return NoContent();
+    }
 }

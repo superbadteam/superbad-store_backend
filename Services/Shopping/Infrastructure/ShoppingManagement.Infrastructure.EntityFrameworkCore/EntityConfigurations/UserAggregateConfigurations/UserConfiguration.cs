@@ -9,7 +9,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
     public void Configure(EntityTypeBuilder<User> builder)
     {
         builder.Property(user => user.Name)
-            .HasMaxLength(320)
             .IsRequired();
 
         builder.Property(user => user.AverageRating)

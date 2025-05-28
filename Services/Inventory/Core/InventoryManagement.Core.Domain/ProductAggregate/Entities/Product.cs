@@ -1,4 +1,5 @@
 using BuildingBlock.Core.Domain;
+using BuildingBlock.Core.Domain.Shared.Utils;
 using InventoryManagement.Core.Domain.CategoryAggregate.Entities;
 using InventoryManagement.Core.Domain.ProductAggregate.Entities.Enums;
 
@@ -13,8 +14,10 @@ public class Product : AggregateRoot
         Images = new List<ProductImage>();
     }
 
-    public Product(string name, string description, Guid categoryId, ProductCondition condition, Guid userId) : this()
+    public Product(string id, string name, string description, Guid categoryId, ProductCondition condition,
+        Guid userId) : this()
     {
+        Id = id.ToGuid();
         Name = name;
         Description = description;
         CategoryId = categoryId;
@@ -42,7 +45,7 @@ public class Product : AggregateRoot
 
     public ProductType AddTypes(string name, int quantity, double price, string? imageUrl)
     {
-        var type = new ProductType(name, quantity, price, imageUrl);
+        var type = new ProductType(Id, name, quantity, price, imageUrl);
 
         Types.Add(type);
 

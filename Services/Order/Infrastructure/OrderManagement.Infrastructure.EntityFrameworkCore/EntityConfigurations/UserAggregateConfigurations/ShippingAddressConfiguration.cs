@@ -17,8 +17,7 @@ public class ShippingAddressConfiguration : IEntityTypeConfiguration<ShippingAdd
             .HasForeignKey(sa => sa.DistrictId);
 
         builder.Property(sa => sa.Name)
-            .IsRequired()
-            .HasMaxLength(320);
+            .IsRequired();
 
         builder.OwnsOne(sa => sa.PhoneNumber, phoneNumber =>
         {

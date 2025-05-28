@@ -26,11 +26,11 @@ public class UserDomainService : IUserDomainService
     }
 
     public async Task<User> CreateAsync(string email, string name, string password,
-        string confirmPassword)
+        string confirmPassword, string id)
     {
         await CheckValidOnCreate(email, password, confirmPassword);
 
-        var user = new User(email, name);
+        var user = new User(email, name, id);
 
         return user;
     }

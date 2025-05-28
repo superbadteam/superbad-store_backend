@@ -9,11 +9,9 @@ public class PermissionConfiguration : IEntityTypeConfiguration<ApplicationPermi
     public void Configure(EntityTypeBuilder<ApplicationPermission> builder)
     {
         builder.Property(permissions => permissions.ClaimType)
-            .HasMaxLength(256)
             .IsRequired();
 
         builder.Property(permissions => permissions.ClaimValue)
-            .HasMaxLength(256)
             .IsRequired();
 
         builder.HasIndex(permissions => new { permissions.RoleId, permissions.ClaimType }).IsUnique();

@@ -35,6 +35,11 @@ public class ReviewDomainService : IReviewDomainService
         return new Review(orderItem.ProductTypeId, rating, content, userId);
     }
 
+    public Review Create(Rating rating, Content? content, string productTypeId, string userId)
+    {
+        return new Review(productTypeId.ToGuid(), rating, content, userId.ToGuid());
+    }
+
     public async Task LikeAsync(Review review, Guid userId)
     {
         await CheckValidOnLikeAsync(review, userId);

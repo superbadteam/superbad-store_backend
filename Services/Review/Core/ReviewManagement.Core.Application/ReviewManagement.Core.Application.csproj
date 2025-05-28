@@ -11,4 +11,8 @@
         <ProjectReference Include="..\ReviewManagement.Core.Domain\ReviewManagement.Core.Domain.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Compile Remove="Reviews\IntegrationEvents\Handlers\ProductCreatedIntegrationEventHandler.cs"/>
+    </ItemGroup>
+
 </Project>

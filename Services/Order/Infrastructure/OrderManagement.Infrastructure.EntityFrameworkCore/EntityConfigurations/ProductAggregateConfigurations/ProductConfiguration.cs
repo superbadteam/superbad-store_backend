@@ -9,8 +9,7 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
     public void Configure(EntityTypeBuilder<Product> builder)
     {
         builder.Property(product => product.Name)
-            .IsRequired()
-            .HasMaxLength(256);
+            .IsRequired();
 
         builder.Property(product => product.UserId)
             .IsRequired();

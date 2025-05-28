@@ -10,9 +10,6 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
         RuleFor(x => x.Dto.Name)
             .CheckProductNameValidation();
 
-        RuleFor(x => x.Dto.Description)
-            .CheckProductDescriptionValidation();
-
         RuleFor(x => x.Dto.Types)
             .NotEmpty()
             .WithMessage("Must has at least one type");

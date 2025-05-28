@@ -21,11 +21,10 @@
         <ProjectReference Include="..\..\Infrastructure\ShoppingManagement.Infrastructure.EntityFrameworkCore\ShoppingManagement.Infrastructure.EntityFrameworkCore.csproj"/>
     </ItemGroup>
 
-
     <ItemGroup>
-        <Content Include="..\..\..\..\.dockerignore">
-            <Link>.dockerignore</Link>
-        </Content>
+      <Content Include="..\..\..\..\.dockerignore">
+        <Link>.dockerignore</Link>
+      </Content>
     </ItemGroup>
 
 </Project>

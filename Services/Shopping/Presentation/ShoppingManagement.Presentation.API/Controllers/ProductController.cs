@@ -33,4 +33,12 @@ public class ProductController : ControllerBase
 
         return Ok(product);
     }
+    
+    [HttpGet("recommended")]
+    public async Task<IActionResult> GetRecommendedProductsAsync()
+    {
+        var products = await _mediator.Send(new GetRecommendedProductsQuery());
+
+        return Ok(new { Products = products });
+    }
 }

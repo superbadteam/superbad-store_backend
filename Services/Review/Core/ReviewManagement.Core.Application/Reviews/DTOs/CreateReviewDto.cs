@@ -6,3 +6,9 @@ public class CreateReviewDto
 
     public int Rating { get; set; }
 }
+
+public class MigrateReviewDto : CreateReviewDto
+{
+    public string ProductTypeId { get; set; }
+    public string UserId { get; set; }
+}

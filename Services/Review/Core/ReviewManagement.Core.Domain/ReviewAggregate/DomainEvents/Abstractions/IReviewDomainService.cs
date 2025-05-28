@@ -8,4 +8,6 @@ public interface IReviewDomainService
     Task<Review> CreateAsync(Guid orderItemId, Rating rating, Content? content, Guid userId);
 
     Task LikeAsync(Review review, Guid userId);
+
+    Review Create(Rating rating, Content? content, string productTypeId, string userId);
 }

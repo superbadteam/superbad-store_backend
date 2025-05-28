@@ -13,7 +13,6 @@ public class ProductConfiguration : IEntityTypeConfiguration<Product>
             .HasForeignKey(product => product.UserId);
 
         builder.Property(product => product.Name)
-            .IsRequired()
-            .HasMaxLength(256);
+            .IsRequired();
     }
 }

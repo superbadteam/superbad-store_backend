@@ -46,9 +46,9 @@ public class PermissionSeeder : IDataSeeder
         var adminRole = Optional<Role>.Of(await _roleReadOnlyRepository.GetByNameAsync("admin"))
             .ThrowIfNotExist(new RoleNotFoundException("admin")).Get();
 
-        foreach (var newPermission in BuildingBlock.Core.Domain.Shared.Constants.Permissions.AdminPermissions.Select(
-                     permission =>
-                         new Permission(permission.Type, permission.Value)))
+        foreach (var newPermission in
+                 BuildingBlock.Core.Domain.Shared.Constants.Permissions.AdminPermissions.Select(permission =>
+                     new Permission(permission.Type, permission.Value)))
         {
             await _permissionDomainService.CheckValidOnAddRoleAsync(newPermission, adminRole);
 
@@ -64,9 +64,9 @@ public class PermissionSeeder : IDataSeeder
         var userRole = Optional<Role>.Of(await _roleReadOnlyRepository.GetByNameAsync("user"))
             .ThrowIfNotExist(new RoleNotFoundException("user")).Get();
 
-        foreach (var newPermission in BuildingBlock.Core.Domain.Shared.Constants.Permissions.UserPermissions.Select(
-                     permission =>
-                         new Permission(permission.Type, permission.Value)))
+        foreach (var newPermission in
+                 BuildingBlock.Core.Domain.Shared.Constants.Permissions.UserPermissions.Select(permission =>
+                     new Permission(permission.Type, permission.Value)))
         {
             await _permissionDomainService.CheckValidOnAddRoleAsync(newPermission, userRole);
 

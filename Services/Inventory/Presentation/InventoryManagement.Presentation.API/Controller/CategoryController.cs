@@ -1,3 +1,4 @@
+using InventoryManagement.Core.Application.Categories.CQRS.Commands.Requests;
 using InventoryManagement.Core.Application.Categories.CQRS.Queries.Requests;
 using InventoryManagement.Core.Application.Categories.DTOs;
 using MediatR;
@@ -22,5 +23,13 @@ public class CategoryController : ControllerBase
         var categories = await _mediator.Send(new GetAllCategoriesQuery());
 
         return Ok(categories);
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> CreateCategoryAsync([FromBody] CreateCategoryDto dto)
+    {
+        await _mediator.Send(new CreateCategoryCommand(dto));
+
+        return NoContent();
     }
 }

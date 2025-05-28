@@ -9,7 +9,6 @@ public class ProductTypeConfiguration : IEntityTypeConfiguration<ProductType>
     public void Configure(EntityTypeBuilder<ProductType> builder)
     {
         builder.Property(productType => productType.Name)
-            .HasMaxLength(256)
             .IsRequired();
 
         builder.Property(productType => productType.Quantity)

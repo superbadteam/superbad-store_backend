@@ -4,6 +4,7 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/Identity/Presentation/IdentityManagement.Presentation.API/IdentityManagement.Presentation.API.csproj", "Services/Identity/Presentation/IdentityManagement.Presentation.API/"]
 COPY ["BuildingBlocks/Core/BuildingBlock.Core.Application/BuildingBlock.Core.Application.csproj", "BuildingBlocks/Core/BuildingBlock.Core.Application/"]
@@ -21,13 +22,13 @@ COPY ["Services/Identity/Infrastructure/IdentityManagement.Infrastructure.Identi
 RUN dotnet restore "Services/Identity/Presentation/IdentityManagement.Presentation.API/IdentityManagement.Presentation.API.csproj"
 COPY . .
 WORKDIR "/src/Services/Identity/Presentation/IdentityManagement.Presentation.API"
-RUN dotnet build "IdentityManagement.Presentation.API.csproj" -c Release -o /app/build
+RUN dotnet build "./IdentityManagement.Presentation.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "IdentityManagement.Presentation.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./IdentityManagement.Presentation.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY SeedIdentityData.sql .
 ENTRYPOINT ["dotnet", "IdentityManagement.Presentation.API.dll"]

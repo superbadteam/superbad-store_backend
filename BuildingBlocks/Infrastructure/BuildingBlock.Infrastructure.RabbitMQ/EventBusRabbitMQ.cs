@@ -13,7 +13,7 @@ using RabbitMQ.Client.Exceptions;
 
 namespace BuildingBlock.Infrastructure.RabbitMQ;
 
-public class EventBusRabbitMQ : IEventBus
+public class EventBusRabbitMQ : IEventBus, IDisposable
 {
     private const string BrokerName = "event_bus";
 
@@ -45,6 +45,11 @@ public class EventBusRabbitMQ : IEventBus
         _retryCount = retryCount;
     }
 
+    public void Dispose()
+    {
+        _consumerChannel?.Dispose();
+    }
+
     public void Publish(IntegrationEvent @event)
     {
         if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
@@ -63,8 +68,7 @@ public class EventBusRabbitMQ : IEventBus
         _logger.LogInformation("Creating RabbitMQ channel to publish event: {EventId} ({EventName})", @event.Id,
             eventName);
 
-        var channel = _persistentConnection.CreateModel();
-
+        using var channel = _persistentConnection.CreateModel();
         _logger.LogInformation("Declaring RabbitMQ exchange to publish event: {EventId}", @event.Id);
 
         channel.ExchangeDeclare(BrokerName, "direct");

@@ -7,15 +7,7 @@ public static class ValidationBuilder
     public static IRuleBuilderOptions<T, string> CheckProductNameValidation<T>(this IRuleBuilder<T, string> ruleBuilder)
     {
         return ruleBuilder
-            .NotEmpty()
-            .MaximumLength(256);
-    }
-
-    public static IRuleBuilderOptions<T, string> CheckProductDescriptionValidation<T>(
-        this IRuleBuilder<T, string> ruleBuilder)
-    {
-        return ruleBuilder
-            .MinimumLength(20);
+            .NotEmpty();
     }
 
     public static IRuleBuilderOptions<T, double> CheckPriceValidation<T>(this IRuleBuilder<T, double> ruleBuilder)

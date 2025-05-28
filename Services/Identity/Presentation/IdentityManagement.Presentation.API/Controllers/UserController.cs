@@ -83,4 +83,12 @@ public class UserController : ControllerBase
 
         return NoContent();
     }
+
+    [HttpPost("sync")]
+    public async Task<ActionResult> SyncUsersAmongServicesAsync()
+    {
+        await _mediator.Send(new SyncUsersAmongServicesCommand());
+
+        return NoContent();
+    }
 }

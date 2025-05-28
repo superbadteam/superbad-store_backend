@@ -2,6 +2,8 @@ namespace IdentityManagement.Core.Application.Users.DTOs;
 
 public class CreateUserDto
 {
+    public string Id { get; set; } = null!;
+
     public string Name { get; set; } = null!;
 
     public string Email { get; set; } = null!;

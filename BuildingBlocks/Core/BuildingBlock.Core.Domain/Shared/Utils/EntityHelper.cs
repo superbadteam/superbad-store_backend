@@ -1,3 +1,5 @@
+using System.Security.Cryptography;
+using System.Text;
 using BuildingBlock.Core.Domain.Exceptions;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Specifications.Abstractions;
@@ -51,5 +53,17 @@ public static class EntityHelper
         where T : IEntity
     {
         Optional<bool>.Of(await readOnlyRepository.CheckIfExistAsync(specification)).ThrowIfExist(exception);
+    }
+
+    public static Guid ToGuid(this string str)
+    {
+        if (str == null)
+            throw new ArgumentNullException(nameof(str));
+        var hash = SHA256.HashData(Encoding.UTF8.GetBytes(str));
+
+        var guidBytes = new byte[16];
+        Array.Copy(hash, guidBytes, 16);
+
+        return new Guid(guidBytes);
     }
 }

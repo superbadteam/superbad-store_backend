@@ -22,4 +22,6 @@ public interface IUserReadOnlyRepository
     Task<bool> CheckPasswordAsync(User user, string password);
 
     Task<string> GetPasswordResetToken(User user);
+
+    Task<List<User>> GetAllAsync();
 }

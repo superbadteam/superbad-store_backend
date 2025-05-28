@@ -12,7 +12,7 @@ public class EntityConflictException : Exception
     }
 
     protected EntityConflictException(string entity, Guid id) : base(
-        $"{entity} with id: '{id}' is not found")
+        $"{entity} with id: '{id}' is already existed")
     {
     }
 

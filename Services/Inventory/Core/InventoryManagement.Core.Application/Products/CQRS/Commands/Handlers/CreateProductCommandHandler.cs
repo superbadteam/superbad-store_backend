@@ -31,7 +31,7 @@ public class CreateProductCommandHandler : ICommandHandler<CreateProductCommand,
 
     public async Task<ProductDetailDto> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var product = await _productDomainService.CreateAsync(request.Dto.Name, request.Dto.Description,
+        var product = await _productDomainService.CreateAsync(request.Dto.Id, request.Dto.Name, request.Dto.Description,
             request.Dto.CategoryId, request.Dto.Condition);
 
         foreach (var productTypeDto in request.Dto.Types)

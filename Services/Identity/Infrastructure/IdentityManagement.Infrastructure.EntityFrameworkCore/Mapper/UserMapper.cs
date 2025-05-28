@@ -15,14 +15,16 @@ public class UserMapper : Profile
         CreateMap<User, ApplicationUser>()
             .ForMember(dest => dest.NormalizedEmail, opt => opt.MapFrom(src => src.Email.ToUpper()))
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Email))
-            .ForMember(dest => dest.NormalizedUserName, opt => opt.MapFrom(src => src.Email.ToUpper()));
+            .ForMember(dest => dest.NormalizedUserName, opt => opt.MapFrom(src => src.Email.ToUpper()))
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id));
         CreateMap<User, UserDetailDto>();
         CreateMap<User, UserSummaryDto>();
 
         CreateMap<ApplicationUser, UserSummaryDto>();
         CreateMap<ApplicationUser, UserCreationDto>();
         CreateMap<ApplicationUser, UserDeletionDto>();
-        CreateMap<ApplicationUser, User>();
+        CreateMap<ApplicationUser, User>()
+            .ConstructUsing(src => new User());
 
         CreateMap<UserCreationDto, UserDetailDto>();
     }

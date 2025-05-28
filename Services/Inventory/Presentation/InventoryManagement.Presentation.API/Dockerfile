@@ -4,6 +4,7 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/Inventory/Presentation/InventoryManagement.Presentation.API/InventoryManagement.Presentation.API.csproj", "Services/Inventory/Presentation/InventoryManagement.Presentation.API/"]
 COPY ["BuildingBlocks/Presentation/BuildingBlock.Presentation.API/BuildingBlock.Presentation.API.csproj", "BuildingBlocks/Presentation/BuildingBlock.Presentation.API/"]
@@ -20,13 +21,13 @@ COPY ["Services/Inventory/Infrastructure/InventoryManagement.Infrastructure.Enti
 RUN dotnet restore "Services/Inventory/Presentation/InventoryManagement.Presentation.API/InventoryManagement.Presentation.API.csproj"
 COPY . .
 WORKDIR "/src/Services/Inventory/Presentation/InventoryManagement.Presentation.API"
-RUN dotnet build "InventoryManagement.Presentation.API.csproj" -c Release -o /app/build
+RUN dotnet build "./InventoryManagement.Presentation.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "InventoryManagement.Presentation.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./InventoryManagement.Presentation.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY SeedInventoryData.sql .
 ENTRYPOINT ["dotnet", "InventoryManagement.Presentation.API.dll"]

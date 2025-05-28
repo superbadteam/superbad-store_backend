@@ -1,4 +1,5 @@
 using BuildingBlock.Core.Domain;
+using BuildingBlock.Core.Domain.Shared.Utils;
 using IdentityManagement.Core.Domain.RoleAggregate.Entities;
 
 namespace IdentityManagement.Core.Domain.UserAggregate.Entities;
@@ -9,6 +10,11 @@ public class User : AggregateRoot
     {
         Email = email;
         Name = name;
+    }
+
+    public User(string email, string name, string id) : this(email, name)
+    {
+        Id = id.ToGuid();
     }
 
     public User()

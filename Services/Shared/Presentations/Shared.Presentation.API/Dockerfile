@@ -4,6 +4,7 @@ EXPOSE 80
 EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Services/Shared/Presentations/Shared.Presentation.API/Shared.Presentation.API.csproj", "Services/Shared/Presentations/Shared.Presentation.API/"]
 COPY ["BuildingBlocks/Core/BuildingBlock.Core.Domain/BuildingBlock.Core.Domain.csproj", "BuildingBlocks/Core/BuildingBlock.Core.Domain/"]
@@ -19,10 +20,11 @@ COPY ["Services/Shared/Infrastructure/Shared.Infrastructure.Cloudinary/Shared.In
 RUN dotnet restore "Services/Shared/Presentations/Shared.Presentation.API/Shared.Presentation.API.csproj"
 COPY . .
 WORKDIR "/src/Services/Shared/Presentations/Shared.Presentation.API"
-RUN dotnet build "Shared.Presentation.API.csproj" -c Release -o /app/build
+RUN dotnet build "./Shared.Presentation.API.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Shared.Presentation.API.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG BUILD_CONFIGURATION=Release
+RUN dotnet publish "./Shared.Presentation.API.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
