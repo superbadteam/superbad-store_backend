@@ -5,6 +5,7 @@ using IdentityManagement.Core.Domain.UserAggregate.Repositories;
 using IdentityManagement.Infrastructure.Identity.UserAggregate.Entities;
 using IdentityManagement.Infrastructure.Identity.UserAggregate.Specifications;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace IdentityManagement.Infrastructure.EntityFrameworkCore.Repositories.UserRepositories;
 
@@ -23,11 +24,11 @@ public class UserReadOnlyRepository : IUserReadOnlyRepository
     }
 
 
-    public async Task<User?> GetByIdAsync(Guid id, string? includeTables = null)
+    public async Task<User?> GetByIdAsync(Guid id, string? includeTables = null, bool ignoreQueryFilters = false)
     {
         var userIdSpecification = new UserIdSpecification(id);
 
-        var applicationUser = await _userReadOnlyRepository.GetAnyAsync(userIdSpecification, includeTables);
+        var applicationUser = await _userReadOnlyRepository.GetAnyAsync(userIdSpecification, includeTables, ignoreQueryFilters);
 
         return _mapper.Map<User?>(applicationUser);
     }
@@ -108,4 +109,5 @@ public class UserReadOnlyRepository : IUserReadOnlyRepository
 
         return _mapper.Map<List<User>>(applicationUsers);
     }
+
 }

@@ -14,5 +14,7 @@ public class ProductSummaryDto
 
     public double Rating { get; set; }
 
+    public Guid CategoryId { get; set; }
+
     public string ImageUrl { get; set; } = null!;
 }

@@ -25,6 +25,12 @@ public class UserDomainService : IUserDomainService
         return user;
     }
 
+    public void Restore(User user)
+    {
+        user.DeletedAt = null;
+        user.DeletedBy = null;
+    }
+
     public void Delete(User user, DateTime? deletedAt, string? deletedBy)
     {
         user.Delete(deletedAt, deletedBy);

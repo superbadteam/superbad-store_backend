@@ -44,4 +44,13 @@ public class UserController : ControllerBase
 
         return Ok(cart);
     }
+
+    [HttpPost("seed")]
+    [AllowAnonymous]
+    public async Task<IActionResult> SeedAsync(SeedUserDto dto)
+    {
+        await _mediator.Send(new SeedUsersCommand(dto));
+
+        return Ok(new { Message = "Users seeded successfully." });
+    }
 }

@@ -25,6 +25,8 @@ public class ShoppingDbContext : BaseDbContext
 
     public DbSet<User> Users { get; set; } = null!;
 
+    public DbSet<UserIdMap> UserIdMaps { get; set; } = null!;
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);

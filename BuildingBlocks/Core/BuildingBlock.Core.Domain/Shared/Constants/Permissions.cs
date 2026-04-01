@@ -23,7 +23,13 @@ public static class Permissions
         new Claim(Role.Create, "Can create roles"),
 
         // FILE
-        new Claim(File.Upload, "Can upload files")
+        new Claim(File.Upload, "Can upload files"),
+
+        // PRODUCT
+        new Claim(Product.View, "Can view products"),
+        new Claim(Product.Edit, "Can edit products"),
+        new Claim(Product.Delete, "Can delete products"),
+        new Claim(Product.Create, "Can create products")
     );
 
     public static readonly List<Claim> UserPermissions = new()

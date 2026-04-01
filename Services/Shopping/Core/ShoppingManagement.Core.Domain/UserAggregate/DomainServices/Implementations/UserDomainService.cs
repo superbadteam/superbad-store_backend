@@ -2,7 +2,7 @@ using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using ShoppingManagement.Core.Domain.ProductAggregate.Entities;
 using ShoppingManagement.Core.Domain.ProductAggregate.Exceptions;
-using ShoppingManagement.Core.Domain.UserAggregate.DomainServices.Adstractions;
+using ShoppingManagement.Core.Domain.UserAggregate.DomainServices.Abstractions;
 using ShoppingManagement.Core.Domain.UserAggregate.Entities;
 using ShoppingManagement.Core.Domain.UserAggregate.Exceptions;
 using ShoppingManagement.Core.Domain.UserAggregate.Specifications;
@@ -29,6 +29,12 @@ public class UserDomainService : IUserDomainService
         var user = new User(id, name, avatarUrl, coverUrl, createdAt, createdBy);
 
         return user;
+    }
+
+    public void Restore(User user)
+    {
+        user.DeletedAt = null;
+        user.DeletedBy = null;
     }
 
     public async Task<Cart> AddToCartAsync(User user, Guid productTypeId, int quantity)

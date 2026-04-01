@@ -69,8 +69,13 @@ public class CreateOrderCommandHandler : ICommandHandler<CreateOrderCommand, Ord
         if (method == AddItemMethod.Direct)
             foreach (var orderItemDto in dto.OrderItems!)
             {
-                var orderItem =
-                    await _orderDomainService.CreateItemAsync(orderItemDto.ProductTypeId, orderItemDto.Quantity);
+                OrderItem orderItem;
+                if (string.IsNullOrEmpty(orderItemDto.StringProductTypeId))
+                    orderItem = await _orderDomainService.CreateItemAsync(orderItemDto.ProductTypeId,
+                        orderItemDto.Quantity);
+                else
+                    orderItem = await _orderDomainService.CreateItemAsync(orderItemDto.StringProductTypeId.ToGuid(),
+                        orderItemDto.Quantity);
 
                 orderItems.Add(orderItem);
             }

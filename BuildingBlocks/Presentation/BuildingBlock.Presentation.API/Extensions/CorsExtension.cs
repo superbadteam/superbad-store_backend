@@ -9,7 +9,7 @@ public static class CorsExtension
     {
         services.AddCors(o => o.AddPolicy(configuration.GetRequiredValue("CORS"), builder =>
         {
-            builder.WithOrigins("*")
+            builder.AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader();
         }));

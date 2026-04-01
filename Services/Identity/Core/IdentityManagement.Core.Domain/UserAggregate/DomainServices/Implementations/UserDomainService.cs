@@ -26,11 +26,11 @@ public class UserDomainService : IUserDomainService
     }
 
     public async Task<User> CreateAsync(string email, string name, string password,
-        string confirmPassword, string id)
+        string confirmPassword)
     {
         await CheckValidOnCreate(email, password, confirmPassword);
 
-        var user = new User(email, name, id);
+        var user = new User(email, name);
 
         return user;
     }
@@ -46,6 +46,12 @@ public class UserDomainService : IUserDomainService
     public async Task DeleteAsync(User user)
     {
         await CheckValidOnDeleteAsync(user);
+    }
+
+    public void Restore(User user)
+    {
+        user.DeletedAt = null;
+        user.DeletedBy = null;
     }
 
     private async Task CheckValidOnDeleteAsync(User user)

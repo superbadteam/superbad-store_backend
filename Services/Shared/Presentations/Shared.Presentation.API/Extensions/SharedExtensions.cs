@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using BuildingBlock.Presentation.API.Extensions;
 using CloudinaryDotNet;
 using FluentValidation;
+using Microsoft.VisualBasic.CompilerServices;
 using Shared.Core.Application;
 using Shared.Core.Application.Services;
 using Shared.Infrastructure.Cloudinary;

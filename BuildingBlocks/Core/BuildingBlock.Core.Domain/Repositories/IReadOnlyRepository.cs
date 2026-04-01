@@ -22,7 +22,10 @@ public interface IReadOnlyRepository<TEntity> where TEntity : IEntity
         bool ignoreQueryFilters = false, bool track = false);
 
     Task<(List<TEntity>, int)> GetFilterAndPagingAsync(ISpecification<TEntity>? specification,
-        string sort, int pageIndex, int pageSize, string? includeTables = null, bool ignoreQueryFilters = false);
+        string sort, int pageIndex, int pageSize, string? includeTables = null, bool ignoreQueryFilters = false,
+        bool track = false);
+
+    Task<int> CountAsync(ISpecification<TEntity>? specification = null);
 
     Task<List<TDto>> ToListAsync<TDto>();
 

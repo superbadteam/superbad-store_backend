@@ -91,4 +91,13 @@ public class UserController : ControllerBase
 
         return NoContent();
     }
+    
+    [HttpPost("{userId:guid}/restore")]
+    [Authorize(Policy = Permissions.User.DeleteAll)]
+    public async Task<ActionResult> RestoreUserAsync(Guid userId)
+    {
+        await _mediator.Send(new RestoreUserCommand(userId));
+
+        return NoContent();
+    }
 }

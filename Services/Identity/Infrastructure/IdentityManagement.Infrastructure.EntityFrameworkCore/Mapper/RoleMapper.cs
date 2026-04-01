@@ -9,7 +9,10 @@ public class RoleMapper : Profile
 {
     public RoleMapper()
     {
-        CreateMap<ApplicationRole, Role>();
+        CreateMap<ApplicationRole, Role>()
+            .ForMember(dest => dest.Permissions, opt => opt.Ignore())
+            .ForMember(dest => dest.UserRoles, opt => opt.Ignore());
+            
         CreateMap<Role, ApplicationRole>()
             .ForMember(dest => dest.NormalizedName, opt => opt.MapFrom(src => src.Name.ToUpper()))
             .ForMember(dest => dest.Permissions, opt => opt.Ignore());

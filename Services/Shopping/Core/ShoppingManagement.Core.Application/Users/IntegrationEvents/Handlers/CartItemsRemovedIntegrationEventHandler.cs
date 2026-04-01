@@ -4,7 +4,7 @@ using BuildingBlock.Core.Domain.Shared.Services;
 using BuildingBlock.Core.Domain.Shared.Utils;
 using BuildingBlock.Core.Domain.Specifications.Implementations;
 using ShoppingManagement.Core.Application.Users.IntegrationEvents.Events;
-using ShoppingManagement.Core.Domain.UserAggregate.DomainServices.Adstractions;
+using ShoppingManagement.Core.Domain.UserAggregate.DomainServices.Abstractions;
 using ShoppingManagement.Core.Domain.UserAggregate.Entities;
 using ShoppingManagement.Core.Domain.UserAggregate.Exceptions;
 

@@ -14,10 +14,9 @@ public class Product : AggregateRoot
         Images = new List<ProductImage>();
     }
 
-    public Product(string id, string name, string description, Guid categoryId, ProductCondition condition,
+    public Product(string name, string description, Guid categoryId, ProductCondition condition,
         Guid userId) : this()
     {
-        Id = id.ToGuid();
         Name = name;
         Description = description;
         CategoryId = categoryId;

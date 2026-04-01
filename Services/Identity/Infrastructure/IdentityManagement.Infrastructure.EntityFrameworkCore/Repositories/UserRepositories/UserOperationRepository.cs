@@ -6,6 +6,7 @@ using IdentityManagement.Core.Domain.UserAggregate.Exceptions;
 using IdentityManagement.Core.Domain.UserAggregate.Repositories;
 using IdentityManagement.Infrastructure.Identity.UserAggregate.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace IdentityManagement.Infrastructure.EntityFrameworkCore.Repositories.UserRepositories;
 
@@ -14,13 +15,15 @@ public class UserOperationRepository : IUserOperationRepository
     private readonly IMapper _mapper;
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly DbSet<ApplicationUser> _userDbSet;
 
     public UserOperationRepository(UserManager<ApplicationUser> userManager, IMapper mapper,
-        SignInManager<ApplicationUser> signInManager)
+        SignInManager<ApplicationUser> signInManager, AppDbContext appDbContext)
     {
         _userManager = userManager;
         _mapper = mapper;
         _signInManager = signInManager;
+        _userDbSet = appDbContext.Set<ApplicationUser>();
     }
 
     public async Task UpdateAsync(User user)
@@ -90,5 +93,11 @@ public class UserOperationRepository : IUserOperationRepository
         _mapper.Map(user, applicationUser);
 
         return applicationUser!;
+    }
+    
+    
+    public void Restore(User user)
+    {
+        _userDbSet.Update(_mapper.Map<ApplicationUser>(user));
     }
 }

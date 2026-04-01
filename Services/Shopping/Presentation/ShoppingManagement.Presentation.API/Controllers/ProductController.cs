@@ -1,6 +1,9 @@
 using BuildingBlock.Core.Application.DTOs;
+using BuildingBlock.Core.Domain.Shared.Constants;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using ShoppingManagement.Core.Application.Products.CQRS.Commands.Requests;
 using ShoppingManagement.Core.Application.Products.CQRS.Queries.Requests;
 using ShoppingManagement.Core.Application.Products.DTOs;
 
@@ -27,18 +30,36 @@ public class ProductController : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    public async Task<ActionResult<ProductDetailDto>> GetCurrentUserProductByIdAsync(Guid id)
+    public async Task<ActionResult<ProductDetailDto>> GetProductAsync(Guid id)
     {
         var product = await _mediator.Send(new GetProductQuery(id));
 
         return Ok(product);
     }
     
+    [HttpGet("{id:guid}/recommendations")]
+    public async Task<ActionResult<List<ProductSummaryDto>>> GetProductRecommendationsAsync(Guid id)
+    {
+        var recommendations = await _mediator.Send(new GetProductRecommendationsQuery(id));
+
+        return Ok(recommendations);
+    }
+
     [HttpGet("recommended")]
-    public async Task<IActionResult> GetRecommendedProductsAsync()
+    [Authorize(Policy = Permissions.Product.View)]
+    public async Task<ActionResult<List<ProductSummaryDto>>> GetRecommendedProductsAsync()
     {
         var products = await _mediator.Send(new GetRecommendedProductsQuery());
 
         return Ok(new { Products = products });
+    }
+
+    [HttpPost("sync-sold")]
+    [AllowAnonymous]
+    public async Task<IActionResult> SyncSoldAsync()
+    {
+        await _mediator.Send(new SyncSoldCommand());
+
+        return NoContent();
     }
 }

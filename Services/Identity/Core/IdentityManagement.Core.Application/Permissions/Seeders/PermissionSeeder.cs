@@ -41,6 +41,8 @@ public class PermissionSeeder : IDataSeeder
 
         var adminPermission = await _permissionReadOnlyRepository.GetNamesByRoleNameAsync("admin");
 
+        _logger.LogInformation(adminPermission.ToString());
+
         if (adminPermission.Any()) return;
 
         var adminRole = Optional<Role>.Of(await _roleReadOnlyRepository.GetByNameAsync("admin"))

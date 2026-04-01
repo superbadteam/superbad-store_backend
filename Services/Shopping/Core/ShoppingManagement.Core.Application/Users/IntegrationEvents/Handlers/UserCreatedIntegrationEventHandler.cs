@@ -2,7 +2,7 @@ using BuildingBlock.Core.Application.IntegrationEvents.Handlers;
 using BuildingBlock.Core.Domain.Repositories;
 using BuildingBlock.Core.Domain.Shared.Services;
 using ShoppingManagement.Core.Application.Users.IntegrationEvents.Events;
-using ShoppingManagement.Core.Domain.UserAggregate.DomainServices.Adstractions;
+using ShoppingManagement.Core.Domain.UserAggregate.DomainServices.Abstractions;
 using ShoppingManagement.Core.Domain.UserAggregate.Entities;
 
 namespace ShoppingManagement.Core.Application.Users.IntegrationEvents.Handlers;

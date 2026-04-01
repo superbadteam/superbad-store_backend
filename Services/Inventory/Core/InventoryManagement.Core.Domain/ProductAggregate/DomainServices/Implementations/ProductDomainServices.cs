@@ -25,12 +25,12 @@ public class ProductDomainService : IProductDomainService
         _currentUser = currentUser;
     }
 
-    public async Task<Product> CreateAsync(string id, string name, string description, Guid categoryId,
+    public async Task<Product> CreateAsync(string name, string description, Guid categoryId,
         ProductCondition condition)
     {
         await CheckValidOnCreateAsync(categoryId);
 
-        return new Product(id, name, description, categoryId, condition, _currentUser.Id);
+        return new Product(name, description, categoryId, condition, _currentUser.Id);
     }
 
     public async Task<Product> EditAsync(Guid id, string code, string name, double price, bool isAvailable,
@@ -98,9 +98,10 @@ public class ProductDomainService : IProductDomainService
         return GetOrThrowAsync(id);
     }
 
-    private async Task CheckValidOnCreateAsync(Guid categoryId)
+    private Task CheckValidOnCreateAsync(Guid categoryId)
     {
-        await CheckCategoryValidation(categoryId);
+        // await CheckCategoryValidation(categoryId);
+        return Task.CompletedTask;
     }
 
     private async Task CheckCategoryValidation(Guid categoryId)

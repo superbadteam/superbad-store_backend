@@ -7,7 +7,7 @@ using BuildingBlock.Core.Domain.Shared.Utils;
 using ShoppingManagement.Core.Application.Users.CQRS.Commands.Requests;
 using ShoppingManagement.Core.Application.Users.DTOs;
 using ShoppingManagement.Core.Application.Users.IntegrationEvents.Events;
-using ShoppingManagement.Core.Domain.UserAggregate.DomainServices.Adstractions;
+using ShoppingManagement.Core.Domain.UserAggregate.DomainServices.Abstractions;
 using ShoppingManagement.Core.Domain.UserAggregate.Entities;
 using ShoppingManagement.Core.Domain.UserAggregate.Exceptions;
 using ShoppingManagement.Core.Domain.UserAggregate.Specifications;

@@ -36,4 +36,12 @@ public class UserController : ControllerBase
 
         return Ok(shippingAddresses);
     }
+
+    [HttpPost("seed-shipping-addresses")]
+    [AllowAnonymous]
+    public async Task<IActionResult> SeedShippingAddressesAsync()
+    {
+        await _mediator.Send(new SeedShippingAddressesCommand());
+        return NoContent();
+    }
 }

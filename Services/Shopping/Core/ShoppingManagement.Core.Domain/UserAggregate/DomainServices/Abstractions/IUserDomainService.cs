@@ -1,6 +1,6 @@
 using ShoppingManagement.Core.Domain.UserAggregate.Entities;
 
-namespace ShoppingManagement.Core.Domain.UserAggregate.DomainServices.Adstractions;
+namespace ShoppingManagement.Core.Domain.UserAggregate.DomainServices.Abstractions;
 
 public interface IUserDomainService
 {
@@ -12,4 +12,6 @@ public interface IUserDomainService
     void RemoveFromCart(User user, Guid cartItemId);
 
     void Delete(User user, DateTime? deletedAt, string? deletedBy);
+
+    void Restore(User user);
 }

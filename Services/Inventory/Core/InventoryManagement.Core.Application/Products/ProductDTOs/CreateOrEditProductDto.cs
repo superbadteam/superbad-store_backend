@@ -4,8 +4,6 @@ namespace InventoryManagement.Core.Application.Products.ProductDTOs;
 
 public class CreateOrEditProductDto
 {
-    public string Id { get; set; } = null!;
-
     public string Name { get; set; } = null!;
 
     public string Description { get; set; } = null!;

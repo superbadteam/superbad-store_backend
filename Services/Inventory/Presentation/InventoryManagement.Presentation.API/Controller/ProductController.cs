@@ -1,5 +1,6 @@
 using BuildingBlock.Core.Application.DTOs;
 using BuildingBlock.Core.Domain.Shared.Constants;
+using BuildingBlock.Core.Domain.Shared.Utils;
 using InventoryManagement.Core.Application.Products.CQRS.Commands.Requests;
 using InventoryManagement.Core.Application.Products.CQRS.Queries.Requests;
 using InventoryManagement.Core.Application.Products.ProductDTOs;
@@ -40,6 +41,16 @@ public class ProductController : ControllerBase
         return Ok(product);
     }
 
+    [HttpGet("me/string/{id}")]
+    [ActionName(nameof(GetCurrentUserProductByIdAsync))]
+    [Authorize(Policy = Permissions.Product.View)]
+    public async Task<ActionResult<ProductDetailDto>> GetCurrentUserProductByIdAsync(string id)
+    {
+        var product = await _mediator.Send(new GetCurrentUserProductStringQuery(id));
+
+        return Ok(product);
+    }
+
     [HttpPost]
     [Authorize(Policy = Permissions.Product.Create)]
     public async Task<ActionResult<ProductDetailDto>> CreateAsync([FromBody] CreateOrEditProductDto dto)
@@ -53,7 +64,16 @@ public class ProductController : ControllerBase
     [Authorize(Policy = Permissions.Product.Edit)]
     public async Task<ActionResult<ProductDetailDto>> EditAsync([FromBody] CreateOrEditProductDto dto, Guid id)
     {
-        var product = await _mediator.Send(new EditProductCommand(id, dto));
+        var product = await _mediator.Send(new EditProductCommand(id));
+
+        return product;
+    }
+    
+    [HttpPut("string/{id}")]
+    [Authorize(Policy = Permissions.Product.Edit)]
+    public async Task<ActionResult<ProductDetailDto>> EditAsync(string id)
+    {
+        var product = await _mediator.Send(new EditProductCommand(id.ToGuid()));
 
         return product;
     }

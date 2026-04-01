@@ -4,7 +4,7 @@ namespace IdentityManagement.Core.Domain.UserAggregate.Repositories;
 
 public interface IUserReadOnlyRepository
 {
-    Task<User?> GetByIdAsync(Guid id, string? includeTables = null);
+    Task<User?> GetByIdAsync(Guid id, string? includeTables = null, bool ignoreQueryFilters = false);
 
     Task<TDto?> GetByIdAsync<TDto>(Guid id, string? includeTables = null, bool ignoreQueryFilters = false);
 
@@ -24,4 +24,5 @@ public interface IUserReadOnlyRepository
     Task<string> GetPasswordResetToken(User user);
 
     Task<List<User>> GetAllAsync();
+
 }

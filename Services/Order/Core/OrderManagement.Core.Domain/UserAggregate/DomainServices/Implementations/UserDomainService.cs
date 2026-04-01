@@ -121,6 +121,12 @@ public class UserDomainService : IUserDomainService
         return productType;
     }
 
+    public void Restore(User user)
+    {
+        user.DeletedAt = null;
+        user.DeletedBy = null;
+    }
+
     private static void ThrowIfQuantityIsInvalid(ProductType productType, int quantity)
     {
         if (productType.Quantity < quantity) throw new InvalidProductTypeQuantityException();

@@ -8,5 +8,5 @@ public class CityDto
 
     public string Code { get; set; } = null!;
 
-    public IEnumerable<DistrictDto> Districts { get; set; } = null!;
+    public List<DistrictDto> Districts { get; set; } = null!;
 }

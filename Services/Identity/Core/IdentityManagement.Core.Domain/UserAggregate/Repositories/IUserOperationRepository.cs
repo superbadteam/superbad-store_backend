@@ -15,4 +15,6 @@ public interface IUserOperationRepository
     Task ResetPasswordAsync(User user, string token, string newPassword);
 
     Task DeleteAsync(User user);
+        
+    void Restore(User user);
 }

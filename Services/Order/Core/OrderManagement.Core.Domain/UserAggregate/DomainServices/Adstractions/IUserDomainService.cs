@@ -18,4 +18,6 @@ public interface IUserDomainService
     Task RemoveMainAddressStatusFromCurrentShippingAddressAsync(User user);
 
     void Delete(User user, DateTime? deletedAt, string? deletedBy);
+
+    void Restore(User user);
 }

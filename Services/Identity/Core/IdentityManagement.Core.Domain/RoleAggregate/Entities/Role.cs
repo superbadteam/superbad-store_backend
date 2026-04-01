@@ -18,7 +18,7 @@ public class Role : Entity
 
     public string ConcurrencyStamp { get; set; } = null!;
 
-    public ICollection<UserRole> UserRoles { get; set; } = null!;
+    public List<UserRole> UserRoles { get; set; } = new();
 
-    public ICollection<Permission> Permissions { get; set; } = null!;
+    public List<Permission> Permissions { get; set; } = new();
 }

@@ -314,6 +314,46 @@ namespace ShoppingManagement.Infrastructure.EntityFrameworkCore.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("ShoppingManagement.Infrastructure.EntityFrameworkCore.UserIdMap", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("DeletedBy")
+                        .HasColumnType("text");
+
+                    b.Property<Guid>("GuidUserId")
+                        .HasColumnType("uuid");
+
+                    b.Property<string>("StringUserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GuidUserId", "StringUserId")
+                        .IsUnique();
+
+                    b.ToTable("UserIdMaps");
+                });
+
             modelBuilder.Entity("ShoppingManagement.Core.Domain.CategoryAggregate.Entities.Category", b =>
                 {
                     b.HasOne("ShoppingManagement.Core.Domain.CategoryAggregate.Entities.Category", "Parent")
